@@ -1,5 +1,13 @@
-# Object file
-*.o
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
-# Ada Library Information
-*.ali
+### Maven ###
+target/
+
+### Spring boot ###
+.mvn
+mvnw.*
+mvnw
