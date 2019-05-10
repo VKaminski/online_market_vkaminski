@@ -7,15 +7,15 @@
 <body>
 <h1>Login</h1>
 <form th:action="@{/login}" method='POST'>
-    <div th:if="${param.error}">
-        <div class="alert alert-danger">
-            Invalid username or password.
-        </div>
-    </div>
+    <!--<div th:if="${param.error}">-->
+        <!--<div class="alert alert-danger">-->
+            <!--Invalid username or password.-->
+        <!--</div>-->
+    <!--</div>-->
     <table>
         <tr>
-            <td>User:</td>
-            <td><input type="text" name="username" id="username"></td>
+            <td>Email:</td>
+            <td><input type="email" name="username" id="username"></td>
         </tr>
         <tr>
             <td>Password:</td>
@@ -26,5 +26,9 @@
         </tr>
     </table>
 </form>
+<br>admin@admin.com
+<br>admin
+<br>customer@customer.com
+<br>customer
 </body>
 </html>

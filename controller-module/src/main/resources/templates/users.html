@@ -9,14 +9,37 @@
 <table>
     <tr>
         <td>№</td>
+        <td>Surname</td>
         <td>Name</td>
+        <td>Patronymic</td>
+        <td>Email</td>
+        <td>Role</td>
     </tr>
-    <th:block th:each="user,stat : ${users}">
-        <tr>
-            <td th:text="${stat.index + 1}">...</td>
-            <td th:text="${user.username}">...</td>
-        </tr>
-    </th:block>
+    <tr th:each="user,stat : ${users}">
+            <td>
+                <span th:text="${stat.index + 1}"></span>
+            </td>
+            <td>
+                <span th:text="${user.surname}"></span>
+            </td>
+            <td>
+                <span th:text="${user.name}"></span>
+            </td>
+            <td>
+                <span th:text="${user.patronymic}"></span>
+            </td>
+            <td>
+                <span th:text="${user.email}"></span>
+            </td>
+            <td>
+                <select>
+                    <option th:each="role :  ${roles}"
+                            th:value="${role}" th:text="${role}"
+                            th:selected="${role == user.getRole().name}"></option>
+                </select>
+            </td>
+        </form>
+    </tr>
 </table>
 </body>
 </html>

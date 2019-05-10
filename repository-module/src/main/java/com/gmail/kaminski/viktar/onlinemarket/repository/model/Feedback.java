@@ -3,12 +3,21 @@ package com.gmail.kaminski.viktar.onlinemarket.repository.model;
 import java.util.Date;
 
 public class Feedback {
+    private Long id;
     private String name;
     private String surname;
     private String patronymic;
     private String content;
     private Date date;
     private String status;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

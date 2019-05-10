@@ -11,7 +11,7 @@ public class CommonController {
     private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
 
     @GetMapping("/login")
-    public String getLogin() {
+    public String login() {
         return "login";
     }
 

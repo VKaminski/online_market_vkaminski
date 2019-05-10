@@ -5,13 +5,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class UserService {
-    public UserDTO getUserByName(String username) {
-        return null;
-    }
+public interface UserService {
+    public UserDTO getUserByEmail(String email);
 
-    public List<UserDTO> getUsers() {
-        return null;
-    }
+    void add(UserDTO userDTO);
+
+    public List<UserDTO> getUsers();
+
+    void setRole(UserDTO userDTO, String roleName);
 }

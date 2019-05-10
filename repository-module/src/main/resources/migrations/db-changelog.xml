@@ -73,4 +73,61 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_1">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_ADMINISTRATOR"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_2">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_SALE"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_3">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_CUSTOMER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_4">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_SECURE_API"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_1">
+        <insert tableName="User">
+            <column name="name" value="Admin"/>
+            <column name="surname" value="Adminov"/>
+            <column name="patronymic" value="Adminovich"/>
+            <column name="email" value="admin@admin.com"/>
+            <column name="password" value="$2a$12$UzpfzWgw47R.qBBP23s1E.OdK0/VKVKpB5ssk4UnCgs3z5zuU6aYi"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_ADMINISTRATOR')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_2">
+        <insert tableName="User">
+            <column name="name" value="Sale"/>
+            <column name="surname" value="Saleov"/>
+            <column name="patronymic" value="Saleovich"/>
+            <column name="email" value="sale@sale.com"/>
+            <column name="password" value="$2a$12$kNHA2bu3vUh7FNm2lEPcV.JBZVXT/6gcGWTh01N57D2oX6kccG92G"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_SALE')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_3">
+        <insert tableName="User">
+            <column name="name" value="Customer"/>
+            <column name="surname" value="Customerov"/>
+            <column name="patronymic" value="Customerovich"/>
+            <column name="email" value="customer@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

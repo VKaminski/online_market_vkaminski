@@ -19,7 +19,7 @@ public class AppUserPrincipal implements UserDetails {
     public AppUserPrincipal(UserDTO userDTO) {
         this.userDTO = userDTO;
         this.grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRoleDTO().getName()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRole().getName()));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class AppUserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userDTO.getUsername();
+        return userDTO.getEmail();
     }
 
     @Override
