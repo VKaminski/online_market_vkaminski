@@ -8,6 +8,7 @@ public class User {
     private String email;
     private String password;
     private Role role;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -63,5 +64,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

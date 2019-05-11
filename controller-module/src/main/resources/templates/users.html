@@ -6,16 +6,19 @@
 </head>
 <body>
 <a href="/logout">Logout</a>
-<table>
-    <tr>
-        <td>№</td>
-        <td>Surname</td>
-        <td>Name</td>
-        <td>Patronymic</td>
-        <td>Email</td>
-        <td>Role</td>
-    </tr>
-    <tr th:each="user,stat : ${users}">
+<form action="#" th:action="@{/users/delete}" th:object="${userIds}" method="post">
+    <table>
+        <tr>
+            <td>№</td>
+            <td>Surname</td>
+            <td>Name</td>
+            <td>Patronymic</td>
+            <td>Email</td>
+            <td>Role</td>
+            <td>Deleted</td>
+        </tr>
+        <tr th:each="user,stat : ${users}">
+
             <td>
                 <span th:text="${stat.index + 1}"></span>
             </td>
@@ -32,14 +35,24 @@
                 <span th:text="${user.email}"></span>
             </td>
             <td>
-                <select>
-                    <option th:each="role :  ${roles}"
-                            th:value="${role}" th:text="${role}"
-                            th:selected="${role == user.getRole().name}"></option>
-                </select>
+                <form action="" th:action="@{/users/{id}/changerole(id=${user.id})}" method="post">
+                    <select name="role" onchange='this.form.submit()'>
+                        <option th:each="role : ${roles}"
+                                th:value="${role}" th:text="${role}"
+                                th:selected="${role == user.getRole().name}">
+                        </option>
+                    </select>
+                </form>
             </td>
-        </form>
-    </tr>
-</table>
+            <td>
+                <input type="checkbox"
+                       th:name="${}"
+                       th:value="${user.id}"
+                       th:checked="${user.deleted}">
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Delete">
+</form>
 </body>
 </html>

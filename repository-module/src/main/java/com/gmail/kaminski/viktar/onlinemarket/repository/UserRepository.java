@@ -8,9 +8,11 @@ import java.util.List;
 public interface UserRepository extends GenericRepository {
     User getUserByEmail(Connection connection, String email);
 
-    List<User> getUsers(Connection connection);
+    List<User> getUsers(Connection connection, Long firstElement, Integer amountElement);
 
-    void setRole(Connection connection, User user, String roleName);
+    void setRole(Connection connection, Long id, String roleName);
 
     User add(Connection connection, User user);
+
+    Long size(Connection connection);
 }

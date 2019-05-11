@@ -72,11 +72,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDTO> getUsers() {
+    public List<UserDTO> getUsers(Long firstElement, Integer amountElement) {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                List<User> users = userRepository.getUsers(connection);
+                List<User> users = userRepository.getUsers(connection, firstElement , amountElement);
                 List<UserDTO> output = new ArrayList<>();
                 for (User user : users) {
                     output.add(userConverter.toUserDTO(user));
@@ -95,12 +95,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setRole(UserDTO userDTO, String roleName) {
+    public Long amountPages(Integer pageSize){
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                User user = userConverter.toUser(userDTO);
-                userRepository.setRole(connection, user, roleName);
+                Long size = userRepository.size(connection);
+                connection.commit();
+                Long amountPages = size / pageSize;
+                if (size % pageSize != 0) {
+                    amountPages++;
+                }
+                return amountPages;
+            } catch (SQLException e) {
+                logger.error(this.getClass().getName() + "rollback operation in amountPages!");
+                connection.rollback();
+                throw new UserServiceException(e);
+            }
+        } catch (SQLException e) {
+            logger.error(this.getClass().getName() + "problem with connection in amountPages!");
+            throw new UserServiceException(e);
+        }
+    }
+
+    @Override
+    public void setRole(Long id, String roleName) {
+        try (Connection connection = userRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                userRepository.setRole(connection, id, roleName);
                 connection.commit();
             } catch (SQLException e) {
                 logger.error(this.getClass().getName() + "rollback operation in setRole!");

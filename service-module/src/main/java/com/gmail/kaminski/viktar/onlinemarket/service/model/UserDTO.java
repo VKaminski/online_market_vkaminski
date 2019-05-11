@@ -8,6 +8,7 @@ public class UserDTO {
     private String email;
     private String password;
     private RoleDTO role;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -63,5 +64,13 @@ public class UserDTO {
 
     public void setRole(RoleDTO role) {
         this.role = role;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

@@ -4,4 +4,5 @@ public class UserServiceException extends RuntimeException {
     public UserServiceException(Throwable cause) {
         super(cause);
     }
+
 }

@@ -1,10 +1,10 @@
-package com.gmail.kaminski.viktar.onlinemarket.repository.model;
+package com.gmail.kaminski.viktar.onlinemarket.service.model;
 
 import java.util.Date;
 
-public class Feedback {
+public class FeedbackDTO {
     private Long id;
-    private User user;
+    private UserDTO userDTO;
     private String content;
     private Date date;
     private String status;
@@ -17,12 +17,12 @@ public class Feedback {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     public String getContent() {

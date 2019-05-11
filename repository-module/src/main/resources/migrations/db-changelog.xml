@@ -39,6 +39,9 @@
             <column name="role_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user_role" references="Role(id)"/>
             </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 

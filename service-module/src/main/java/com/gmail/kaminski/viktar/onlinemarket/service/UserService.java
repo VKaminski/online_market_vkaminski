@@ -1,16 +1,17 @@
 package com.gmail.kaminski.viktar.onlinemarket.service;
 
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface UserService {
-    public UserDTO getUserByEmail(String email);
+    UserDTO getUserByEmail(String email);
 
     void add(UserDTO userDTO);
 
-    public List<UserDTO> getUsers();
+    List<UserDTO> getUsers(Long firstElement, Integer amountElement);
 
-    void setRole(UserDTO userDTO, String roleName);
+    Long amountPages(Integer pageSize);
+
+    void setRole(Long id, String roleName);
 }

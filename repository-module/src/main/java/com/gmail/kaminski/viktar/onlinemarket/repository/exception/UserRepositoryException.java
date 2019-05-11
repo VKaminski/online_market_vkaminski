@@ -4,4 +4,8 @@ public class UserRepositoryException extends RuntimeException {
     public UserRepositoryException(Throwable cause) {
         super(cause);
     }
+
+    public UserRepositoryException(String message) {
+        super(message);
+    }
 }

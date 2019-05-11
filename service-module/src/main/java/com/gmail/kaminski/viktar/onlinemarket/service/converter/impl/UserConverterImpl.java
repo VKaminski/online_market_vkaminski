@@ -14,6 +14,7 @@ public class UserConverterImpl implements UserConverter {
         this.roleConverter = roleConverter;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public UserDTO toUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
@@ -38,9 +39,11 @@ public class UserConverterImpl implements UserConverter {
         if (user.getRole() != null) {
             userDTO.setRole(roleConverter.toRoleDTO(user.getRole()));
         }
+        userDTO.setDeleted(user.isDeleted());
         return userDTO;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public User toUser(UserDTO userDTO) {
         User user = new User();
@@ -65,6 +68,7 @@ public class UserConverterImpl implements UserConverter {
         if (userDTO.getRole() != null) {
             user.setRole(roleConverter.toRole(userDTO.getRole()));
         }
+        user.setDeleted(userDTO.isDeleted());
         return user;
     }
 }
