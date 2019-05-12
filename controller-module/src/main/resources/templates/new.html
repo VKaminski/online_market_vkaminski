@@ -5,6 +5,23 @@
     <title>New user</title>
 </head>
 <body>
-New user page
+<form action="#" th:action="@{/users/new/create}" th:object="${user}" method="post">
+    <br>Surname
+    <input type="text" th:field="*{surname}">
+    <br>Name
+    <input type="text" th:field="*{name}">
+    <br>Patronymic
+    <input type="text" th:field="*{patronymic}">
+    <br>Email
+    <input type="text" th:field="*{email}">
+    <br>Role
+    <select th:field="*{role}">
+        <option th:each="roleName : ${roles}"
+                th:value="${roleName}" th:text="${roleName}">
+        </option>
+    </select>
+    <br>
+    <button type="submit">Create</button>
+</form>
 </body>
 </html>

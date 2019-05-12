@@ -1,8 +1,10 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.Role;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.RoleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.NewUserDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import org.springframework.stereotype.Component;
 
@@ -69,6 +71,28 @@ public class UserConverterImpl implements UserConverter {
             user.setRole(roleConverter.toRole(userDTO.getRole()));
         }
         user.setDeleted(userDTO.isDeleted());
+        return user;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public User toUser(NewUserDTO newUserDTO) {
+        User user = new User();
+        if (newUserDTO.getName() != null) {
+            user.setName(newUserDTO.getName());
+        }
+        if (newUserDTO.getSurname() != null) {
+            user.setSurname(newUserDTO.getSurname());
+        }
+        if (newUserDTO.getPatronymic() != null) {
+            user.setPatronymic(newUserDTO.getPatronymic());
+        }
+        if (newUserDTO.getEmail() != null) {
+            user.setEmail(newUserDTO.getEmail());
+        }
+        Role role = new Role();
+        role.setName(newUserDTO.getRole());
+        user.setRole(role);
         return user;
     }
 }

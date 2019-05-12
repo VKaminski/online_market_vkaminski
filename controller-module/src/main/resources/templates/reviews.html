@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reviews</title>
+</head>
+<body>
+<a href="/logout">Logout</a>
+<a href="/users">Users</a>
+
+<table>
+    <tr>
+        <td>№</td>
+        <td>Author</td>
+        <td>Content</td>
+        <td>Date</td>
+        <td>Visible</td>
+    </tr>
+    <tr th:each="review,stat : ${reviews}">
+        <td>
+            <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElement + 1}"></span>
+        </td>
+        <td>
+            <span th:text="${review.getUserDTO().surname}"></span>
+            <span th:text="${review.getUserDTO().name}"></span>
+            <span th:text="${review.getUserDTO().patronymic}"></span>
+        </td>
+        <td>
+            <span th:text="${review.content}"></span>
+        </td>
+        <td>
+            <span th:text="${review.date}"></span>
+        </td>
+        <td>
+            <form action="#" th:action="@{/reviews/{id}/hide(id=${review.id})}" method="post">
+                <input type="checkbox" onchange='this.form.submit()'
+                       th:checked="${review.visible}">
+            </form>
+        </td>
+        <td>
+            <form action="#" th:action="@{/reviews/{id}/delete(id=${review.id})}" method="post">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+
+    </tr>
+</table>
+
+<div th:with="url=@{/reviews}">
+    <div th:include="paginator :: paginator"></div>
+</div>
+</body>
+</html>

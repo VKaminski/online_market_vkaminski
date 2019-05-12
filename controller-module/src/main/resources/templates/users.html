@@ -6,21 +6,28 @@
 </head>
 <body>
 <a href="/logout">Logout</a>
-<form action="#" th:action="@{/users/delete}" th:object="${userIds}" method="post">
+<a href="/users/new">New user</a>
+<a href="/reviews">Reviews</a>
+<form action="#" th:action="@{/users/delete}" th:object="${deletedList}" method="post">
     <table>
         <tr>
+            <td><input type="submit" value="Delete"></td>
             <td>№</td>
             <td>Surname</td>
             <td>Name</td>
             <td>Patronymic</td>
             <td>Email</td>
             <td>Role</td>
-            <td>Deleted</td>
         </tr>
         <tr th:each="user,stat : ${users}">
-
             <td>
-                <span th:text="${stat.index + 1}"></span>
+                <input type="checkbox"
+                       th:field="*{checkedUsersId}"
+                       th:value="${user.id}"
+                       th:checked="${user.deleted}">
+            </td>
+            <td>
+                <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElement + 1}"></span>
             </td>
             <td>
                 <span th:text="${user.surname}"></span>
@@ -35,7 +42,7 @@
                 <span th:text="${user.email}"></span>
             </td>
             <td>
-                <form action="" th:action="@{/users/{id}/changerole(id=${user.id})}" method="post">
+                <form action="#" th:action="@{/users/{id}/changerole(id=${user.id})}" method="post">
                     <select name="role" onchange='this.form.submit()'>
                         <option th:each="role : ${roles}"
                                 th:value="${role}" th:text="${role}"
@@ -45,14 +52,15 @@
                 </form>
             </td>
             <td>
-                <input type="checkbox"
-                       th:name="${}"
-                       th:value="${user.id}"
-                       th:checked="${user.deleted}">
+                <form action="#" th:action="@{/users/{id}/changepassword(id=${user.id})}" method="post">
+                    <input type="submit" value="Change password">
+                </form>
             </td>
         </tr>
     </table>
-    <input type="submit" value="Delete">
+    <div th:with="url=@{/users}">
+        <div th:include="paginator :: paginator"></div>
+    </div>
 </form>
 </body>
 </html>

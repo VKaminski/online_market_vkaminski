@@ -1,18 +1,15 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.RoleRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
+import com.gmail.kaminski.viktar.onlinemarket.repository.exception.RoleRepositoryException;
 import com.gmail.kaminski.viktar.onlinemarket.service.RoleService;
-import com.gmail.kaminski.viktar.onlinemarket.service.converter.RoleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.exception.RoleServiceException;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
                 List<String> roleNames = roleRepository.getRoleNames(connection);
                 connection.commit();
                 return roleNames;
-            } catch (SQLException e) {
+            } catch (RoleRepositoryException e) {
                 logger.error(this.getClass().getName() + "rollback operation in getRoleNames");
                 connection.rollback();
                 throw new RoleServiceException(e);

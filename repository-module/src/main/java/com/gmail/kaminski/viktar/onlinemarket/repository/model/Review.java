@@ -2,12 +2,13 @@ package com.gmail.kaminski.viktar.onlinemarket.repository.model;
 
 import java.util.Date;
 
-public class Feedback {
+public class Review {
     private Long id;
     private User user;
     private String content;
     private Date date;
-    private String status;
+    private Boolean visible;
+    private Boolean deleted;
 
     public Long getId() {
         return id;
@@ -41,11 +42,19 @@ public class Feedback {
         this.date = date;
     }
 
-    public String getStatus() {
-        return status;
+    public Boolean getVisible() {
+        return visible;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

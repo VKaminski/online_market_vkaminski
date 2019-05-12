@@ -21,7 +21,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
     private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     @Override
-    public User getUserByEmail(Connection connection, String email) {
+    public User get(Connection connection, String email) {
         String sqlRequest = "SELECT U.password, R.name FROM User AS U" +
                 " JOIN Role AS R ON U.role_id = R.id WHERE email=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
@@ -39,19 +39,40 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
                 }
                 return user;
             } catch (SQLException e) {
-                logger.error(this.getClass().getName() + " problem with ResultSet in getUserByEmail!");
+                logger.error(this.getClass().getName() + " problem with ResultSet in get (by email)!");
                 throw new UserRepositoryException(e);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + " problem with prepareStatement in getUserByEmail!");
+            logger.error(this.getClass().getName() + " problem with prepareStatement in get (by email)!");
             throw new UserRepositoryException(e);
         }
     }
 
     @Override
-    public List<User> getUsers(Connection connection, Long firstElement, Integer amountElement) {
+    public User get(Connection connection, Long id) {
         String sqlRequest = "SELECT U.id,U.surname,U.name,U.patronymic,U.email, U.deleted, R.name AS role" +
                 " FROM User AS U JOIN Role AS R ON U.role_id = R.id" +
+                " WHERE U.deleted = false AND U.id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
+            preparedStatement.setLong(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return get(resultSet);
+            } catch (SQLException e) {
+                logger.error(this.getClass().getName() + " problem with ResultSet in get (by id)!");
+                throw new UserRepositoryException(e);
+            }
+        } catch (SQLException e) {
+            logger.error(this.getClass().getName() + " problem with prepareStatement in get (by id)!");
+            throw new UserRepositoryException(e);
+        }
+    }
+
+    @Override
+    public List<User> get(Connection connection, Long firstElement, Integer amountElement) {
+        String sqlRequest = "SELECT U.id,U.surname,U.name,U.patronymic,U.email, U.deleted, R.name AS role" +
+                " FROM User AS U JOIN Role AS R ON U.role_id = R.id" +
+                " WHERE deleted = false" +
                 " ORDER BY email" +
                 " LIMIT ?,?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
@@ -64,11 +85,11 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
                 }
                 return users;
             } catch (SQLException e) {
-                logger.error(this.getClass().getName() + " problem with ResultSet in getUsers!");
+                logger.error(this.getClass().getName() + " problem with ResultSet in get (list)!");
                 throw new UserRepositoryException(e);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + " problem with prepareStatement in getUsers!");
+            logger.error(this.getClass().getName() + " problem with prepareStatement in get (list)!");
             throw new UserRepositoryException(e);
         }
     }
@@ -76,7 +97,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
     @Override
     public void setRole(Connection connection, Long id, String roleName) {
         String sqlRequest = "UPDATE User SET role_id = (SELECT (id) FROM Role WHERE name = ?)" +
-                " WHERE id = ?";
+                " WHERE id = ? AND locked = false";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
             preparedStatement.setString(1, roleName);
             preparedStatement.setLong(2, id);
@@ -91,7 +112,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
     @Override
     public User add(Connection connection, User user) {
         String sqlRequest = "INSERT INTO User(surname, name, patronymic, email, password, role_id) " +
-                "VALUES (?,?,?,?(SELECT (id) FROM Role WHERE name = ?))";
+                "VALUES (?,?,?,?,?,(SELECT (id) FROM Role WHERE name = ?))";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getSurname());
             preparedStatement.setString(2, user.getName());
@@ -116,7 +137,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
 
     @Override
     public Long size(Connection connection) {
-        String sqlRequest = "SELECT COUNT (*) FROM User WHERE deleted = false ";
+        String sqlRequest = "SELECT COUNT(*) FROM User WHERE deleted = false ";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -135,6 +156,45 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
             }
         } catch (SQLException e) {
             logger.error(this.getClass().getName() + " problem with PrepareStatement in size!");
+            throw new UserRepositoryException(e);
+        }
+    }
+
+    @Override
+    public void delete(Connection connection, List<Long> checkedUsersId) {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < checkedUsersId.size(); i++) {
+            buffer.append("?,");
+        }
+        String sqlRequestPostfix = "(" + buffer.substring(0, buffer.length() - 1) + ")";
+        String sqlRequest = "UPDATE User SET deleted = true WHERE locked = false AND id IN " + sqlRequestPostfix;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
+            int count = 1;
+            for (Long id : checkedUsersId) {
+                preparedStatement.setLong(count, id);
+                count++;
+            }
+            int deletedRows = preparedStatement.executeUpdate();
+            if (deletedRows == 0) {
+                String message = this.getClass().getName() + " Users hasn't been deleted!";
+                logger.error(message);
+                throw new UserRepositoryException(message);
+            }
+        } catch (SQLException e) {
+            logger.error(this.getClass().getName() + "SQLException user delete");
+            throw new UserRepositoryException(e);
+        }
+    }
+
+    @Override
+    public void changePassword(Connection connection, Long id, String hashPassword) {
+        String sqlRequest = "UPDATE User SET password = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
+            preparedStatement.setString(1, hashPassword);
+            preparedStatement.setLong(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error(this.getClass().getName() + " problem with prepareStatement in changePassword!");
             throw new UserRepositoryException(e);
         }
     }

@@ -31,7 +31,7 @@
             </column>
             <column name="patronymic" type="VARCHAR(40)"/>
             <column name="email" type="VARCHAR(50)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="password" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -39,25 +39,17 @@
             <column name="role_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user_role" references="Role(id)"/>
             </column>
-            <column name="deleted" type="TINYINT(1)" defaultValue="0">
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locked" type="TINYINT(1)" defaultValue="false">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet author="viktar.kaminski@gmail.com" id="FEEDBACK_STATUS_TABLE_1">
-        <createTable tableName="Feedback_status">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="FEEDBACK_TABLE_1">
-        <createTable tableName="Feedback">
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_TABLE_1">
+        <createTable tableName="Review">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -67,11 +59,14 @@
             <column name="content" type="VARCHAR(1000)">
                 <constraints nullable="false"/>
             </column>
-            <column name="date" type="TIMESTAMP">
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="status_id" type="BIGINT">
-                <constraints foreignKeyName="fk_feedback_status" references="Feedback_status(id)"/>
+            <column name="visible" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -97,6 +92,18 @@
     <changeSet author="viktar.kaminski@gmail.com" id="ROLE_4">
         <insert tableName="Role">
             <column name="name" value="ROLE_SECURE_API"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_0">
+        <insert tableName="User">
+            <column name="name" value="Superadmin"/>
+            <column name="surname" value="Superadminov"/>
+            <column name="patronymic" value="Superadminovich"/>
+            <column name="email" value="superadmin@admin.com"/>
+            <column name="password" value="$2a$12$0007AfuifZi2yi1C0D3p9uT07xRGUHjrMT0xJMJxsZPT05PUVSFuK"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_ADMINISTRATOR')"/>
+            <column name="locked" valueBoolean="true"/>
         </insert>
     </changeSet>
 
@@ -130,6 +137,427 @@
             <column name="email" value="customer@customer.com"/>
             <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
             <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_4">
+        <insert tableName="User">
+            <column name="name" value="User1"/>
+            <column name="surname" value="Userov1"/>
+            <column name="patronymic" value="Userovich1"/>
+            <column name="email" value="user1@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_5">
+        <insert tableName="User">
+            <column name="name" value="User2"/>
+            <column name="surname" value="Userov2"/>
+            <column name="patronymic" value="Userovich2"/>
+            <column name="email" value="user2@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_6">
+        <insert tableName="User">
+            <column name="name" value="User3"/>
+            <column name="surname" value="Userov3"/>
+            <column name="patronymic" value="Userovich3"/>
+            <column name="email" value="user3@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_7">
+        <insert tableName="User">
+            <column name="name" value="User4"/>
+            <column name="surname" value="Userov4"/>
+            <column name="patronymic" value="Userovich4"/>
+            <column name="email" value="user4@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_8">
+        <insert tableName="User">
+            <column name="name" value="User5"/>
+            <column name="surname" value="Userov5"/>
+            <column name="patronymic" value="Userovich5"/>
+            <column name="email" value="user5@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_9">
+        <insert tableName="User">
+            <column name="name" value="User6"/>
+            <column name="surname" value="Userov6"/>
+            <column name="patronymic" value="Userovich6"/>
+            <column name="email" value="user6@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_10">
+        <insert tableName="User">
+            <column name="name" value="User7"/>
+            <column name="surname" value="Userov7"/>
+            <column name="patronymic" value="Userovich7"/>
+            <column name="email" value="user7@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_11">
+        <insert tableName="User">
+            <column name="name" value="User8"/>
+            <column name="surname" value="Userov8"/>
+            <column name="patronymic" value="Userovich8"/>
+            <column name="email" value="user8@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_12">
+        <insert tableName="User">
+            <column name="name" value="User9"/>
+            <column name="surname" value="Userov9"/>
+            <column name="patronymic" value="Userovich9"/>
+            <column name="email" value="user9@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_13">
+        <insert tableName="User">
+            <column name="name" value="User10"/>
+            <column name="surname" value="Userov10"/>
+            <column name="patronymic" value="Userovich10"/>
+            <column name="email" value="user100@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_14">
+        <insert tableName="User">
+            <column name="name" value="User11"/>
+            <column name="surname" value="Userov11"/>
+            <column name="patronymic" value="Userovich11"/>
+            <column name="email" value="user11@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_15">
+        <insert tableName="User">
+            <column name="name" value="User12"/>
+            <column name="surname" value="Userov12"/>
+            <column name="patronymic" value="Userovich12"/>
+            <column name="email" value="user12@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_16">
+        <insert tableName="User">
+            <column name="name" value="User13"/>
+            <column name="surname" value="Userov13"/>
+            <column name="patronymic" value="Userovich13"/>
+            <column name="email" value="user13@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_17">
+        <insert tableName="User">
+            <column name="name" value="User14"/>
+            <column name="surname" value="Userov14"/>
+            <column name="patronymic" value="Userovich14"/>
+            <column name="email" value="user14@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_18">
+        <insert tableName="User">
+            <column name="name" value="User15"/>
+            <column name="surname" value="Userov15"/>
+            <column name="patronymic" value="Userovich15"/>
+            <column name="email" value="user15@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_19">
+        <insert tableName="User">
+            <column name="name" value="User16"/>
+            <column name="surname" value="Userov16"/>
+            <column name="patronymic" value="Userovich16"/>
+            <column name="email" value="user16@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_20">
+        <insert tableName="User">
+            <column name="name" value="User17"/>
+            <column name="surname" value="Userov17"/>
+            <column name="patronymic" value="Userovich17"/>
+            <column name="email" value="user17@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_21">
+        <insert tableName="User">
+            <column name="name" value="User18"/>
+            <column name="surname" value="Userov18"/>
+            <column name="patronymic" value="Userovich18"/>
+            <column name="email" value="user18@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_22">
+        <insert tableName="User">
+            <column name="name" value="User19"/>
+            <column name="surname" value="Userov19"/>
+            <column name="patronymic" value="Userovich19"/>
+            <column name="email" value="user19@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_23">
+        <insert tableName="User">
+            <column name="name" value="User20"/>
+            <column name="surname" value="Userov20"/>
+            <column name="patronymic" value="Userovich20"/>
+            <column name="email" value="user20@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_24">
+        <insert tableName="User">
+            <column name="name" value="User21"/>
+            <column name="surname" value="Userov21"/>
+            <column name="patronymic" value="Userovich21"/>
+            <column name="email" value="user21@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_25">
+        <insert tableName="User">
+            <column name="name" value="User22"/>
+            <column name="surname" value="Userov22"/>
+            <column name="patronymic" value="Userovich22"/>
+            <column name="email" value="user22@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_26">
+        <insert tableName="User">
+            <column name="name" value="User23"/>
+            <column name="surname" value="Userov23"/>
+            <column name="patronymic" value="Userovich23"/>
+            <column name="email" value="user23@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_27">
+        <insert tableName="User">
+            <column name="name" value="User24"/>
+            <column name="surname" value="Userov24"/>
+            <column name="patronymic" value="Userovich24"/>
+            <column name="email" value="user24@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_28">
+        <insert tableName="User">
+            <column name="name" value="User25"/>
+            <column name="surname" value="Userov25"/>
+            <column name="patronymic" value="Userovich25"/>
+            <column name="email" value="user25@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_29">
+        <insert tableName="User">
+            <column name="name" value="User26"/>
+            <column name="surname" value="Userov26"/>
+            <column name="patronymic" value="Userovich26"/>
+            <column name="email" value="user26@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_30">
+        <insert tableName="User">
+            <column name="name" value="User27"/>
+            <column name="surname" value="Userov27"/>
+            <column name="patronymic" value="Userovich27"/>
+            <column name="email" value="user27@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_31">
+        <insert tableName="User">
+            <column name="name" value="User29"/>
+            <column name="surname" value="Userov29"/>
+            <column name="patronymic" value="Userovich29"/>
+            <column name="email" value="user29@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_32">
+        <insert tableName="User">
+            <column name="name" value="User30"/>
+            <column name="surname" value="Userov30"/>
+            <column name="patronymic" value="Userovich30"/>
+            <column name="email" value="user30@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_33">
+        <insert tableName="User">
+            <column name="name" value="User31"/>
+            <column name="surname" value="Userov31"/>
+            <column name="patronymic" value="Userovich31"/>
+            <column name="email" value="user31@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_34">
+        <insert tableName="User">
+            <column name="name" value="User32"/>
+            <column name="surname" value="Userov32"/>
+            <column name="patronymic" value="Userovich32"/>
+            <column name="email" value="user32@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_35">
+        <insert tableName="User">
+            <column name="name" value="User33"/>
+            <column name="surname" value="Userov33"/>
+            <column name="patronymic" value="Userovich33"/>
+            <column name="email" value="user33@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_1">
+        <insert tableName="Review">
+            <column name="user_id" value="1"/>
+            <column name="content" value="Test"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_2">
+        <insert tableName="Review">
+            <column name="user_id" value="1"/>
+            <column name="content" value="Saleov"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_3">
+        <insert tableName="Review">
+            <column name="user_id" value="1"/>
+            <column name="content" value="Customerov"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_4">
+        <insert tableName="Review">
+            <column name="user_id" value="1"/>
+            <column name="content" value="Userov1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_5">
+        <insert tableName="Review">
+            <column name="user_id" value="2"/>
+            <column name="content" value="Userov2"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_6">
+        <insert tableName="Review">
+            <column name="user_id" value="3"/>
+            <column name="content" value="Userov3"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_7">
+        <insert tableName="Review">
+            <column name="user_id" value="4"/>
+            <column name="content" value="Userov4"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_8">
+        <insert tableName="Review">
+            <column name="user_id" value="5"/>
+            <column name="content" value="Userov5"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_9">
+        <insert tableName="Review">
+            <column name="user_id" value="6"/>
+            <column name="content" value="Userov6"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_10">
+        <insert tableName="Review">
+            <column name="user_id" value="7"/>
+            <column name="content" value="Userov7"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_11">
+        <insert tableName="Review">
+            <column name="user_id" value="8"/>
+            <column name="content" value="Userov8"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_12">
+        <insert tableName="Review">
+            <column name="user_id" value="9"/>
+            <column name="content" value="Userov9"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_13">
+        <insert tableName="Review">
+            <column name="user_id" value="10"/>
+            <column name="content" value="Userov10"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_14">
+        <insert tableName="Review">
+            <column name="user_id" value="11"/>
+            <column name="content" value="Userov11"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_15">
+        <insert tableName="Review">
+            <column name="user_id" value="12"/>
+            <column name="content" value="Userov12"/>
+        </insert>
+    </changeSet>
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_16">
+        <insert tableName="Review">
+            <column name="user_id" value="13"/>
+            <column name="content" value="Userov13"/>
         </insert>
     </changeSet>
 
