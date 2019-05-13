@@ -16,6 +16,16 @@ public class Paginator {
         amountVariants.add(15);
     }
 
+    public Paginator(Long page, Integer amountElement, Long amountPage) {
+        this.page = page;
+        this.amountElement = amountElement;
+        this.amountPage = amountPage;
+        amountVariants = new ArrayList<>();
+        amountVariants.add(5);
+        amountVariants.add(10);
+        amountVariants.add(15);
+    }
+
     public Long getPage() {
         return page;
     }

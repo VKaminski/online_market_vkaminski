@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,10 +32,10 @@ public class AdministratorController {
     private ReviewService reviewService;
     private PaginatorService paginatorService;
 
-    private AdministratorController(UserService userService,
-                                    RoleService roleService,
-                                    PaginatorService paginatorService,
-                                    ReviewService reviewService) {
+    protected AdministratorController(UserService userService,
+                                      RoleService roleService,
+                                      PaginatorService paginatorService,
+                                      ReviewService reviewService) {
         this.userService = userService;
         this.roleService = roleService;
         this.paginatorService = paginatorService;
@@ -42,13 +43,14 @@ public class AdministratorController {
     }
 
     @GetMapping("/users")
-    public String users(@RequestParam(value = "page", required = false, defaultValue="1") Long page,
-                        @RequestParam(value = "amountElement", required = false, defaultValue="10") Integer amountElement,
-                        Model model) {
-        Long firstElement = (page - 1) * amountElement;
-        List<UserDTO> users = userService.get(firstElement, amountElement);
+    public String users(
+            @RequestParam(value = "page", required = false, defaultValue = "1") String page,
+            @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
+            Model model) {
         Long sizeList = userService.size();
         Paginator paginator = paginatorService.get(page, amountElement, sizeList);
+        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElement();
+        List<UserDTO> users = userService.get(firstElement, paginator.getAmountElement());
         List<String> roles = roleService.getRoleNames();
         List<Long> checkedUsersId = new ArrayList<>();
         DeletedList deletedList = new DeletedList();
@@ -81,7 +83,7 @@ public class AdministratorController {
     }
 
     @GetMapping("/users/new")
-    public String newUser(Model model){
+    public String newUser(Model model) {
         List<String> roles = roleService.getRoleNames();
         NewUserDTO user = new NewUserDTO();
         model.addAttribute("roles", roles);
@@ -91,19 +93,26 @@ public class AdministratorController {
 
     @PostMapping("/users/new/create")
     public String createUser(
-            @Valid @ModelAttribute("user") NewUserDTO user) {
+            @Valid @ModelAttribute("user") NewUserDTO user,
+            BindingResult bindingResult,
+            Model model) {
+        List<String> roles = roleService.getRoleNames();
+        model.addAttribute("roles", roles);
+        if (bindingResult.hasErrors()) {
+            return "new";
+        }
         userService.add(user);
         return "redirect:/users/new";
     }
 
     @GetMapping("/reviews")
-    public String reviews(@RequestParam(value = "page", required = false, defaultValue="1") Long page,
-                        @RequestParam(value = "amountElement", required = false, defaultValue="10") Integer amountElement,
-                        Model model) {
-        Long firstElement = (page - 1) * amountElement;
-        List<ReviewDTO> reviews = reviewService.get(firstElement, amountElement);
+    public String reviews(@RequestParam(value = "page", required = false, defaultValue = "1") String page,
+                          @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
+                          Model model) {
         Long sizeList = reviewService.size();
         Paginator paginator = paginatorService.get(page, amountElement, sizeList);
+        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElement();
+        List<ReviewDTO> reviews = reviewService.get(firstElement, paginator.getAmountElement());
         Long id = new Long(0);
         model.addAttribute("reviewId", id);
         model.addAttribute("reviews", reviews);

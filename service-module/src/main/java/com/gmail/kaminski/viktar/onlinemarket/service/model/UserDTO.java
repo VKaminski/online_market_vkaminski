@@ -10,6 +10,18 @@ public class UserDTO {
     private RoleDTO role;
     private boolean deleted;
 
+    public UserDTO() {
+    }
+
+    public UserDTO(Long id, String name, String surname, String patronymic, String email, RoleDTO role) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.email = email;
+        this.role = role;
+    }
+
     public Long getId() {
         return id;
     }

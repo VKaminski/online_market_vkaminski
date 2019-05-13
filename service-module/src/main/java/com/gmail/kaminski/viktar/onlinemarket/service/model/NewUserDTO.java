@@ -7,15 +7,15 @@ import javax.validation.constraints.Size;
 
 public class NewUserDTO {
     @NotNull
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z]")
+    @Size(min = 1, max = 20)
+    @Pattern(regexp = "[a-zA-Z]*")
     private String name;
     @NotNull
-    @Size(max = 40)
-    @Pattern(regexp = "[a-zA-Z]")
+    @Size(min = 1, max = 40)
+    @Pattern(regexp = "[a-zA-Z]*")
     private String surname;
-    @Size(max = 40)
-    @Pattern(regexp = "[a-zA-Z]")
+    @Size(min = 1, max = 40)
+    @Pattern(regexp = "[a-zA-Z]*")
     private String patronymic;
     @NotNull
     @Email

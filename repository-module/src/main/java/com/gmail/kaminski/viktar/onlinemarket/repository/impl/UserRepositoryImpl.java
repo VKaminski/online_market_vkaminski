@@ -70,7 +70,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
 
     @Override
     public List<User> get(Connection connection, Long firstElement, Integer amountElement) {
-        String sqlRequest = "SELECT U.id,U.surname,U.name,U.patronymic,U.email, U.deleted, R.name AS role" +
+        String sqlRequest = "SELECT U.id,U.surname,U.name,U.patronymic,U.email, R.name AS role" +
                 " FROM User AS U JOIN Role AS R ON U.role_id = R.id" +
                 " WHERE deleted = false" +
                 " ORDER BY email" +
@@ -208,7 +208,6 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
             String patronymic = resultSet.getString("patronymic");
             String email = resultSet.getString("email");
             String roleName = resultSet.getString("role");
-            Boolean deleted = resultSet.getBoolean("deleted");
             user.setId(id);
             user.setSurname(surname);
             user.setName(name);
@@ -217,7 +216,6 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
             Role role = new Role();
             role.setName(roleName);
             user.setRole(role);
-            user.setDeleted(deleted);
             return user;
         } catch (SQLException e) {
             String errorMessage = "Exception: UserRepository private get";

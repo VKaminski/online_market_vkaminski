@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Reviews</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
 </head>
-<body align="center">
-<h2 align="center">Reviews</h2>
-<a href="/users">Users</a>
+<body>
 <a href="/logout">Logout</a>
+<a href="/users">Users</a>
 
-<div id="main" align="center">
-<table border="1" cellpadding="2">
+<table>
     <tr>
         <td>№</td>
         <td>Author</td>
@@ -48,8 +45,8 @@
 
     </tr>
 </table>
-</div>
-<div th:with="url=@{/reviews}" align="center">
+
+<div th:with="url=@{/reviews}">
     <div th:include="paginator :: paginator"></div>
 </div>
 </body>
