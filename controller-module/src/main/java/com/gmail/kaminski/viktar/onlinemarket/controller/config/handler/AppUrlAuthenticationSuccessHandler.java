@@ -1,7 +1,9 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller.config.handler;
 
+import com.gmail.kaminski.viktar.onlinemarket.controller.config.GlobalValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -16,12 +18,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
-import static com.gmail.kaminski.viktar.onlinemarket.controller.config.GlobalValue.ADMINISTRATOR_ROLE_NAME;
-
 @Component
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static Logger logger = LoggerFactory.getLogger(LoginAccessDeniedHandler.class);
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    @Autowired
+    private GlobalValue globalValue;
 
 
     @Override
@@ -61,7 +63,7 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("ROLE_" + ADMINISTRATOR_ROLE_NAME)) {
+            if (grantedAuthority.getAuthority().equals("ROLE_" + globalValue.getAdministratorRoleName())) {
                 isAdministrator = true;
                 break;
             }

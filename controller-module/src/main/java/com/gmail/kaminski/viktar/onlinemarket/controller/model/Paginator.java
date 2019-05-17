@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Paginator {
     private Long page;
-    private Integer amountElement;
-    private Long amountPage;
+    private Integer amountElementOnPage;
+    private Long totalElement;
     private List<Integer> amountVariants;
 
     public Paginator() {
@@ -16,10 +16,10 @@ public class Paginator {
         amountVariants.add(15);
     }
 
-    public Paginator(Long page, Integer amountElement, Long amountPage) {
+    public Paginator(Long page, Integer amountElementOnPage, Long totalElement) {
         this.page = page;
-        this.amountElement = amountElement;
-        this.amountPage = amountPage;
+        this.amountElementOnPage = amountElementOnPage;
+        this.totalElement = totalElement;
         amountVariants = new ArrayList<>();
         amountVariants.add(5);
         amountVariants.add(10);
@@ -34,20 +34,20 @@ public class Paginator {
         this.page = page;
     }
 
-    public Integer getAmountElement() {
-        return amountElement;
+    public Integer getAmountElementOnPage() {
+        return amountElementOnPage;
     }
 
-    public void setAmountElement(Integer amountElement) {
-        this.amountElement = amountElement;
+    public void setAmountElementOnPage(Integer amountElementOnPage) {
+        this.amountElementOnPage = amountElementOnPage;
     }
 
-    public Long getAmountPage() {
-        return amountPage;
+    public Long getTotalElement() {
+        return totalElement;
     }
 
-    public void setAmountPage(Long amountPage) {
-        this.amountPage = amountPage;
+    public void setTotalElement(Long totalElement) {
+        this.totalElement = totalElement;
     }
 
     public List<Integer> getAmountVariants() {

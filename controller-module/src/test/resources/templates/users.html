@@ -27,7 +27,7 @@
                        th:checked="${user.deleted}">
             </td>
             <td>
-                <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElement + 1}"></span>
+                <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElementOnPage + 1}"></span>
             </td>
             <td>
                 <span th:text="${user.surname}"></span>

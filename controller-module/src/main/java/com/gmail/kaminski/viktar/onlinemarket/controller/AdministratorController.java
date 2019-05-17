@@ -49,15 +49,15 @@ public class AdministratorController {
             Model model) {
         Long sizeList = userService.getAmountUsers();
         Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElement();
-        List<UserDTO> users = userService.getUsers(firstElement, paginator.getAmountElement());
+        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
+        List<UserDTO> users = userService.getUsers(firstElement, paginator.getAmountElementOnPage());
         List<String> roles = roleService.getRoleNames();
         List<Long> checkedUsersId = new ArrayList<>();
         CheckedUsers checkedUsers = new CheckedUsers();
         checkedUsers.setCheckedUsersId(checkedUsersId);
         model.addAttribute("users", users);
         model.addAttribute("roles", roles);
-        model.addAttribute("deletedList", checkedUsers);
+        model.addAttribute("checkedUsers", checkedUsers);
         model.addAttribute("paginator", paginator);
         return "users";
     }
@@ -76,7 +76,7 @@ public class AdministratorController {
     }
 
     @PostMapping("/users/delete")
-    public String deleteUsers(@ModelAttribute(value = "deletedList") CheckedUsers checkedUsers) {
+    public String deleteUsers(@ModelAttribute(value = "checkedUsers") CheckedUsers checkedUsers) {
         List<Long> checkedUsersId = checkedUsers.getCheckedUsersId();
         userService.delete(checkedUsersId);
         return "redirect:/users";
@@ -111,8 +111,8 @@ public class AdministratorController {
                           Model model) {
         Long sizeList = reviewService.size();
         Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElement();
-        List<ReviewDTO> reviews = reviewService.get(firstElement, paginator.getAmountElement());
+        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
+        List<ReviewDTO> reviews = reviewService.get(firstElement, paginator.getAmountElementOnPage());
         Long id = new Long(0);
         model.addAttribute("reviewId", id);
         model.addAttribute("reviews", reviews);

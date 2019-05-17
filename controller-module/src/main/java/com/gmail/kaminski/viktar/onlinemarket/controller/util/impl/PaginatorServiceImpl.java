@@ -11,16 +11,12 @@ public class PaginatorServiceImpl implements PaginatorService {
     private static final Logger logger = LoggerFactory.getLogger(PaginatorServiceImpl.class);
 
     @Override
-    public Paginator get(String stringPage, String stringAmountElement, Long sizeList) {
-        Long page = validPage(stringPage, sizeList);
+    public Paginator get(String stringPage, String stringAmountElement, Long totalElement) {
+        Long page = validPage(stringPage, totalElement);
         Integer amountElement = validAmountElement(stringAmountElement);
-        Long amountPage = sizeList / amountElement;
-        if (sizeList % amountElement != 0) {
-            amountPage++;
-        }
         Paginator paginator = new Paginator();
-        paginator.setAmountElement(amountElement);
-        paginator.setAmountPage(amountPage);
+        paginator.setAmountElementOnPage(amountElement);
+        paginator.setTotalElement(totalElement);
         paginator.setPage(page);
         return paginator;
     }
