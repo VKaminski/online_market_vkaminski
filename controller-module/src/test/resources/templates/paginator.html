@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div th:fragment="paginator">
+    <table>
+        <tr>
+            <td>
+                <a th:href="@{${url}(page=${paginator.page-1},amountElementOnPage=${paginator.amountElementOnPage})}">Previous</a>
+            </td>
+            <td th:each="pageRef : ${#numbers.sequence(1, paginator.totalElement)}">
+                <a th:if="${pageRef == 1}" th:href="@{${url}(page=${pageRef},amountElementOnPage=${paginator.amountElementOnPage})}" th:text="${pageRef}"></a>
+                <a th:if="${(pageRef == (paginator.page-2) or pageRef == (paginator.page+2))}" th:href="@{${url}(page=${pageRef},amountElementOnPage=${paginator.amountElementOnPage})}" th:text="..."></a>
+                <a th:if="${pageRef >= (paginator.page-1) and pageRef <= (paginator.page+1) and pageRef != 1 and pageRef != paginator.totalElement}" th:href="@{${url}(page=${pageRef},amountElementOnPage=${paginator.amountElementOnPage})}" th:text="${pageRef}"></a>
+                <a th:if="${pageRef == paginator.totalElement}" th:href="@{${url}(page=${pageRef},amountElementOnPage=${paginator.amountElementOnPage})}" th:text="${pageRef}"></a>
+            </td>
+            <td>
+                <a th:href="@{${url}(page=${paginator.page+1},amountElementOnPage=${paginator.amountElementOnPage})}">Next</a>
+            </td>
+            <td>
+                <form action="" th:action="@{${url}(page=${paginator.page},amountElementOnPage=${amountVariant})}">
+                    <select name="amountElementOnPage" onchange='this.form.submit()'>
+                        <option th:each="amountVariant : ${paginator.amountVariants}"
+                                th:value="${amountVariant}" th:text="${amountVariant}"
+                                th:selected="${amountVariant == paginator.amountElementOnPage}">
+                        </option>
+                    </select>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
