@@ -2,7 +2,7 @@ package com.gmail.kaminski.viktar.onlinemarket.controller.model;
 
 import java.util.List;
 
-public class DeletedList {
+public class CheckedUsers {
     private List<Long> checkedUsersId;
 
     public List<Long> getCheckedUsersId() {

@@ -38,11 +38,11 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl implements Revie
                 }
                 return reviews;
             } catch (SQLException e) {
-                logger.error(this.getClass().getName() + " problem with ResultSet in get (list)!");
+                logger.error(this.getClass().getName() + " problem with ResultSet in getByEmail (list)!");
                 throw new ReviewRepositoryException(e);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + " problem with prepareStatement in get (list)!");
+            logger.error(this.getClass().getName() + " problem with prepareStatement in getByEmail (list)!");
             throw new ReviewRepositoryException(e);
         }
     }
@@ -67,7 +67,7 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl implements Revie
                 throw new ReviewRepositoryException(message);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + " problem with PrepareStatement in size!");
+            logger.error(this.getClass().getName() + " problem with PrepareStatement in getAmountUsers!");
             throw new ReviewRepositoryException(e);
         }
     }
@@ -128,7 +128,7 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl implements Revie
             review.setVisible(visible);
             return review;
         } catch (SQLException e) {
-            String errorMessage = "Exception: ReviewRepository private get";
+            String errorMessage = "Exception: ReviewRepository private getByEmail";
             logger.error(errorMessage);
             throw new SQLException(errorMessage, e);
         }

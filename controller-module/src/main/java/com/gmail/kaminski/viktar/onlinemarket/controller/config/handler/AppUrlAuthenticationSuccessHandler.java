@@ -16,11 +16,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
+import static com.gmail.kaminski.viktar.onlinemarket.controller.config.GlobalValue.ADMINISTRATOR_ROLE_NAME;
+
 @Component
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static Logger logger = LoggerFactory.getLogger(LoginAccessDeniedHandler.class);
-
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -59,15 +61,15 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("ROLE_ADMINISTRATOR")) {
+            if (grantedAuthority.getAuthority().equals("ROLE_" + ADMINISTRATOR_ROLE_NAME)) {
                 isAdministrator = true;
                 break;
             }
         }
         if (isAdministrator) {
-            return "users";
+            return "/users";
         } else {
-            return "login";
+            return "/login";
         }
     }
 

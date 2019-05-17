@@ -23,13 +23,13 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Value("${custom.password.crypto.round}")
     private int cryptoRound;
     @Value("${custom.password.min.length}")
     private int minPasswordLength;
     @Value("${custom.password.max.length}")
     private int maxPasswordLength;
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private UserRepository userRepository;
     private UserConverter userConverter;
     private EmailService emailService;
@@ -46,17 +46,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO get(String email) {
+    public UserDTO getByEmail(String email) {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                User user = userRepository.get(connection, email);
+                User user = userRepository.getByEmail(connection, email);
                 UserDTO userDTO = userConverter.toUserDTO(user);
                 connection.commit();
                 return userDTO;
             } catch (UserRepositoryException e) {
                 connection.rollback();
-                logger.info("Operation get (by email) was rollback");
+                logger.info("Operation getByEmail (by email) was rollback");
                 throw new UserServiceException(e);
             }
         } catch (SQLException e) {
@@ -93,11 +93,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDTO> get(Long firstElement, Integer amountElement) {
+    public List<UserDTO> getUsers(Long firstElement, Integer amountElement) {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                List<User> users = userRepository.get(connection, firstElement, amountElement);
+                List<User> users = userRepository.getUsers(connection, firstElement, amountElement);
                 List<UserDTO> output = new ArrayList<>();
                 for (User user : users) {
                     output.add(userConverter.toUserDTO(user));
@@ -116,38 +116,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long size() {
+    public Long getAmountUsers() {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                Long size = userRepository.size(connection);
+                Long size = userRepository.getAmountUsers(connection);
                 connection.commit();
                 return size;
             } catch (UserRepositoryException e) {
-                logger.error(this.getClass().getName() + "rollback operation in size!");
+                logger.error(this.getClass().getName() + "rollback operation in getAmountUsers!");
                 connection.rollback();
                 throw new UserServiceException(e);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + "problem with connection in size!");
+            logger.error(this.getClass().getName() + "problem with connection in getAmountUsers!");
             throw new UserServiceException(e);
         }
     }
 
     @Override
-    public void setRole(Long id, String roleName) {
+    public void updateRole(Long id, String roleName) {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                userRepository.setRole(connection, id, roleName);
+                userRepository.updateRole(connection, id, roleName);
                 connection.commit();
             } catch (UserRepositoryException e) {
-                logger.error(this.getClass().getName() + "rollback operation in setRole!");
+                logger.error(this.getClass().getName() + "rollback operation in updateRole!");
                 connection.rollback();
                 throw new UserServiceException(e);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + "problem with connection in setRole!");
+            logger.error(this.getClass().getName() + "problem with connection in updateRole!");
             throw new UserServiceException(e);
         }
     }
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
             connection.setAutoCommit(false);
             try {
                 userRepository.changePassword(connection, id, hashPassword);
-                User user = userRepository.get(connection, id);
+                User user = userRepository.getById(connection, id);
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append("Hello ").append(user.getName()).append(" ").append(user.getSurname())
                         .append(", your new password ").append(newPassword);

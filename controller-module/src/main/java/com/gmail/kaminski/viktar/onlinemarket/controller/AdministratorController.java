@@ -1,6 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
-import com.gmail.kaminski.viktar.onlinemarket.controller.model.DeletedList;
+import com.gmail.kaminski.viktar.onlinemarket.controller.model.CheckedUsers;
 import com.gmail.kaminski.viktar.onlinemarket.controller.model.Paginator;
 import com.gmail.kaminski.viktar.onlinemarket.controller.util.PaginatorService;
 import com.gmail.kaminski.viktar.onlinemarket.service.ReviewService;
@@ -47,17 +47,17 @@ public class AdministratorController {
             @RequestParam(value = "page", required = false, defaultValue = "1") String page,
             @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
             Model model) {
-        Long sizeList = userService.size();
+        Long sizeList = userService.getAmountUsers();
         Paginator paginator = paginatorService.get(page, amountElement, sizeList);
         Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElement();
-        List<UserDTO> users = userService.get(firstElement, paginator.getAmountElement());
+        List<UserDTO> users = userService.getUsers(firstElement, paginator.getAmountElement());
         List<String> roles = roleService.getRoleNames();
         List<Long> checkedUsersId = new ArrayList<>();
-        DeletedList deletedList = new DeletedList();
-        deletedList.setCheckedUsersId(checkedUsersId);
+        CheckedUsers checkedUsers = new CheckedUsers();
+        checkedUsers.setCheckedUsersId(checkedUsersId);
         model.addAttribute("users", users);
         model.addAttribute("roles", roles);
-        model.addAttribute("deletedList", deletedList);
+        model.addAttribute("deletedList", checkedUsers);
         model.addAttribute("paginator", paginator);
         return "users";
     }
@@ -65,7 +65,7 @@ public class AdministratorController {
     @PostMapping("/users/{id}/changerole")
     public String changeRole(@PathVariable("id") Long id,
                              @RequestParam String role) {
-        userService.setRole(id, role);
+        userService.updateRole(id, role);
         return "redirect:/users";
     }
 
@@ -76,8 +76,8 @@ public class AdministratorController {
     }
 
     @PostMapping("/users/delete")
-    public String deleteUsers(@ModelAttribute(value = "deletedList") DeletedList deletedList) {
-        List<Long> checkedUsersId = deletedList.getCheckedUsersId();
+    public String deleteUsers(@ModelAttribute(value = "deletedList") CheckedUsers checkedUsers) {
+        List<Long> checkedUsersId = checkedUsers.getCheckedUsersId();
         userService.delete(checkedUsersId);
         return "redirect:/users";
     }

@@ -1,6 +1,5 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
-import com.gmail.kaminski.viktar.onlinemarket.controller.model.DeletedList;
 import com.gmail.kaminski.viktar.onlinemarket.controller.model.Paginator;
 import com.gmail.kaminski.viktar.onlinemarket.controller.util.PaginatorService;
 import com.gmail.kaminski.viktar.onlinemarket.service.ReviewService;
@@ -8,7 +7,6 @@ import com.gmail.kaminski.viktar.onlinemarket.service.RoleService;
 import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.RoleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,8 +65,8 @@ public class AdministratorControllerJUnitTest {
 
     @Test
     public void shouldGetUsersPage() throws Exception {
-        when(userService.get(0l, 10)).thenReturn(users.subList(0,10));
-        when(userService.size()).thenReturn(Long.valueOf(users.size()));
+        when(userService.getUsers(0l, 10)).thenReturn(users.subList(0,10));
+        when(userService.getAmountUsers()).thenReturn(Long.valueOf(users.size()));
         when(roleService.getRoleNames()).thenReturn(roles);
         this.mockMvc.perform(get("/users.html"))
                 .andExpect(status().isOk())

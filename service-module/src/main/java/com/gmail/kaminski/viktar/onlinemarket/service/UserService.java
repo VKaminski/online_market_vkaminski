@@ -6,15 +6,15 @@ import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import java.util.List;
 
 public interface UserService {
-    UserDTO get(String email);
+    UserDTO getByEmail(String email);
 
     void add(NewUserDTO newUserDTO);
 
-    List<UserDTO> get(Long firstElement, Integer amountElement);
+    List<UserDTO> getUsers(Long firstElement, Integer amountElement);
 
-    Long size();
+    Long getAmountUsers();
 
-    void setRole(Long id, String roleName);
+    void updateRole(Long id, String roleName);
 
     void delete(List<Long> checkedUsersId);
 

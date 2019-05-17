@@ -40,12 +40,12 @@ public class ReviewServiceImpl implements ReviewService {
                 connection.commit();
                 return output;
             } catch (ReviewRepositoryException e) {
-                logger.error(this.getClass().getName() + "rollback operation in get (list)");
+                logger.error(this.getClass().getName() + "rollback operation in getByEmail (list)");
                 connection.rollback();
                 throw new ReviewServiceException(e);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + "problem with connection in get (list)");
+            logger.error(this.getClass().getName() + "problem with connection in getByEmail (list)");
             throw new ReviewServiceException(e);
         }
     }
@@ -59,12 +59,12 @@ public class ReviewServiceImpl implements ReviewService {
                 connection.commit();
                 return size;
             } catch (ReviewRepositoryException e) {
-                logger.error(this.getClass().getName() + "rollback operation in size!");
+                logger.error(this.getClass().getName() + "rollback operation in getAmountUsers!");
                 connection.rollback();
                 throw new ReviewServiceException(e);
             }
         } catch (SQLException e) {
-            logger.error(this.getClass().getName() + "problem with connection in size!");
+            logger.error(this.getClass().getName() + "problem with connection in getAmountUsers!");
             throw new ReviewServiceException(e);
         }
     }

@@ -8,7 +8,7 @@
 <a href="/logout">Logout</a>
 <a href="/users/new">New user</a>
 <a href="/reviews">Reviews</a>
-<form action="#" th:action="@{/users/delete}" th:object="${deletedList}" method="post">
+<form action="#" th:action="@{/users/delete}" th:object="${checkedUsers}" method="post">
     <table>
         <tr>
             <td><input type="submit" value="Delete"></td>

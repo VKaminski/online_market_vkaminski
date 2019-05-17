@@ -13,7 +13,7 @@
     <a href="/logout">Logout</a>
 </nav>
 <div id="main" align="center">
-    <form action="#" th:action="@{/users/delete}" th:object="${deletedList}" method="post">
+    <form action="#" th:action="@{/users/delete}" th:object="${checkedUsers}" method="post">
         <table border="1" cellpadding="2">
             <tr>
                 <td><input type="submit" value="Delete"></td>
