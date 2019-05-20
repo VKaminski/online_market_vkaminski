@@ -1,6 +1,8 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller.util;
 
 import com.gmail.kaminski.viktar.onlinemarket.controller.CustomerController;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/")
 public class APIController {
@@ -21,32 +25,31 @@ public class APIController {
     private static final Marker custom = MarkerFactory.getMarker("custom");
 
     @PostMapping("/users")
-    public ResponseEntity<String> addUser(
-            @RequestBody     ) {
+    public UserDTO addUser(
+            @RequestBody UserDTO userDTO) {
 
     }
 
     @GetMapping("/articles")
-    public ResponseEntity<String> getArticles(
-            @RequestBody     ) {
+    public List<ArticleDTO> getArticles() {
 
     }
 
     @GetMapping("/articles/{id}")
-    public ResponseEntity<String> getArticles(
-            @RequestBody     ) {
+    public ArticleDTO getArticle() {
 
     }
 
     @PostMapping("/articles")
-    public ResponseEntity<String> addArticles(
+    public List<ArticleDTO> addArticles(
             @RequestBody     ) {
 
     }
 
     @DeleteMapping("/articles/{id}")
-    public ResponseEntity<String> deleteArticles(
-            @RequestBody     ) {
+    public ArticleDTO deleteArticles(
+            @PathVariable("id") Long id
+    ) {
 
     }
 
