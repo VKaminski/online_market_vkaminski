@@ -31,7 +31,7 @@ public class ArticleConverterImpl implements ArticleConverter {
         if (article.getAuthor() != null) {
             articleDTO.setAuthor(userConverter.toUserDTO(article.getAuthor()));
         }
-        if (article.getTitle() != null){
+        if (article.getTitle() != null) {
             articleDTO.setTitle(article.getTitle());
         }
         if (article.getContent() != null) {
@@ -45,7 +45,7 @@ public class ArticleConverterImpl implements ArticleConverter {
         }
 
         if (article.getComments() != null) {
-            if (!article.getComments().isEmpty()){
+            if (!article.getComments().isEmpty()) {
                 List<CommentDTO> commentDTOs = new ArrayList<>();
                 for (Comment comment : article.getComments()) {
                     commentDTOs.add(commentConverter.toCommentDTO(comment));
@@ -54,5 +54,39 @@ public class ArticleConverterImpl implements ArticleConverter {
             }
         }
         return articleDTO;
+    }
+
+    @Override
+    public Article toArticle(ArticleDTO articleDTO) {
+        Article article = new Article();
+        if (articleDTO.getId() != null) {
+            article.setId(articleDTO.getId());
+        }
+        if (articleDTO.getAuthor() != null) {
+            article.setAuthor(userConverter.toUser(articleDTO.getAuthor()));
+        }
+        if (articleDTO.getTitle() != null) {
+            article.setTitle(articleDTO.getTitle());
+        }
+        if (articleDTO.getContent() != null) {
+            article.setContent(articleDTO.getContent());
+        }
+        if (articleDTO.getDate() != null) {
+            article.setDate(articleDTO.getDate());
+        }
+        if (articleDTO.getAmountComments() != null) {
+            article.setAmountComments(articleDTO.getAmountComments());
+        }
+
+        if (articleDTO.getComments() != null) {
+            if (!article.getComments().isEmpty()) {
+                List<Comment> comments = new ArrayList<>();
+                for (CommentDTO commentDTO : articleDTO.getComments()) {
+                    comments.add(commentConverter.toComment(commentDTO));
+                }
+                article.setComments(comments);
+            }
+        }
+        return article;
     }
 }

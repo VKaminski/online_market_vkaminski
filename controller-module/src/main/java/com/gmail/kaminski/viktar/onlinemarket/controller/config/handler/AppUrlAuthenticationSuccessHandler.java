@@ -75,7 +75,7 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         if (isAdministrator) {
             return "/users";
-        }else if (isCustomer){
+        } else if (isCustomer) {
             return "/articles";
         } else {
             return "/login";

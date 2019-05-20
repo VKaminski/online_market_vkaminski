@@ -103,7 +103,7 @@ public class ArticleServiceImpl implements ArticleService {
     private boolean validComment(String content) {
         String[] forbiddenArray = forbiddenWords.split(",");
         for (String word : forbiddenArray) {
-            if(content.contains(word)){
+            if (content.contains(word)) {
                 return false;
             }
         }
@@ -152,6 +152,43 @@ public class ArticleServiceImpl implements ArticleService {
             }
         } catch (SQLException e) {
             logger.debug(custom, this.getClass().getName() + "problem with connection in findByDate");
+            throw new ArticleServiceException(e);
+        }
+    }
+
+    @Override
+    public void add(ArticleDTO articleDTO) {
+        try (Connection connection = articleRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            Article article = articleConverter.toArticle(articleDTO);
+            try {
+                articleRepository.add(connection, article);
+                connection.commit();
+            } catch (ArticleRepositoryException e) {
+                connection.rollback();
+                logger.error(this.getClass().getName() + "rollback operation in addArticle");
+                throw new ArticleServiceException(e);
+            }
+        } catch (SQLException e) {
+            logger.error(this.getClass().getName() + "problem with connection in addArticle");
+            throw new ArticleServiceException(e);
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        try (Connection connection = articleRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                articleRepository.delete(connection, id);
+                connection.commit();
+            } catch (ArticleRepositoryException e) {
+                logger.error(this.getClass().getName() + "rollback operation in delete!");
+                connection.rollback();
+                throw new ArticleServiceException(e);
+            }
+        } catch (SQLException e) {
+            logger.error(this.getClass().getName() + "problem with connection in delete!");
             throw new ArticleServiceException(e);
         }
     }

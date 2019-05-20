@@ -17,4 +17,8 @@ public interface ArticleService {
     List<ArticleDTO> findByTitle(String searchRequest, Long firstElement, Integer amountElement);
 
     List<ArticleDTO> findByDate(String dateStart, String dateStop, Long firstElement, Integer amountElement);
+
+    void add(ArticleDTO articleDTO);
+
+    void delete(Long id);
 }

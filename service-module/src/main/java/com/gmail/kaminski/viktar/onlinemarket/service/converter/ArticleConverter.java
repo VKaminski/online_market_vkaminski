@@ -5,4 +5,6 @@ import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
 
 public interface ArticleConverter {
     ArticleDTO toArticleDTO(Article article);
+
+    Article toArticle(ArticleDTO articleDTO);
 }

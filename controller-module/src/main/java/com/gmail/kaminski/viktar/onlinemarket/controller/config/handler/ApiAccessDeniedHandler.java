@@ -16,8 +16,8 @@ public class ApiAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request,
-            HttpServletResponse response,
-            AccessDeniedException ex) throws IOException {
+                       HttpServletResponse response,
+                       AccessDeniedException ex) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             logger.info(

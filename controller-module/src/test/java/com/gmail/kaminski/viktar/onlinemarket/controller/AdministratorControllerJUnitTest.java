@@ -20,7 +20,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -50,7 +49,7 @@ public class AdministratorControllerJUnitTest {
             new UserDTO(11L, "name11", "surname11", "patronymic11", "user11@email.com", new RoleDTO())
     );
 
-    private List<String> roles = asList("ROLE_ADMINISTRATOR","ROLE_SALE","ROLE_CUSTOMER","ROLE_SECURE_API");
+    private List<String> roles = asList("ROLE_ADMINISTRATOR", "ROLE_SALE", "ROLE_CUSTOMER", "ROLE_SECURE_API");
     private Paginator paginator = new Paginator(1l, 10, 2l);
 
     @Before
@@ -65,12 +64,12 @@ public class AdministratorControllerJUnitTest {
 
     @Test
     public void shouldGetUsersPage() throws Exception {
-        when(userService.getUsers(0l, 10)).thenReturn(users.subList(0,10));
+        when(userService.getUsers(0l, 10)).thenReturn(users.subList(0, 10));
         when(userService.getAmountUsers()).thenReturn(Long.valueOf(users.size()));
         when(roleService.getRoleNames()).thenReturn(roles);
         this.mockMvc.perform(get("/users.html"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("users", users.subList(0,10)))
+                .andExpect(model().attribute("users", users.subList(0, 10)))
                 .andExpect(model().attribute("roles", roles))
                 .andExpect(model().attributeExists("deletedList"))
                 .andExpect(forwardedUrl("users"));

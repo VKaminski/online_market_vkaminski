@@ -2,7 +2,6 @@ package com.gmail.kaminski.viktar.onlinemarket.repository.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.CommentRepository;
 import com.gmail.kaminski.viktar.onlinemarket.repository.exception.CommentRepositoryException;
-import com.gmail.kaminski.viktar.onlinemarket.repository.exception.UserRepositoryException;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Comment;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
 import org.slf4j.Logger;

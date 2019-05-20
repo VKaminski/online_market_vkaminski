@@ -1,7 +1,5 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.model;
 
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
-
 import java.util.Date;
 import java.util.List;
 

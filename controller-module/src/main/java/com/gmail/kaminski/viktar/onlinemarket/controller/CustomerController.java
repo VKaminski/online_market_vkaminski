@@ -110,9 +110,9 @@ public class CustomerController {
         UserDTO currentUser = new UserDTO();
         currentUser.setEmail(currentUserEmail);
         newComment.setAuthor(currentUser);
-        if(articleService.addComment(newComment)){
+        if (articleService.addComment(newComment)) {
             return "redirect:/articles/" + articleId;
-        }else {
+        } else {
             String errorMessage = "Message contain forbidden word";
             model.addAttribute("errorMessage", errorMessage);
             showArticle(articleId, model);

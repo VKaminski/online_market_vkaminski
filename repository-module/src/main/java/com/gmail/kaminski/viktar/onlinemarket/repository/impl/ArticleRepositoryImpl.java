@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl implements Arti
 
     @Override
     public Long getAmountArticles(Connection connection) {
-        String sqlRequest = "SELECT COUNT(*) FROM Article";
+        String sqlRequest = "SELECT COUNT(*) FROM Article WHERE deleted = false";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -56,7 +57,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl implements Arti
                 "FROM Article AS A " +
                 "JOIN User AS U ON U.id = A.user_id " +
                 "LEFT JOIN Comment AS C ON A.id = C.article_id " +
-                "WHERE A.id = ? " +
+                "WHERE A.id = ? AND A.deleted = false " +
                 "GROUP BY A.id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
             preparedStatement.setLong(1, id);
@@ -81,6 +82,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl implements Arti
                 "FROM Article AS A " +
                 "JOIN User AS U ON U.id = A.user_id " +
                 "LEFT JOIN Comment AS C ON A.id = C.article_id " +
+                "WHERE A.deleted = false " +
                 "GROUP BY A.id " +
                 "ORDER BY A.date " +
                 "LIMIT ?, ?";
@@ -111,7 +113,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl implements Arti
                 "FROM Article AS A " +
                 "JOIN User AS U ON U.id = A.user_id " +
                 "LEFT JOIN Comment AS C ON A.id = C.article_id " +
-                "WHERE A.title REGEXP ? " +
+                "WHERE A.title REGEXP ? AND A.deleted = false " +
                 "GROUP BY A.id " +
                 "ORDER BY A.date " +
                 "LIMIT ?, ?";
@@ -143,7 +145,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl implements Arti
                 "FROM Article AS A " +
                 "JOIN User AS U ON U.id = A.user_id " +
                 "LEFT JOIN Comment AS C ON A.id = C.article_id " +
-                "WHERE A.date BETWEEN ? AND ?" +
+                "WHERE A.deleted = false AND (A.date BETWEEN ? AND ?) " +
                 "GROUP BY A.id " +
                 "ORDER BY A.date " +
                 "LIMIT ?, ?";
@@ -164,6 +166,44 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl implements Arti
             }
         } catch (SQLException e) {
             logger.debug(custom, this.getClass().getName() + " problem with prepareStatement in findByTitle!");
+            throw new ArticleRepositoryException(e);
+        }
+    }
+
+    @Override
+    public void add(Connection connection, Article article) {
+        String sqlRequest = "INSERT INTO Article(user_id, title, content) " +
+                "VALUES (?,?,?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setLong(1, article.getAuthor().getId());
+            preparedStatement.setString(2, article.getTitle());
+            preparedStatement.setString(3, article.getContent());
+            preparedStatement.execute();
+            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                resultSet.next();
+            } catch (SQLException e) {
+                logger.debug(custom, this.getClass().getName() + " problem with ResultSet in add!");
+                throw new ArticleRepositoryException(e);
+            }
+        } catch (SQLException e) {
+            logger.debug(custom, this.getClass().getName() + " problem with PrepareStatement in add!");
+            throw new ArticleRepositoryException(e);
+        }
+    }
+
+    @Override
+    public void delete(Connection connection, Long id) {
+        String sqlRequest = "UPDATE Article SET deleted = true WHERE id = ? ";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
+            preparedStatement.setLong(1, id);
+            int deletedRows = preparedStatement.executeUpdate();
+            if (deletedRows == 0) {
+                String message = this.getClass().getName() + " Article hasn't been deleted!";
+                logger.error(custom, message);
+                throw new ArticleRepositoryException(message);
+            }
+        } catch (SQLException e) {
+            logger.error(custom, this.getClass().getName() + "SQLException Article delete");
             throw new ArticleRepositoryException(e);
         }
     }

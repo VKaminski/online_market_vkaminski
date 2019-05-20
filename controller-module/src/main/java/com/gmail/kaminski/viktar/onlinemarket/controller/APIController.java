@@ -1,6 +1,5 @@
-package com.gmail.kaminski.viktar.onlinemarket.controller.util;
+package com.gmail.kaminski.viktar.onlinemarket.controller;
 
-import com.gmail.kaminski.viktar.onlinemarket.controller.CustomerController;
 import com.gmail.kaminski.viktar.onlinemarket.service.ArticleService;
 import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
@@ -51,23 +50,26 @@ public class APIController {
     }
 
     @GetMapping("/articles/{id}")
-    public ArticleDTO getArticle(
+    public ResponseEntity getArticle(
             @PathVariable Long id
     ) {
-
+        ArticleDTO article = articleService.getById(id);
+        return new ResponseEntity(article, HttpStatus.OK);
     }
 
     @PostMapping("/articles")
-    public List<ArticleDTO> addArticles(
-            @RequestBody) {
-
+    public ResponseEntity addArticles(
+            @RequestBody ArticleDTO articleDTO) {
+        articleService.add(articleDTO);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/articles/{id}")
-    public ArticleDTO deleteArticles(
+    public ResponseEntity deleteArticles(
             @PathVariable("id") Long id
     ) {
-
+        articleService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 

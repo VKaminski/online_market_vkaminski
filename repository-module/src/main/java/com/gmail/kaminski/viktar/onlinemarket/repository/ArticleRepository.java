@@ -15,4 +15,8 @@ public interface ArticleRepository extends GenericRepository {
     List<Article> findByTitle(Connection connection, String searchRequest, Long firstElement, Integer amountElement);
 
     List<Article> findByDate(Connection connection, String dateStart, String dateStop, Long firstElement, Integer amountElement);
+
+    void add(Connection connection, Article article);
+
+    void delete(Connection connection, Long id);
 }
