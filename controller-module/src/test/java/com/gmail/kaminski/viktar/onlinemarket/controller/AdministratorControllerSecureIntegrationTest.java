@@ -58,4 +58,6 @@ public class AdministratorControllerSecureIntegrationTest {
         mock.perform(get("/reviews"))
                 .andExpect(status().isOk());
     }
+
+
 }

@@ -60,6 +60,7 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
 
     protected String determineTargetUrl(Authentication authentication) {
         boolean isAdministrator = false;
+        boolean isCustomer = false;
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
@@ -67,9 +68,15 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
                 isAdministrator = true;
                 break;
             }
+            if (grantedAuthority.getAuthority().equals("ROLE_" + globalValue.getCustomerRoleName())) {
+                isCustomer = true;
+                break;
+            }
         }
         if (isAdministrator) {
             return "/users";
+        }else if (isCustomer){
+            return "/articles";
         } else {
             return "/login";
         }

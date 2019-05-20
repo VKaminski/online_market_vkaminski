@@ -1,0 +1,205 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(230, 230, 230);
+}
+
+#main, #header, #footer {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#menu, #userinfo {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top: 5px;*/
+    /*margin-bottom: 5px;*/
+}
+
+
+
+
+
+h2 {
+    text-align: center;
+    font-size: 70px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+}
+
+h1 {
+    text-align: right;
+    font-size: 20px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+}
+
+#header, #footer {
+    background-color: #b0c3ca;
+}
+
+#menu ul {
+    list-style: none;
+    margin: 0 auto;
+}
+
+#menu a {
+    text-decoration: none;
+    font-family: 'Lora', serif;
+}
+
+#menu i {
+    margin-right: 10px;
+}
+
+#menu nav {
+    display: block;
+    width: 660px;
+    margin: 0 auto 10px;
+}
+
+#menu li {
+    display: inline;
+}
+
+#menu ul {
+    background: #D4E7EE;
+    overflow: hidden;
+    padding: 0;
+}
+
+#menu li {
+    float: left;
+}
+
+#menu a {
+    display: block;
+    padding: 1em;
+    border-right: 1px solid #ADC0CE;
+    background: rgba(173, 192, 206, .3);
+    color: #29838C;
+}
+
+#menu a:hover {
+    background: #ADC0CE
+}
+
+#paginator ul {
+    list-style: none;
+    margin: 0 auto;
+}
+
+#paginator a {
+    text-decoration: none;
+    font-family: 'Lora', serif;
+}
+
+#paginator i {
+    margin-right: 10px;
+}
+
+#paginator nav {
+    display: block;
+    width: 660px;
+    margin: 0 auto 30px;
+}
+
+#paginator li {
+    display: inline;
+}
+
+#menu ul {
+    background: #D4E7EE;
+    overflow: hidden;
+    padding: 0;
+}
+
+#paginator li {
+    float: left;
+}
+
+#paginator a {
+    display: block;
+    padding: 1em;
+    border-right: 1px solid #ADC0CE;
+    background: rgba(173, 192, 206, .3);
+    color: #29838C;
+}
+
+#paginator a:hover {
+    background: #ADC0CE
+}
+
+
+table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    border: transparent;
+    font-size: 14px;
+    background: white;
+    max-width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    font-weight: normal;
+    color: #039;
+    padding: 10px 15px;
+}
+
+td {
+    color: #669;
+    border-top: 1px solid #e8edff;
+    padding: 10px 15px;
+}
+
+tr:hover td {
+    background: #e8edff;
+}
+
+
+input[type] {
+    padding: 5px;
+    border: 2px solid #ccc;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input[type]:focus {
+    border-color: #434343;
+}
+
+input[type=submit] {
+    padding: 5px 15px;
+    background: #ccc;
+    border: 0 none;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#footer ul {
+    padding: 25px 0px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: justify;
+}
+
+.button{
+    padding: 5px 15px;
+    background: #ccc;
+    border: 0 none;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+/*.clearfix{*/
+/*clear: both;*/
+/*}*/
+

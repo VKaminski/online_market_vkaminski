@@ -7,8 +7,20 @@ import org.springframework.stereotype.Component;
 public class GlobalValue {
     @Value("${custom.role.name.administrator}")
     private String administratorRoleName;
+    @Value("${custom.role.name.customer}")
+    private String customerRoleName;
+    @Value("${custom.role.name.api}")
+    private String APIRoleName;
 
     public String getAdministratorRoleName() {
         return administratorRoleName;
+    }
+
+    public String getCustomerRoleName() {
+        return customerRoleName;
+    }
+
+    public String getAPIRoleName() {
+        return APIRoleName;
     }
 }

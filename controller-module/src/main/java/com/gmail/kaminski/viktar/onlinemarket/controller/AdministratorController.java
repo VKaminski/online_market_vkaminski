@@ -11,6 +11,8 @@ import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,7 @@ import java.util.List;
 @Controller
 public class AdministratorController {
     private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
+    private static final Marker custom = MarkerFactory.getMarker("custom");
     private UserService userService;
     private RoleService roleService;
     private ReviewService reviewService;

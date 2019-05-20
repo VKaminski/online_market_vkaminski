@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <Console username="Console" target="SYSTEM_OUT">
-            <PatternLayout
-                    pattern="%d{HH:mm:ss.SSS} [%M] %-5level - %msg%n"/>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{%d{HH:mm:ss.SSS} %highlight{%-5level} [%M]  - %msg%n}"/>
+            <MarkerFilter marker="custom" onMatch="DENY" onMismatch="ACCEPT"/>
         </Console>
+
+        <Console name="ConsoleCustom" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%magenta{%d{HH:mm:ss.SSS} [%M] %-5level - %msg%n}"/>
+            <MarkerFilter marker="custom" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <RollingFile name="File">
+            <Filepattern>./logs/logs(%d{yyyy-MM-dd}).log</Filepattern>
+            <MarkerFilter marker="custom" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%M] %-5level - %msg%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
 
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="ConsoleCustom"/>
+            <AppenderRef ref="File"/>
         </Root>
     </Loggers>
 
