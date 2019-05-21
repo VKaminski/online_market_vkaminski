@@ -40,34 +40,4 @@ public class CustomerControllerSecureIntegrationTest {
         mock.perform(get("/articles/1"))
                 .andExpect(status().isOk());
     }
-
-
-//
-//    @Test
-//    public void shouldGetNewUserPageWithoutLogin() throws Exception {
-//        mock.perform(get("/users/new"))
-//                .andExpect(redirectedUrlPattern("**/login"));
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = {"ADMINISTRATOR"})
-//    public void shouldGetNewUserPageWithLoginAdmin() throws Exception {
-//        mock.perform(get("/users/new"))
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    public void shouldGetReviewPageWithoutLogin() throws Exception {
-//        mock.perform(get("/reviews"))
-//                .andExpect(redirectedUrlPattern("**/login"));
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = {"ADMINISTRATOR"})
-//    public void shouldGetReviewPageWithLoginAdmin() throws Exception {
-//        mock.perform(get("/reviews"))
-//                .andExpect(status().isOk());
-//    }
-//
-//
 }
