@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Article</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
+</head>
+<body>
+<h2 align="center">Article</h2>
+<nav id="menu" align="center">
+    <a href="/articles">Articles</a>
+    <a href="/logout">Logout</a>
+</nav>
+<div id="main" align="center">
+    <table border="1" cellpadding="2">
+        <tr>
+            <td>
+                <h3>
+                    <div th:text="${article.title}"/>
+                </h3>
+                <div th:text="${article.content}"/>
+                <br>Author:
+                <span th:text="${article.author.name}"/>
+
+                <span th:text="${article.author.surname}"/>
+                <br>Comments:
+                <span th:text="${article.amountComments}"/>
+                <br>Date:
+                <span th:text="${article.date}"/>
+            </td>
+        </tr>
+    </table>
+    <h2><span th:text="${errorMessage}"/></h2>
+    <table border="1" cellpadding="2">
+        <tr th:each="comment,stat : ${article.comments}">
+            <td>
+                <br>Author:
+                <span th:text="${comment.author.name}"/>
+
+                <span th:text="${comment.author.surname}"/>
+                <br>
+                <span th:unless="${comment.head == 0}">
+                    <span th:each="commentHead,stat : ${article.comments}">
+                        <span th:if="${commentHead.id == comment.head}">
+                            [
+                            <span th:text="${commentHead.author.name}"/>
+
+                            <span th:text="${commentHead.author.surname}"/>
+                            ],
+                        </span>
+                    </span>
+                </span>
+                <span th:text="${comment.content}"/>
+                <br>Date:
+                <span th:text="${comment.date}"/>
+                <div>
+                    <form action="#" th:action="@{/articles/{articleId}/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}" th:object="${newComment}" method="post">
+                        <input type="text" th:field="*{content}">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+</body>
+</html>
