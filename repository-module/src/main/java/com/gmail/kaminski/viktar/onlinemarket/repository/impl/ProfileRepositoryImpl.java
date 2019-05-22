@@ -31,22 +31,8 @@ public class ProfileRepositoryImpl extends GenericRepositoryImpl implements Prof
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                Profile profile = new Profile();
-                while (resultSet.next()) {
-                    Long id = resultSet.getLong("userId");
-                    String surname = resultSet.getString("userSurname");
-                    String name = resultSet.getString("userName");
-                    User user = new User();
-                    user.setId(id);
-                    user.setSurname(surname);
-                    user.setName(name);
-                    profile.setUser(user);
-                    String address = resultSet.getString("profileAddress");
-                    String phone = resultSet.getString("profilePhone");
-                    profile.setAddress(address);
-                    profile.setPhone(phone);
-                }
-                return profile;
+                resultSet.next();
+                return getProfile(resultSet);
             } catch (SQLException e) {
                 logger.debug(custom, this.getClass().getName() + " problem with ResultSet in getById!");
                 throw new ProfileRepositoryException(e);
@@ -55,5 +41,22 @@ public class ProfileRepositoryImpl extends GenericRepositoryImpl implements Prof
             logger.debug(custom, this.getClass().getName() + " problem with prepareStatement in getById!");
             throw new ProfileRepositoryException(e);
         }
+    }
+
+    private Profile getProfile(ResultSet resultSet) throws SQLException {
+        Profile profile = new Profile();
+        Long id = resultSet.getLong("userId");
+        String surname = resultSet.getString("userSurname");
+        String name = resultSet.getString("userName");
+        User user = new User();
+        user.setId(id);
+        user.setSurname(surname);
+        user.setName(name);
+        profile.setUser(user);
+        String address = resultSet.getString("profileAddress");
+        String phone = resultSet.getString("profilePhone");
+        profile.setAddress(address);
+        profile.setPhone(phone);
+        return profile;
     }
 }

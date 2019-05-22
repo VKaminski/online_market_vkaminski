@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -38,8 +39,11 @@ public class CustomerController {
         this.profileService = profileService;
     }
 
-    @GetMapping("/articles")
-    public String showArticles(
+    @RequestMapping({"/articles", "/articles/findtitle", "/articles/finddate"})
+    private String getArticles(
+            @RequestParam(value = "searchRequest", required = false) String searchRequest,
+            @RequestParam(value = "dateRequestStart", required = false) String dateRequestStart,
+            @RequestParam(value = "dateRequestStop", required = false) String dateRequestStop,
             @RequestParam(value = "page", required = false, defaultValue = "1") String page,
             @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
             Model model) {
@@ -47,40 +51,14 @@ public class CustomerController {
         Long sizeList = articleService.getAmountArticles();
         Paginator paginator = paginatorService.get(page, amountElement, sizeList);
         Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
-        List<ArticleDTO> articles = articleService.getArticles(firstElement, paginator.getAmountElementOnPage());
-        model.addAttribute("articles", articles);
-        model.addAttribute("paginator", paginator);
-        return "articles";
-    }
-
-    @PostMapping("/articles/findtitle")
-    public String findByTitle(
-            @RequestParam("searchRequest") String searchRequest,
-            @RequestParam(value = "page", required = false, defaultValue = "1") String page,
-            @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
-            Model model) {
-        logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
-        Long sizeList = articleService.getAmountArticles();
-        Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
-        List<ArticleDTO> articles = articleService.findByTitle(searchRequest, firstElement, paginator.getAmountElementOnPage());
-        model.addAttribute("articles", articles);
-        model.addAttribute("paginator", paginator);
-        return "articles";
-    }
-
-    @PostMapping("/articles/finddate")
-    public String findByDate(
-            @RequestParam("dateRequestStart") String dateRequestStart,
-            @RequestParam("dateRequestStop") String dateRequestStop,
-            @RequestParam(value = "page", required = false, defaultValue = "1") String page,
-            @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
-            Model model) {
-        logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
-        Long sizeList = articleService.getAmountArticles();
-        Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
-        List<ArticleDTO> articles = articleService.findByDate(dateRequestStart, dateRequestStop, firstElement, paginator.getAmountElementOnPage());
+        List<ArticleDTO> articles;
+        if (dateRequestStart != null && dateRequestStop != null) {
+            articles = articleService.findByDate(dateRequestStart, dateRequestStop, firstElement, paginator.getAmountElementOnPage());
+        } else if (searchRequest != null) {
+            articles = articleService.findByTitle(searchRequest, firstElement, paginator.getAmountElementOnPage());
+        } else {
+            articles = articleService.getArticles(firstElement, paginator.getAmountElementOnPage());
+        }
         model.addAttribute("articles", articles);
         model.addAttribute("paginator", paginator);
         return "articles";
