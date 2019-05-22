@@ -16,49 +16,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AdministratorControllerSecureIntegrationTest {
+public class CustomerControllerSecureIntegrationTest {
 
     @Autowired
     private MockMvc mock;
 
     @Test
-    public void shouldGetUsersPageWithoutLogin() throws Exception {
-        mock.perform(get("/users"))
+    public void shouldGetArticlesPageWithoutLogin() throws Exception {
+        mock.perform(get("/articles"))
                 .andExpect(redirectedUrlPattern("**/login"));
     }
 
     @Test
-    @WithMockUser(roles = {"ADMINISTRATOR"})
-    public void shouldGetUsersPageWithLoginAdmin() throws Exception {
-        mock.perform(get("/users"))
+    @WithMockUser(roles = {"CUSTOMER"})
+    public void shouldGetArticlesPageWithLogin() throws Exception {
+        mock.perform(get("/articles"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldGetNewUserPageWithoutLogin() throws Exception {
-        mock.perform(get("/users/new"))
-                .andExpect(redirectedUrlPattern("**/login"));
-    }
-
-    @Test
-    @WithMockUser(roles = {"ADMINISTRATOR"})
-    public void shouldGetNewUserPageWithLoginAdmin() throws Exception {
-        mock.perform(get("/users/new"))
+    @WithMockUser(roles = {"CUSTOMER"})
+    public void shouldGetArticlePageWithLogin() throws Exception {
+        mock.perform(get("/articles/1"))
                 .andExpect(status().isOk());
     }
-
-    @Test
-    public void shouldGetReviewPageWithoutLogin() throws Exception {
-        mock.perform(get("/reviews"))
-                .andExpect(redirectedUrlPattern("**/login"));
-    }
-
-    @Test
-    @WithMockUser(roles = {"ADMINISTRATOR"})
-    public void shouldGetReviewPageWithLoginAdmin() throws Exception {
-        mock.perform(get("/reviews"))
-                .andExpect(status().isOk());
-    }
-
-
 }

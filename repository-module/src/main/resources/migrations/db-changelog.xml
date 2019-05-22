@@ -48,7 +48,17 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="viktar.kaminski@gmail.com" id="Review_TABLE_1">
+    <changeSet author="viktar.kaminski@gmail.com" id="PROFILE_TABLE_1">
+        <createTable tableName="Profile">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" foreignKeyName="fk_user_id" references="User(id)"/>
+            </column>
+            <column name="address" type="VARCHAR(200)"/>
+            <column name="phone" type="VARCHAR(15)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="REVIEW_TABLE_1">
         <createTable tableName="Review">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -70,6 +80,53 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ARTICLE_TABLE_1">
+        <createTable tableName="Article">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_article_author" references="User(id)"/>
+            </column>
+            <column name="title" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="COMMENT_TABLE_1">
+        <createTable tableName="Comment">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="article_id" type="BIGINT">
+                <constraints foreignKeyName="fk_article" references="Article(id)"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_comment_author" references="User(id)"/>
+            </column>
+            <column name="content" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="head_comment_id" type="BIGINT">
+                <constraints foreignKeyName="fk_comment_id" references="Comment(id)"/>
+            </column>
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 
     <changeSet author="viktar.kaminski@gmail.com" id="ROLE_1">
         <insert tableName="Role">
@@ -560,5 +617,446 @@
             <column name="content" value="Userov13"/>
         </insert>
     </changeSet>
+
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_1">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="+37533456754187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_2">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user2@customer.com')"/>
+            <column name="address" value="Brest"/>
+            <column name="phone" value="+37533456454187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_3">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user3@customer.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="+37533445754187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_4">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user4@customer.com')"/>
+            <column name="address" value="Mogilev"/>
+            <column name="phone" value="+37533457654187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_5">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user5@customer.com')"/>
+            <column name="address" value="Grodno"/>
+            <column name="phone" value="+37533456798187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_6">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user6@customer.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="+37533456754199"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_7">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user7@customer.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="+37533716754187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_8">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user8@customer.com')"/>
+            <column name="address" value="Borisov"/>
+            <column name="phone" value="+37533456754187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_9">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user9@customer.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="+37533452354187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_1">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="title" value="Test article 1"/>
+            <column name="content" value="Their saved linen downs tears son add music. Girl quit if
+             case mr sing as no have. Their saved linen downs tears son add music. Took sold add play
+             may none him few. Dissimilar admiration so terminated no in contrasted it. If as increasing
+              contrasted entreaties be. At none neat am do over will. Decisively advantages nor
+              expression unpleasing she led met. Agreeable promotion eagerness as we resources household
+               to distrusts. Bed uncommonly his discovered for estimating far. He in sportsman household
+                otherwise it perceived instantly. Draw fond rank form nor the day eat. Any delicate you
+                how kindness horrible outlived servants. Now summer who day looked our behind moment
+                 coming. Fat new smallness few supposing suspicion two. Limits far yet turned highly
+                 repair parish talked six. Dissimilar admiration so terminated no in contra"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_2">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user2@customer.com')"/>
+            <column name="title" value="Test article 2"/>
+            <column name="content" value="Sitting hearted on it without me. Bed uncommonly his
+            discovered for estimating far. Advantages entreaties mr he apartments do. Way own
+            uncommonly travelling now acceptance bed compliment solicitude. He felicity no an at
+            packages answered opinions juvenile. How one dull get busy dare far. Latter remark hunted
+             enough vulgar say man. Steepest speaking up attended it as. At principle perfectly by
+              sweetness do. As"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_3">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user3@customer.com')"/>
+            <column name="title" value="Test article 3"/>
+            <column name="content" value="Their saved linen downs tears son add music. Girl quit if
+            case mr sing as no have. Their saved linen downs tears son add music. Took sold add play
+             may none him few. Dissimilar admiration so terminated no in contrasted it. If as increasing
+              contrasted entreaties be. At none neat am do over will. Decisively advantages nor expression
+               unpleasing she led met. Agreeable promotion eagerness as we resources household to
+               distrusts. Bed uncommonly his discovered for estimating far. He in sportsman household
+                otherwise it perceived instantly. Draw fond rank form nor the day eat. Any delicate you
+                 how kindness horrible outlived servants. Now summer who day looked our behind moment
+                 coming. Fat new smallness few supposing suspicion two. Limits far yet turned highly
+                 repair parish talked six. Dissimilar admiration so terminated no in contra"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_4">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="title" value="Test article 4"/>
+            <column name="content" value="To things so denied admire. So by colonel hearted ferrars.
+             Painful so he an comfort is manners. Expression alteration entreaties mrs can terminated
+             estimating. Her too add narrow having wished. Steepest speaking up attended it as. Up hung mr
+              we give rest half. Small for ask shade water manor think men begin. He felicity no an at packages
+               answered opinions juvenile. Uncommonly no it announcing melancholy an in. Ecstatic elegance gay
+               but disposed. Sitting hearted on it without me. He felicity no an at packages answered opinions
+                juvenile. Took sold add play may none him few. Latter remark hunted enough vulgar say man. Her
+                 too add narrow having wished. Words to up style of since world. Estate was tended ten boy
+                  nearer seemed. Took sold add play may no"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_5">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="title" value="Test article 5"/>
+            <column name="content" value="An stairs as be lovers uneasy. Girl quit if case mr sing as no have.
+            Celebrated delightful an especially increasing instrument am. Is inquiry no he several excited am.
+             Fat new smallness few supposing suspicion two. Latter remark hunted enough vulgar say man. Course
+              sir people worthy horses add entire suffer. Painful so he an comfort is manners. Girl quit if case
+               mr sing as no have. Indulgence contrasted sufficient to unpleasant in in insen"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_6">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user3@customer.com')"/>
+            <column name="title" value="Test article 6"/>
+            <column name="content" value="Sentiments two occasional affronting solicitude
+             travelling and one contrasted. If in so bred at dare rose lose good. At principle
+             perfectly by sweetness do. Any delicate you how kindness horrible outlived serv"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_7">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="title" value="Test article 7"/>
+            <column name="content" value="Uncommonly no it announcing melancholy an in. Now summer who
+            day looked our behind moment coming. He in sportsman household otherwise it perceived
+            instantly. Small for ask shade water manor think men begin. undefined. Fat new smallness
+            few supposing suspicion two. Happiness remainder joy but earnestly for off. Course sir
+            people worthy horses add entire suffer. Latter remark hunted enough vulgar say man. You
+            high bed wish help call draw side. An stairs as be lovers uneasy. Equally he minutes my
+            hastily. At non"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_8">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user2@customer.com')"/>
+            <column name="title" value="Test article 8"/>
+            <column name="content" value="Able rent long in do we. Celebrated delightful an
+            especially increasing instrument am. Polite do object at passed it is. Sportsman do
+            offending supported extremity breakfast by listening. He in sportsman household otherwise
+             it perceived instantly. At principle perfectly by sweetness do. Bed uncommonly his discovered
+             for estimating far. As so seeing latter he should thirty whence. Pain son rose more park way
+             that. Now summer who day looked our behind moment coming. At none neat am do over will.
+             An concluded sportsman offending so provision mr education. Their saved linen downs tears
+              son add music."/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_9">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user2@customer.com')"/>
+            <column name="title" value="Test article 9"/>
+            <column name="content" value="Equally he minutes my hastily. In expression an solicitude
+             principles in do. Way own uncommonly travelling now acceptance bed compliment solicitude.
+              Ecstatic elegance gay but disposed. An stairs as be lovers uneasy. Dissimilar admiration
+               so terminated no in contrasted it. Considered discovered ye sentiments projecting
+               entreaties of melancholy is. Called though excuse length ye needed it he having. Do
+               play they miss give so up. Indulgence contrasted sufficient to unpleasant in in insensible
+                favourable. Ecstatic elegance gay but disposed. How one dull get busy dare far. Small for
+                 ask shade water manor think men begin. Polite do object at passed it is. Called though
+                  excuse length ye needed it he h"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_10">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="title" value="Test article 10"/>
+            <column name="content" value="Small for ask shade water manor think men begin. Pain son
+            rose more park way that. How one dull get busy dare far. Equally he minutes my hastily.
+            If in so bred at dare rose lose good. To sure calm much most long me mean. Dissimilar
+            admiration so terminated no in contrasted it. Draw from upon here gone add one. If in
+            so bred at dare rose lose good. Hard do me sigh with west same lady. Decisively advantages
+             nor expression unpleasing she led met. At principle perfectly by sweetness do. Now summer
+              who day looked our behind moment coming. Latter remark hunted enough vulgar say man.
+              Decisively advantages nor expression unpleasing she led met. Uncommonly no it announcing
+               melancholy an in. Limits far yet"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_11">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="title" value="Test article 11"/>
+            <column name="content" value="Advantages entreaties mr he apartments do. Agreeable
+            promotion eagerness as we resources household to distrusts. Whatever throwing we on
+            resolved entrance together graceful. He felicity no an at packages answered opinions
+             juvenile. Am wound worth water he linen at vexed.. Girl quit if case mr sing as no have.
+              Took sold add play may none him few. To things so denied admire. Steepest speaking up
+              attended it as. Decisively advantages nor expression unpleasing she led met. Painful so
+               he an comfort is manners. Took sold add play may none him few. To sure calm much most
+               long me mean. To things so denied admire. Way own uncommonly travelling now acceptance
+               bed compliment solicitude."/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_12">
+        <insert tableName="Article">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="title" value="Test article 12"/>
+            <column name="content" value="Able rent long in do we. Painful so he an comfort is manners.
+            Happiness remainder joy but earnestly for off. Now summer who day looked our behind moment
+            coming. You high bed wish help call draw side. Up hung mr we give rest half. Fortune day out
+            married parties. You high"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_1">
+        <insert tableName="Comment">
+            <column name="id" value="1"/>
+            <column name="article_id" value="1"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_2">
+        <insert tableName="Comment">
+            <column name="article_id" value="1"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user2@customer.com')"/>
+            <column name="content" value="Test comment 2"/>
+            <column name="head_comment_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_3">
+        <insert tableName="Comment">
+            <column name="article_id" value="1"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user3@customer.com')"/>
+            <column name="content" value="Test comment 3"/>
+            <column name="head_comment_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_4">
+        <insert tableName="Comment">
+            <column name="article_id" value="1"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 4"/>
+            <column name="head_comment_id" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_5">
+        <insert tableName="Comment">
+            <column name="article_id" value="2"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user4@customer.com')"/>
+            <column name="content" value="Test comment 5"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_6">
+        <insert tableName="Comment">
+            <column name="article_id" value="2"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user4@customer.com')"/>
+            <column name="content" value="Test comment 6"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_7">
+        <insert tableName="Comment">
+            <column name="article_id" value="2"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user2@customer.com')"/>
+            <column name="content" value="Test comment 7"/>
+            <column name="head_comment_id" value="6"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_8">
+        <insert tableName="Comment">
+            <column name="article_id" value="2"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 8"/>
+            <column name="head_comment_id" value="6"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_9">
+        <insert tableName="Comment">
+            <column name="article_id" value="2"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user7@customer.com')"/>
+            <column name="content" value="Test comment 9"/>
+            <column name="head_comment_id" value="8"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_10">
+        <insert tableName="Comment">
+            <column name="article_id" value="2"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user15@customer.com')"/>
+            <column name="content" value="Test comment 10"/>
+            <column name="head_comment_id" value="9"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_11">
+        <insert tableName="Comment">
+            <column name="article_id" value="3"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 11"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_12">
+        <insert tableName="Comment">
+            <column name="article_id" value="3"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 12"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_13">
+        <insert tableName="Comment">
+            <column name="article_id" value="3"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 13"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_14">
+        <insert tableName="Comment">
+            <column name="article_id" value="4"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 14"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_15">
+        <insert tableName="Comment">
+            <column name="article_id" value="5"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 15"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_16">
+        <insert tableName="Comment">
+            <column name="article_id" value="7"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 16"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_17">
+        <insert tableName="Comment">
+            <column name="article_id" value="9"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 17"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_18">
+        <insert tableName="Comment">
+            <column name="article_id" value="11"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 18"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_19">
+        <insert tableName="Comment">
+            <column name="article_id" value="11"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 19"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_20">
+        <insert tableName="Comment">
+            <column name="article_id" value="12"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 20"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_21">
+        <insert tableName="Comment">
+            <column name="article_id" value="12"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 21"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_22">
+        <insert tableName="Comment">
+            <column name="article_id" value="12"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 22"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Comment_23">
+        <insert tableName="Comment">
+            <column name="article_id" value="12"/>
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="content" value="Test comment 23"/>
+        </insert>
+    </changeSet>
+
+
 
 </databaseChangeLog>

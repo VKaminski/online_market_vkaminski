@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Reviews</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
 </head>
-<body>
-<a href="/logout">Logout</a>
+<body align="center">
+<h2 align="center">Reviews</h2>
 <a href="/users">Users</a>
+<a href="/logout">Logout</a>
 
-<table>
+<div id="main" align="center">
+<table border="1" cellpadding="2">
     <tr>
         <td>№</td>
         <td>Author</td>
@@ -21,9 +24,9 @@
             <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElementOnPage + 1}"></span>
         </td>
         <td>
-            <span th:text="${review.getUserDTO().surname}"></span>
-            <span th:text="${review.getUserDTO().name}"></span>
-            <span th:text="${review.getUserDTO().patronymic}"></span>
+            <span th:text="${review.userDTO.surname}"></span>
+            <span th:text="${review.userDTO.name}"></span>
+            <span th:text="${review.userDTO.patronymic}"></span>
         </td>
         <td>
             <span th:text="${review.content}"></span>
@@ -45,8 +48,8 @@
 
     </tr>
 </table>
-
-<div th:with="url=@{/reviews}">
+</div>
+<div th:with="url=@{/reviews}" align="center">
     <div th:include="paginator :: paginator"></div>
 </div>
 </body>

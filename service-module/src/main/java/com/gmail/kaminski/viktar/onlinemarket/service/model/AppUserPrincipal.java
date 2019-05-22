@@ -56,4 +56,8 @@ public class AppUserPrincipal implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public UserDTO getUserDTO() {
+        return userDTO;
+    }
 }

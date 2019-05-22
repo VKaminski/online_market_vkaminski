@@ -22,7 +22,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
 
     @Override
     public User getByEmail(Connection connection, String email) {
-        String sqlRequest = "SELECT U.password, R.name FROM User AS U" +
+        String sqlRequest = "SELECT U.id, U.password, R.name FROM User AS U" +
                 " JOIN Role AS R ON U.role_id = R.id WHERE email=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRequest)) {
             preparedStatement.setString(1, email);
@@ -31,6 +31,8 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
                 while (resultSet.next()) {
                     String password = resultSet.getString("password");
                     String roleName = resultSet.getString("name");
+                    Long id = resultSet.getLong("id");
+                    user.setId(id);
                     user.setEmail(email);
                     user.setPassword(password);
                     Role role = new Role();

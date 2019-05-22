@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
+</head>
+<body>
+<h2 align="center">Articles</h2>
+<nav id="menu" align="center">
+    <a href="/profile">Profile</a>
+    <a href="/logout">Logout</a>
+</nav>
+<div id="main" align="center">
+    <form th:action="@{/articles/findtitle}" method='POST'>
+        Find by title:
+        <input type="text" name="searchRequest"/>
+        <input type="submit" value="Find"/>
+    </form>
+    <form th:action="@{/articles/finddate}" method='POST'>
+        Find dy date:
+        <input type="date" name="dateRequestStart">
+        <input type="date" name="dateRequestStop">
+        <input type="submit" value="Find"/>
+    </form>
+    <table border="1" cellpadding="2">
+        <tr th:each="article,stat : ${articles}">
+            <td>
+                <h3>
+                    <div th:text="${article.title}"/>
+                </h3>
+                <div th:text="${article.content.substring(0, 200)}"/>
+                <br>Author:
+                <span th:text="${article.author.name}"/>
+
+                <span th:text="${article.author.surname}"/>
+                <br>Comments:
+                <span th:text="${article.amountComments}"/>
+                <br>Date:
+                <span th:text="${article.date}"/>
+                <br><a th:href="@{/articles/{id}/(id=${article.id})}">More...</a>
+            </td>
+        </tr>
+    </table>
+    <div th:with="url=@{/articles}">
+        <div th:include="paginator :: paginator"></div>
+    </div>
+</div>
+
+</body>
+</html>
