@@ -7,8 +7,11 @@ import org.springframework.stereotype.Component;
 public class GlobalValue {
     @Value("${custom.role.name.administrator}")
     private String administratorRoleName;
+<<<<<<< HEAD
     @Value("${custom.role.name.sale}")
     private String saleRoleName;
+=======
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     @Value("${custom.role.name.customer}")
     private String customerRoleName;
     @Value("${custom.role.name.api}")
@@ -25,8 +28,11 @@ public class GlobalValue {
     public String getAPIRoleName() {
         return APIRoleName;
     }
+<<<<<<< HEAD
 
     public String getSaleRoleName() {
         return saleRoleName;
     }
+=======
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
 }

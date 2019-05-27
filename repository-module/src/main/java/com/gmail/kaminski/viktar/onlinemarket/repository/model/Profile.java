@@ -1,5 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository.model;
 
+<<<<<<< HEAD
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,11 @@ public class Profile {
     @Column
     private String address;
     @Column
+=======
+public class Profile {
+    private User user;
+    private String address;
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     private String phone;
 
     public void setUser(User user) {
@@ -47,6 +53,7 @@ public class Profile {
     public String getPhone() {
         return phone;
     }
+<<<<<<< HEAD
 
     @Override
     public int hashCode() {
@@ -67,4 +74,6 @@ public class Profile {
                 Objects.equals(address, profile.address) &&
                 Objects.equals(phone, profile.phone);
     }
+=======
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
 }

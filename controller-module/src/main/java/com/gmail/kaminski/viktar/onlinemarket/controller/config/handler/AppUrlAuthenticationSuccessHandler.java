@@ -60,7 +60,10 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
 
     protected String determineTargetUrl(Authentication authentication) {
         boolean isAdministrator = false;
+<<<<<<< HEAD
         boolean isSale = false;
+=======
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
         boolean isCustomer = false;
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
@@ -69,10 +72,13 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
                 isAdministrator = true;
                 break;
             }
+<<<<<<< HEAD
             if (grantedAuthority.getAuthority().equals("ROLE_" + globalValue.getSaleRoleName())) {
                 isSale = true;
                 break;
             }
+=======
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
             if (grantedAuthority.getAuthority().equals("ROLE_" + globalValue.getCustomerRoleName())) {
                 isCustomer = true;
                 break;
@@ -80,9 +86,13 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         if (isAdministrator) {
             return "/users";
+<<<<<<< HEAD
         } else if (isSale) {
             return "/articles";
         }else if (isCustomer) {
+=======
+        } else if (isCustomer) {
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
             return "/articles";
         } else {
             return "/login";

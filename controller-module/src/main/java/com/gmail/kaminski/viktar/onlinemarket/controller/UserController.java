@@ -7,6 +7,13 @@ import com.gmail.kaminski.viktar.onlinemarket.service.RoleService;
 import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.RoleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
+<<<<<<< HEAD:controller-module/src/main/java/com/gmail/kaminski/viktar/onlinemarket/controller/UserController.java
+=======
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f:controller-module/src/main/java/com/gmail/kaminski/viktar/onlinemarket/controller/AdministratorController.java
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+<<<<<<< HEAD:controller-module/src/main/java/com/gmail/kaminski/viktar/onlinemarket/controller/UserController.java
 public class UserController {
+=======
+public class AdministratorController {
+    private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
+    private static final Marker custom = MarkerFactory.getMarker("custom");
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f:controller-module/src/main/java/com/gmail/kaminski/viktar/onlinemarket/controller/AdministratorController.java
     private UserService userService;
     private RoleService roleService;
     private PaginatorService paginatorService;

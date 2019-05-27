@@ -1,5 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository.model;
 
+<<<<<<< HEAD
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -49,6 +50,19 @@ public class Article {
     private List<Comment> comments = new ArrayList<>();
     @Column
     private boolean deleted;
+=======
+import java.util.Date;
+import java.util.List;
+
+public class Article {
+    private Long id;
+    private User author;
+    private String content;
+    private Date date;
+    private Integer amountComments;
+    private String title;
+    private List<Comment> comments;
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
 
     public void setId(Long id) {
         this.id = id;
@@ -82,6 +96,17 @@ public class Article {
         return date;
     }
 
+<<<<<<< HEAD
+=======
+    public void setAmountComments(Integer amountComments) {
+        this.amountComments = amountComments;
+    }
+
+    public Integer getAmountComments() {
+        return amountComments;
+    }
+
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     public void setTitle(String title) {
         this.title = title;
     }
@@ -97,6 +122,7 @@ public class Article {
     public List<Comment> getComments() {
         return comments;
     }
+<<<<<<< HEAD
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
@@ -126,4 +152,6 @@ public class Article {
                 Objects.equals(date, article.date) &&
                 Objects.equals(content, article.content);
     }
+=======
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
 }

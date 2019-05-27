@@ -34,10 +34,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/articles", "/articles/**", "/article", "/article/**", "/profile")
+<<<<<<< HEAD
                 .hasAnyRole(globalValue.getCustomerRoleName(), globalValue.getSaleRoleName())
                 .antMatchers("/items", "/items/**")
                 .hasRole(globalValue.getSaleRoleName())
                 .antMatchers("/users", "/users/**", "/reviews", "/reviews/**")
+=======
+                .hasRole(globalValue.getCustomerRoleName())
+                .antMatchers("/users", "/users/**", "/reviews", "/reviews/**", "/profile")
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
                 .hasRole(globalValue.getAdministratorRoleName())
                 .antMatchers("/", "/403", "/login", "/test/**")
                 .permitAll()

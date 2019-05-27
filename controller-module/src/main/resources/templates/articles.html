@@ -1,13 +1,18 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+=======
+<html xmlns:th="http://www.thymeleaf.org">
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
 <head>
     <meta charset="UTF-8">
     <title>Articles</title>
     <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
 </head>
 <body>
+<<<<<<< HEAD
 <div align="center">
      <span sec:authorize="isAuthenticated()">
                 | Logged user: <span sec:authentication="name"></span> |
@@ -19,6 +24,10 @@
 <nav id="menu" align="center">
     <br><a sec:authorize="hasRole('ROLE_SALE')" th:href="@{/articles/new}">New article</a>
     <br><a sec:authorize="hasRole('ROLE_SALE')" th:href="@{/items}">Items</a>
+=======
+<h2 align="center">Articles</h2>
+<nav id="menu" align="center">
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     <a href="/profile">Profile</a>
     <a href="/logout">Logout</a>
 </nav>
@@ -40,17 +49,22 @@
                 <h3>
                     <div th:text="${article.title}"/>
                 </h3>
+<<<<<<< HEAD
                 <div th:if="${article.content.length() > 200}">
                     <div th:text="${article.content.substring(0, 200)}"/>
                 </div>
                 <div th:if="${article.content.length() <= 200}">
                     <div th:text="${article.content}"/>
                 </div>
+=======
+                <div th:text="${article.content.substring(0, 200)}"/>
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
                 <br>Author:
                 <span th:text="${article.author.name}"/>
 
                 <span th:text="${article.author.surname}"/>
                 <br>Comments:
+<<<<<<< HEAD
                 <span th:text="${article.comments.size()}"/>
                 <br>Date:
                 <span th:text="${article.date}"/>
@@ -58,6 +72,12 @@
                 <div sec:authorize="hasRole('ROLE_SALE')">
                     <br><a th:href="@{/articles/{id}/delete(id=${article.id})}">Delete</a>
                 </div>
+=======
+                <span th:text="${article.amountComments}"/>
+                <br>Date:
+                <span th:text="${article.date}"/>
+                <br><a th:href="@{/articles/{id}/(id=${article.id})}">More...</a>
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
             </td>
         </tr>
     </table>

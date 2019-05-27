@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+=======
+<html xmlns:th="http://www.thymeleaf.org">
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
 <head>
     <meta charset="UTF-8">
     <title>Article</title>
@@ -17,6 +21,7 @@
     <table border="1" cellpadding="2">
         <tr>
             <td>
+<<<<<<< HEAD
                 <form action="#" th:action="@{/articles/{id}/update(id=${article.id})}" th:object="${article}" method="post">
                     <h3>
                         <div sec:authorize="hasRole('ROLE_SALE')">
@@ -42,6 +47,20 @@
                         <button type="submit">Update</button>
                     </div>
                 </form>
+=======
+                <h3>
+                    <div th:text="${article.title}"/>
+                </h3>
+                <div th:text="${article.content}"/>
+                <br>Author:
+                <span th:text="${article.author.name}"/>
+
+                <span th:text="${article.author.surname}"/>
+                <br>Comments:
+                <span th:text="${article.amountComments}"/>
+                <br>Date:
+                <span th:text="${article.date}"/>
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
             </td>
         </tr>
     </table>
@@ -54,9 +73,15 @@
 
                 <span th:text="${comment.author.surname}"/>
                 <br>
+<<<<<<< HEAD
                 <span th:unless="${comment.headComment == null}">
                     <span th:each="commentHead,stat : ${article.comments}">
                         <span th:if="${commentHead.id == comment.headComment.id}">
+=======
+                <span th:unless="${comment.head == 0}">
+                    <span th:each="commentHead,stat : ${article.comments}">
+                        <span th:if="${commentHead.id == comment.head}">
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
                             [
                             <span th:text="${commentHead.author.name}"/>
 
@@ -69,6 +94,7 @@
                 <br>Date:
                 <span th:text="${comment.date}"/>
                 <div>
+<<<<<<< HEAD
                     <div>
                     <form action="#"
                           th:action="@{/articles/{articleId}/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}"
@@ -84,6 +110,13 @@
                     </div>
                 </div>
 
+=======
+                    <form action="#" th:action="@{/articles/{articleId}/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}" th:object="${newComment}" method="post">
+                        <input type="text" th:field="*{content}">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
             </td>
         </tr>
     </table>

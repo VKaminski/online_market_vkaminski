@@ -49,8 +49,13 @@ public class UserControllerJUnitTest {
             new UserDTO(11L, "name11", "surname11", "patronymic11", "user11@email.com", new RoleDTO())
     );
 
+<<<<<<< HEAD:controller-module/src/test/java/com/gmail/kaminski/viktar/onlinemarket/controller/UserControllerJUnitTest.java
     private List<RoleDTO> roles = asList(new RoleDTO());
     private Paginator paginator = new Paginator(1, 10, 2l);
+=======
+    private List<String> roles = asList("ROLE_ADMINISTRATOR", "ROLE_SALE", "ROLE_CUSTOMER", "ROLE_SECURE_API");
+    private Paginator paginator = new Paginator(1l, 10, 2l);
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f:controller-module/src/test/java/com/gmail/kaminski/viktar/onlinemarket/controller/AdministratorControllerJUnitTest.java
 
     @Before
     public void init() {
@@ -61,6 +66,10 @@ public class UserControllerJUnitTest {
 
     @Test
     public void shouldGetUsersPage() throws Exception {
+<<<<<<< HEAD:controller-module/src/test/java/com/gmail/kaminski/viktar/onlinemarket/controller/UserControllerJUnitTest.java
+=======
+        when(userService.getUsers(0l, 10)).thenReturn(users.subList(0, 10));
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f:controller-module/src/test/java/com/gmail/kaminski/viktar/onlinemarket/controller/AdministratorControllerJUnitTest.java
         when(userService.getAmountUsers()).thenReturn(Long.valueOf(users.size()));
         when(userService.getUsers(0, 10)).thenReturn(users.subList(0, 10));
         when(roleService.getAll()).thenReturn(roles);

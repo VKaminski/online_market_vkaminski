@@ -5,6 +5,7 @@ import com.gmail.kaminski.viktar.onlinemarket.repository.model.Comment;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ArticleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.CommentConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
+<<<<<<< HEAD
 import com.gmail.kaminski.viktar.onlinemarket.service.impl.UserServiceImpl;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.CommentDTO;
@@ -26,6 +27,17 @@ public class
 ArticleConverterImpl implements ArticleConverter {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final Marker custom = MarkerFactory.getMarker("custom");
+=======
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.CommentDTO;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class ArticleConverterImpl implements ArticleConverter {
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     private UserConverter userConverter;
     private CommentConverter commentConverter;
 
@@ -40,6 +52,7 @@ ArticleConverterImpl implements ArticleConverter {
         if (article.getId() != null) {
             articleDTO.setId(article.getId());
         }
+<<<<<<< HEAD
         articleDTO.setAuthor(userConverter.toUserDTO(article.getAuthor()));
         articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());
@@ -53,6 +66,32 @@ ArticleConverterImpl implements ArticleConverter {
                 commentDTOs.add(commentConverter.toCommentDTO(comment));
             }
             articleDTO.setComments(commentDTOs);
+=======
+        if (article.getAuthor() != null) {
+            articleDTO.setAuthor(userConverter.toUserDTO(article.getAuthor()));
+        }
+        if (article.getTitle() != null) {
+            articleDTO.setTitle(article.getTitle());
+        }
+        if (article.getContent() != null) {
+            articleDTO.setContent(article.getContent());
+        }
+        if (article.getDate() != null) {
+            articleDTO.setDate(article.getDate());
+        }
+        if (article.getAmountComments() != null) {
+            articleDTO.setAmountComments(article.getAmountComments());
+        }
+
+        if (article.getComments() != null) {
+            if (!article.getComments().isEmpty()) {
+                List<CommentDTO> commentDTOs = new ArrayList<>();
+                for (Comment comment : article.getComments()) {
+                    commentDTOs.add(commentConverter.toCommentDTO(comment));
+                }
+                articleDTO.setComments(commentDTOs);
+            }
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
         }
         return articleDTO;
     }
@@ -63,6 +102,7 @@ ArticleConverterImpl implements ArticleConverter {
         if (articleDTO.getId() != null) {
             article.setId(articleDTO.getId());
         }
+<<<<<<< HEAD
         article.setAuthor(userConverter.toUser(articleDTO.getAuthor()));
         article.setTitle(articleDTO.getTitle());
         article.setContent(articleDTO.getContent());
@@ -97,6 +137,32 @@ ArticleConverterImpl implements ArticleConverter {
                 date = new Date(currentTime);
             }
             article.setDate(date);
+=======
+        if (articleDTO.getAuthor() != null) {
+            article.setAuthor(userConverter.toUser(articleDTO.getAuthor()));
+        }
+        if (articleDTO.getTitle() != null) {
+            article.setTitle(articleDTO.getTitle());
+        }
+        if (articleDTO.getContent() != null) {
+            article.setContent(articleDTO.getContent());
+        }
+        if (articleDTO.getDate() != null) {
+            article.setDate(articleDTO.getDate());
+        }
+        if (articleDTO.getAmountComments() != null) {
+            article.setAmountComments(articleDTO.getAmountComments());
+        }
+
+        if (articleDTO.getComments() != null) {
+            if (!article.getComments().isEmpty()) {
+                List<Comment> comments = new ArrayList<>();
+                for (CommentDTO commentDTO : articleDTO.getComments()) {
+                    comments.add(commentConverter.toComment(commentDTO));
+                }
+                article.setComments(comments);
+            }
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
         }
         return article;
     }

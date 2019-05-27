@@ -1,5 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository.model;
 
+<<<<<<< HEAD
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -58,32 +59,69 @@ public class Comment {
 
     public void setArticle(Article article) {
         this.article = article;
+=======
+import java.util.Date;
+
+public class Comment {
+    private Long articleId;
+    private User author;
+    private Long id;
+    private String content;
+    private Date date;
+    private Long head;
+
+    public Long getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(Long articleId) {
+        this.articleId = articleId;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     }
 
     public User getAuthor() {
         return author;
     }
 
+<<<<<<< HEAD
     public void setAuthor(User author) {
         this.author = author;
     }
 
     public String getContent() {
         return content;
+=======
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     }
 
     public void setContent(String content) {
         this.content = content;
     }
 
+<<<<<<< HEAD
     public Date getDate() {
         return date;
+=======
+    public String getContent() {
+        return content;
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     }
 
     public void setDate(Date date) {
         this.date = date;
     }
 
+<<<<<<< HEAD
     public Comment getHeadComment() {
         return headComment;
     }
@@ -119,5 +157,17 @@ public class Comment {
                 Objects.equals(date, comment.date) &&
                 Objects.equals(headComment.id, comment.headComment.id) &&
                 Objects.equals(content, comment.content);
+=======
+    public Date getDate() {
+        return date;
+    }
+
+    public void setHead(Long head) {
+        this.head = head;
+    }
+
+    public Long getHead() {
+        return head;
+>>>>>>> 666068f8e41815d3241301d06ecd5416f12f1e1f
     }
 }
