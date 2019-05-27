@@ -48,8 +48,7 @@ public class UserControllerJUnitTest {
             new UserDTO(10L, "name10", "surname10", "patronymic10", "user10@email.com", new RoleDTO()),
             new UserDTO(11L, "name11", "surname11", "patronymic11", "user11@email.com", new RoleDTO())
     );
-
-    private List<RoleDTO> roles = asList(new RoleDTO());
+private List<RoleDTO> roles = asList(new RoleDTO());
     private Paginator paginator = new Paginator(1, 10, 2l);
 
     @Before
@@ -61,6 +60,7 @@ public class UserControllerJUnitTest {
 
     @Test
     public void shouldGetUsersPage() throws Exception {
+        when(userService.getUsers(0, 10)).thenReturn(users.subList(0, 10));
         when(userService.getAmountUsers()).thenReturn(Long.valueOf(users.size()));
         when(userService.getUsers(0, 10)).thenReturn(users.subList(0, 10));
         when(roleService.getAll()).thenReturn(roles);

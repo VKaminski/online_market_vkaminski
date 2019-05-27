@@ -70,12 +70,12 @@
                 <span th:text="${comment.date}"/>
                 <div>
                     <div>
-                    <form action="#"
-                          th:action="@{/articles/{articleId}/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}"
-                          th:object="${newComment}" method="post">
-                        <input type="text" th:field="*{content}">
-                        <button type="submit">Send</button>
-                    </form>
+                        <form action="#"
+                              th:action="@{/articles/{articleId}/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}"
+                              th:object="${newComment}" method="post">
+                            <input type="text" th:field="*{content}">
+                            <button type="submit">Send</button>
+                        </form>
                     </div>
                     <div sec:authorize="hasRole('ROLE_SALE')">
                         <form action="#" th:action="@{/articles/{articleId}/{commentId}/delete(articleId=${article.id}, commentId=${comment.id})}" method="post">
