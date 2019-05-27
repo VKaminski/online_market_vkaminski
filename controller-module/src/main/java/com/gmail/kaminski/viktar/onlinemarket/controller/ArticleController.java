@@ -43,7 +43,7 @@ public class ArticleController {
     }
 
     @RequestMapping({"/articles", "/articles/findtitle", "/articles/finddate"})
-    private String getPage(
+    private String getArticles(
             @RequestParam(value = "searchRequest", required = false) String searchRequest,
             @RequestParam(value = "dateRequestStart", required = false) String dateRequestStart,
             @RequestParam(value = "dateRequestStop", required = false) String dateRequestStop,
