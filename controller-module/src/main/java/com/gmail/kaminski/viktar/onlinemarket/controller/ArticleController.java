@@ -43,7 +43,7 @@ public class ArticleController {
     }
 
     @RequestMapping({"/articles", "/articles/findtitle", "/articles/finddate"})
-    private String getPage(
+    private String getArticles(
             @RequestParam(value = "searchRequest", required = false) String searchRequest,
             @RequestParam(value = "dateRequestStart", required = false) String dateRequestStart,
             @RequestParam(value = "dateRequestStop", required = false) String dateRequestStop,
@@ -110,40 +110,5 @@ public class ArticleController {
         newArticle.setAuthor(user);
         articleService.add(newArticle);
         return "redirect:/articles";
-    }
-
-    @PostMapping("/articles/{id}/{commentId}/addcomment")
-    public String addComment(
-            @PathVariable("id") Long articleId,
-            @PathVariable("commentId") Long commentId,
-            @ModelAttribute("newComment") CommentDTO newComment,
-            Model model) {
-        ArticleDTO articleDTO = new ArticleDTO();
-        articleDTO.setId(articleId);
-        newComment.setArticle(articleDTO);
-        CommentDTO headComment = new CommentDTO();
-        headComment.setId(commentId);
-        newComment.setHeadComment(headComment);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserEmail = auth.getName();
-        UserDTO currentUser = new UserDTO();
-        currentUser.setEmail(currentUserEmail);
-        newComment.setAuthor(currentUser);
-        if (articleService.addComment(newComment)) {
-            return "redirect:/articles/" + articleId;
-        } else {
-            String errorMessage = "Message contain forbidden word";
-            model.addAttribute("errorMessage", errorMessage);
-            showArticle(articleId, model);
-            return "article";
-        }
-    }
-
-    @PostMapping("/articles/{articleId}/{commentId}/delete")
-    public String deleteComment(
-            @PathVariable("articleId") Long articleId,
-            @PathVariable("commentId") Long commentId) {
-        articleService.deleteComment(commentId);
-        return "redirect:/articles/" + articleId;
     }
 }

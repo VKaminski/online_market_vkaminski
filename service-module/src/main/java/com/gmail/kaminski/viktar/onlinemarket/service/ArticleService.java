@@ -14,8 +14,6 @@ public interface ArticleService {
 
     ArticleDTO getById(Long id);
 
-    boolean addComment(CommentDTO commentDTO);
-
     List<ArticleDTO> findByTitle(String searchRequest, Integer firstElement, Integer amountElement);
 
     List<ArticleDTO> findByDate(Date dateStart, Date dateStop, Integer firstElement, Integer amountElement);
@@ -25,6 +23,4 @@ public interface ArticleService {
     void delete(Long id);
 
     void update(ArticleDTO articleDTO);
-
-    void deleteComment(Long commentId);
 }
