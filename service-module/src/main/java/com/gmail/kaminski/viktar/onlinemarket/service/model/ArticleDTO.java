@@ -1,5 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +10,7 @@ public class ArticleDTO {
     private String title;
     private String content;
     private Date date;
-    private Integer amountComments;
-    private String preview;
-    private List<CommentDTO> comments;
+    private List<CommentDTO> comments = new ArrayList<>();
 
     public void setId(Long id) {
         this.id = id;
@@ -45,28 +44,12 @@ public class ArticleDTO {
         return content;
     }
 
-    public void setAmountComments(Integer amountComments) {
-        this.amountComments = amountComments;
-    }
-
-    public Integer getAmountComments() {
-        return amountComments;
-    }
-
     public void setAuthor(UserDTO author) {
         this.author = author;
     }
 
     public UserDTO getAuthor() {
         return author;
-    }
-
-    public void setPreview(String preview) {
-        this.preview = preview;
-    }
-
-    public String getPreview() {
-        return preview;
     }
 
     public void setComments(List<CommentDTO> comments) {

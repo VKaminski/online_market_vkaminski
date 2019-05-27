@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Paginator {
-    private Long page;
+    private Integer page;
     private Integer amountElementOnPage;
     private Long totalElement;
     private List<Integer> amountVariants;
@@ -16,7 +16,7 @@ public class Paginator {
         amountVariants.add(15);
     }
 
-    public Paginator(Long page, Integer amountElementOnPage, Long totalElement) {
+    public Paginator(Integer page, Integer amountElementOnPage, Long totalElement) {
         this.page = page;
         this.amountElementOnPage = amountElementOnPage;
         this.totalElement = totalElement;
@@ -26,11 +26,11 @@ public class Paginator {
         amountVariants.add(15);
     }
 
-    public Long getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(Long page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 

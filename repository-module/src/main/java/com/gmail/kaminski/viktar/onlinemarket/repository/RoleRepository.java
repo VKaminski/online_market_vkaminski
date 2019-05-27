@@ -1,8 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository;
 
-import java.sql.Connection;
-import java.util.List;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.Role;
 
-public interface RoleRepository extends GenericRepository {
-    List<String> getRoleNames(Connection connection);
+public interface RoleRepository extends GenericRepository<Long, Role> {
 }

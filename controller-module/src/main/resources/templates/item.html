@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Item</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
+</head>
+<body>
+<h2 align="center">Item</h2>
+<nav id="menu" align="center">
+    <br><a sec:authorize="hasRole('ROLE_SALE')" th:href="@{/articles/new}">New article</a>
+    <br><a sec:authorize="hasRole('ROLE_SALE')" th:href="@{/articles}">Articles</a>
+    <br><a sec:authorize="hasRole('ROLE_SALE')" th:href="@{/items}">Items</a>
+    <a href="/profile">Profile</a>
+    <a href="/logout">Logout</a>
+</nav>
+<div id="main" align="center">
+
+    <table border="1" cellpadding="2">
+        <tr>
+            <td>Name</td>
+            <td>
+                <span th:text="${item.name}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Unique Number</td>
+            <td>
+                <span th:text="${item.uniqNumber}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>
+                <span th:text="${item.description}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>
+                <span th:text="${item.price}"></span>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

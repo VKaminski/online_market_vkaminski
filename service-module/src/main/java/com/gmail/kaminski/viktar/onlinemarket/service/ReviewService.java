@@ -5,9 +5,9 @@ import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewDTO;
 import java.util.List;
 
 public interface ReviewService {
-    List<ReviewDTO> get(Long firstElement, Integer amountElement);
+    List<ReviewDTO> get(Integer firstElement, Integer amountElement);
 
-    Long size();
+    Long getTotalAmount();
 
     void show(Long id);
 
