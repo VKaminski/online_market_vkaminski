@@ -41,8 +41,11 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .and()
-                .exceptionHandling().accessDeniedHandler(apiAccessDeniedHandler())
-                .and().csrf().disable();
+                .exceptionHandling()
+                .accessDeniedHandler(apiAccessDeniedHandler())
+                .and()
+                .csrf()
+                .disable();
     }
 
     @Bean

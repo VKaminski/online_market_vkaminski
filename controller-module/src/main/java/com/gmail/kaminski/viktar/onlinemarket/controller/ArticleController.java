@@ -3,10 +3,10 @@ package com.gmail.kaminski.viktar.onlinemarket.controller;
 import com.gmail.kaminski.viktar.onlinemarket.controller.model.Paginator;
 import com.gmail.kaminski.viktar.onlinemarket.controller.util.PaginatorService;
 import com.gmail.kaminski.viktar.onlinemarket.service.ArticleService;
-import com.gmail.kaminski.viktar.onlinemarket.service.ProfileService;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.AppUserPrincipal;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.CommentDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.ProfileDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.NewArticleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,36 +23,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
-public class CustomerController {
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+public class ArticleController {
+    private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
     private static final Marker custom = MarkerFactory.getMarker("custom");
     private ArticleService articleService;
     private PaginatorService paginatorService;
-    private ProfileService profileService;
 
-    public CustomerController(ArticleService articleService, PaginatorService paginatorService, ProfileService profileService) {
+    public ArticleController(ArticleService articleService,
+                             PaginatorService paginatorService) {
         this.articleService = articleService;
         this.paginatorService = paginatorService;
-        this.profileService = profileService;
     }
-
-//    @GetMapping("/articles")
-//    public String showArticles(
-//            @RequestParam(value = "page", required = false, defaultValue = "1") String page,
-//            @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
-//            Model model) {
-//        logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
-//        Long sizeList = articleService.getAmountArticles();
-//        Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-//        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
-//        List<ArticleDTO> articles = articleService.getArticles(firstElement, paginator.getAmountElementOnPage());
-//        model.addAttribute("articles", articles);
-//        model.addAttribute("paginator", paginator);
-//        return "articles";
-//    }
 
     @RequestMapping({"/articles", "/articles/findtitle", "/articles/finddate"})
     private String getPage(
@@ -61,14 +49,17 @@ public class CustomerController {
             @RequestParam(value = "dateRequestStop", required = false) String dateRequestStop,
             @RequestParam(value = "page", required = false, defaultValue = "1") String page,
             @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
-            Model model) {
+            Model model) throws ParseException {
         logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
         Long sizeList = articleService.getAmountArticles();
         Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Long firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
+        Integer firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
         List<ArticleDTO> articles;
         if (dateRequestStart != null && dateRequestStop != null) {
-            articles = articleService.findByDate(dateRequestStart, dateRequestStop, firstElement, paginator.getAmountElementOnPage());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateStart = format.parse(dateRequestStart);
+            Date dateStop = format.parse(dateRequestStop);
+            articles = articleService.findByDate(dateStart, dateStop, firstElement, paginator.getAmountElementOnPage());
         } else if (searchRequest != null) {
             articles = articleService.findByTitle(searchRequest, firstElement, paginator.getAmountElementOnPage());
         } else {
@@ -90,14 +81,49 @@ public class CustomerController {
         return "article";
     }
 
+    @GetMapping("/articles/{id}/delete")
+    public String deleteArticle(
+            @PathVariable("id") Long id) {
+        articleService.delete(id);
+        return "redirect:/articles";
+    }
+
+    @PostMapping("/articles/{id}/update")
+    public String deleteArticle(
+            @ModelAttribute("article") ArticleDTO article) {
+        articleService.update(article);
+        return "redirect:/articles";
+    }
+
+    @GetMapping("/articles/new")
+    public String newArticle(Model model) {
+        model.addAttribute("article", new ArticleDTO());
+        return "newarticle";
+    }
+
+    @PostMapping("/articles/new")
+    public String createArticle(
+            @Valid @ModelAttribute("article") NewArticleDTO newArticle) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        AppUserPrincipal userPrincipal = (AppUserPrincipal) auth.getPrincipal();
+        UserDTO user = userPrincipal.getUserDTO();
+        newArticle.setAuthor(user);
+        articleService.add(newArticle);
+        return "redirect:/articles";
+    }
+
     @PostMapping("/articles/{id}/{commentId}/addcomment")
     public String addComment(
             @PathVariable("id") Long articleId,
             @PathVariable("commentId") Long commentId,
             @ModelAttribute("newComment") CommentDTO newComment,
             Model model) {
-        newComment.setArticleId(articleId);
-        newComment.setHead(commentId);
+        ArticleDTO articleDTO = new ArticleDTO();
+        articleDTO.setId(articleId);
+        newComment.setArticle(articleDTO);
+        CommentDTO headComment = new CommentDTO();
+        headComment.setId(commentId);
+        newComment.setHeadComment(headComment);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentUserEmail = auth.getName();
         UserDTO currentUser = new UserDTO();
@@ -113,13 +139,11 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/profile")
-    public String showUserProfile(
-            Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        ProfileDTO profileDTO = profileService.getByUserEmail(email);
-        model.addAttribute("profile", profileDTO);
-        return "profile";
+    @PostMapping("/articles/{articleId}/{commentId}/delete")
+    public String deleteComment(
+            @PathVariable("articleId") Long articleId,
+            @PathVariable("commentId") Long commentId) {
+        articleService.deleteComment(commentId);
+        return "redirect:/articles/" + articleId;
     }
 }

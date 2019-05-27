@@ -12,7 +12,7 @@ public class EmailServiceImpl implements EmailService {
     private String marketEmail;
     private JavaMailSender emailSender;
 
-    private EmailServiceImpl(JavaMailSender emailSender) {
+    public EmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 

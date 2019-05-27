@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AdministratorControllerSecureIntegrationTest {
+public class UserControllerSecureIntegrationTest {
 
     @Autowired
     private MockMvc mock;

@@ -12,7 +12,7 @@ public class PaginatorServiceImpl implements PaginatorService {
 
     @Override
     public Paginator get(String stringPage, String stringAmountElement, Long totalElement) {
-        Long page = validPage(stringPage, totalElement);
+        Integer page = validPage(stringPage, totalElement);
         Integer amountElement = validAmountElement(stringAmountElement);
         Paginator paginator = new Paginator();
         paginator.setAmountElementOnPage(amountElement);
@@ -21,15 +21,15 @@ public class PaginatorServiceImpl implements PaginatorService {
         return paginator;
     }
 
-    private Long validPage(String stringPage, Long sizeList) {
-        Long validPage = 1l;
+    private Integer validPage(String stringPage, Long sizeList) {
+        Integer validPage = 1;
         try {
-            validPage = Long.parseLong(stringPage);
+            validPage = Integer.parseInt(stringPage);
         } catch (NumberFormatException e) {
             logger.info("Not valid page");
         }
         if (validPage < 1 || validPage > sizeList){
-            validPage = 1l;
+            validPage = 1;
         }
         return validPage;
     }

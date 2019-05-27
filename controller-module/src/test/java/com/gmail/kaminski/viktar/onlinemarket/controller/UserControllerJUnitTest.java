@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdministratorControllerJUnitTest {
+public class UserControllerJUnitTest {
     private MockMvc mockMvc;
 
     @Mock
@@ -49,24 +49,21 @@ public class AdministratorControllerJUnitTest {
             new UserDTO(11L, "name11", "surname11", "patronymic11", "user11@email.com", new RoleDTO())
     );
 
-    private List<String> roles = asList("ROLE_ADMINISTRATOR", "ROLE_SALE", "ROLE_CUSTOMER", "ROLE_SECURE_API");
-    private Paginator paginator = new Paginator(1l, 10, 2l);
+    private List<RoleDTO> roles = asList(new RoleDTO());
+    private Paginator paginator = new Paginator(1, 10, 2l);
 
     @Before
     public void init() {
-        AdministratorController controller =
-                new AdministratorController(userService
-                        , roleService
-                        , paginatorService
-                        , reviewService);
+        ReviewController controller =
+                new ReviewController(paginatorService, reviewService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     public void shouldGetUsersPage() throws Exception {
-        when(userService.getUsers(0l, 10)).thenReturn(users.subList(0, 10));
         when(userService.getAmountUsers()).thenReturn(Long.valueOf(users.size()));
-        when(roleService.getRoleNames()).thenReturn(roles);
+        when(userService.getUsers(0, 10)).thenReturn(users.subList(0, 10));
+        when(roleService.getAll()).thenReturn(roles);
         this.mockMvc.perform(get("/users.html"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", users.subList(0, 10)))

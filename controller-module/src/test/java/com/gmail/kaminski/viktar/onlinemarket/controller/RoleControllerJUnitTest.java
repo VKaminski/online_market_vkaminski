@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomerControllerJUnitTest {
+public class RoleControllerJUnitTest {
     private MockMvc mockMvc;
     private String page = "1";
     private String amountElement = "10";
@@ -42,13 +42,11 @@ public class CustomerControllerJUnitTest {
     @Mock
     private PaginatorService paginatorService;
     @Mock
-    private UserService userService;
-    @Mock
     private ProfileService profileService;
 
     @Before
     public void init() {
-        CustomerController controller = new CustomerController(articleService, paginatorService, profileService);
+        RoleController controller = new RoleController(profileService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -58,7 +56,7 @@ public class CustomerControllerJUnitTest {
         List<ArticleDTO> articles = new ArrayList<>();
         when(articleService.getAmountArticles()).thenReturn(amountArticles);
         when(paginatorService.get(page, amountElement, amountArticles)).thenReturn(paginator);
-        when(articleService.getArticles(0l, 10)).thenReturn(articles);
+        when(articleService.getArticles(0, 10)).thenReturn(articles);
         this.mockMvc.perform(get("/articles.html"))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("articles"));
@@ -70,7 +68,7 @@ public class CustomerControllerJUnitTest {
         List<ArticleDTO> articles = new ArrayList<>();
         when(articleService.getAmountArticles()).thenReturn(amountArticles);
         when(paginatorService.get(page, amountElement, amountArticles)).thenReturn(paginator);
-        when(articleService.getArticles(0l, 10)).thenReturn(articles);
+        when(articleService.getArticles(0, 10)).thenReturn(articles);
         this.mockMvc.perform(get("/articles.html"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("articles", articles));
@@ -82,7 +80,7 @@ public class CustomerControllerJUnitTest {
         List<ArticleDTO> articles = new ArrayList<>();
         when(articleService.getAmountArticles()).thenReturn(amountArticles);
         when(paginatorService.get(page, amountElement, amountArticles)).thenReturn(paginator);
-        when(articleService.getArticles(0l, 10)).thenReturn(articles);
+        when(articleService.getArticles(0, 10)).thenReturn(articles);
         this.mockMvc.perform(get("/articles.html"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("paginator", paginator));
@@ -94,7 +92,7 @@ public class CustomerControllerJUnitTest {
         List<ArticleDTO> articles = new ArrayList<>();
         when(articleService.getAmountArticles()).thenReturn(amountArticles);
         when(paginatorService.get(page, amountElement, amountArticles)).thenReturn(paginator);
-        when(articleService.getArticles(0l, 10)).thenReturn(articles);
+        when(articleService.getArticles(0, 10)).thenReturn(articles);
         this.mockMvc.perform(get("/articles.html"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("paginator", paginator));
@@ -122,19 +120,19 @@ public class CustomerControllerJUnitTest {
 
     @Test
     public void shouldGetProfilePage() throws Exception {
-        String email = "test@test.com";
+        Long id = 1l;
         ProfileDTO profileDTO = new ProfileDTO();
-        when(profileService.getByUserEmail(email)).thenReturn(profileDTO);
-        this.mockMvc.perform(get("/profile/" + email + ".html"))
+        when(profileService.getById(id)).thenReturn(profileDTO);
+        this.mockMvc.perform(get("/profile/" + id + ".html"))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("profile"));
     }
 
     @Test
     public void checkProfileAttributeOnProfilePage() throws Exception {
-        String email = "test@test.com";
+        Long id = 1l;
         ProfileDTO profileDTO = new ProfileDTO();
-        when(profileService.getByUserEmail(email)).thenReturn(profileDTO);
+        when(profileService.getById(id)).thenReturn(profileDTO);
         this.mockMvc.perform(get("/profile.html"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("profile", profileDTO));
@@ -142,7 +140,7 @@ public class CustomerControllerJUnitTest {
 
     private Paginator getPaginator() {
         Paginator paginator = new Paginator();
-        paginator.setPage(Long.valueOf(page));
+        paginator.setPage(Integer.valueOf(page));
         paginator.setAmountElementOnPage(Integer.valueOf(amountElement));
         paginator.setTotalElement(amountArticles);
         return paginator;
@@ -158,7 +156,6 @@ public class CustomerControllerJUnitTest {
             UserDTO userDTO = getUserDTO(i);
             articleDTO.setAuthor(userDTO);
             articleDTO.setContent(articleContent);
-            articleDTO.setPreview(articleContent.substring(0, 200));
             List<CommentDTO> comments = new ArrayList<>();
             for (int j = 0; j < amountComments; j++) {
                 CommentDTO comment = new CommentDTO();
