@@ -3,28 +3,32 @@
 
 <body>
 <nav id="paginator" align="center">
-    <div th:fragment="paginator" >
+    <div th:fragment="paginator (pageDTO)" >
         <table>
             <tr>
                 <td>
-                    <a th:href="@{${url}(page=${paginator.page - 1},amountElement=${paginator.amountElementOnPage})}">Previous</a>
+                    <a th:href="@{${url}(page=${pageDTO.page - 1},amountElement=${pageDTO.amountElementsOnPage})}">Previous</a>
                 </td>
-                <td th:each="pageRef : ${#numbers.sequence(1, paginator.totalElement/paginator.amountElementOnPage)}">
-                    <a th:if="${pageRef == 1}" th:href="@{${url}(page=${pageRef},amountElement=${paginator.amountElementOnPage})}" th:text="${pageRef}"></a>
-                    <a th:if="${(pageRef == (paginator.page-2) or pageRef == (paginator.page+2))}" th:href="@{${url}(page=${pageRef},amountElement=${paginator.amountElementOnPage})}" th:text="..."></a>
-                    <a th:if="${pageRef >= (paginator.page - 1) and pageRef <= (paginator.page + 1) and pageRef != 1 and pageRef != paginator.totalElement}" th:href="@{${url}(page=${pageRef},amountElement=${paginator.amountElementOnPage})}" th:text="${pageRef}"></a>
-                    <a th:if="${pageRef == paginator.totalElement}" th:href="@{${url}(page=${pageRef},amountElement=${paginator.amountElementOnPage})}" th:text="${pageRef}"></a>
-                </td>
-                <td>
-                    <a th:href="@{${url}(page=${paginator.page + 1},amountElement=${paginator.amountElementOnPage})}">Next</a>
+                <td th:each="pageRef : ${#numbers.sequence(1, pageDTO.amountElements/pageDTO.amountElementsOnPage)}">
+                    <a th:if="${pageRef == 1}" th:href="@{${url}(page=${pageRef},amountElement=${pageDTO.amountElementsOnPage})}" th:text="${pageRef}"></a>
+                    <a th:if="${(pageRef == (pageDTO.page-2) or pageRef == (pageDTO.page+2))}" th:href="@{${url}(page=${pageRef},amountElement=${pageDTO.amountElementsOnPage})}" th:text="..."></a>
+                    <a th:if="${pageRef >= (pageDTO.page - 1) and pageRef <= (pageDTO.page + 1) and pageRef != 1 and pageRef != pageDTO.amountElements}" th:href="@{${url}(page=${pageRef},amountElement=${pageDTO.amountElementsOnPage})}" th:text="${pageRef}"></a>
+                    <a th:if="${pageRef == pageDTO.amountElements}" th:href="@{${url}(page=${pageRef},amountElement=${pageDTO.amountElementsOnPage})}" th:text="${pageRef}"></a>
                 </td>
                 <td>
-                    <form action="" th:action="@{${url}(page=${paginator.page},amountElement=${amountVariant})}">
+                    <a th:href="@{${url}(page=${pageDTO.page + 1},amountElement=${pageDTO.amountElementsOnPage})}">Next</a>
+                </td>
+                <td>
+                    <form action="" th:action="@{${url}(page=${pageDTO.page},amountElement=${elementsOnPage})}">
                         <select name="amountElement" onchange='this.form.submit()'>
-                            <option th:each="amountVariant : ${paginator.amountVariants}"
+                            <option th:each="amountVariant : ${new Integer[]{5, 10, 20}}"
                                     th:value="${amountVariant}" th:text="${amountVariant}"
-                                    th:selected="${amountVariant == paginator.amountElementOnPage}">
+                                    th:selected="${amountVariant == pageDTO.amountElementsOnPage}">
                             </option>
+                            <!--<option th:selected="${pageDTO.amountElementsOnPage}"></option>-->
+                            <!--<option value="5">5</option>-->
+                            <!--<option value="10">10</option>-->
+                            <!--<option value="20">20</option>-->
                         </select>
                     </form>
                 </td>

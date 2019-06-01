@@ -11,11 +11,11 @@ import java.util.List;
 public class ItemRepositoryImpl extends GenericRepositoryImpl<Long, Item> implements ItemRepository {
 
     @Override
-    public List<Item> findAll(int firstElement, int amountElement) {
+    public List<Item> getAllOrderByName(Integer firstElement, Integer amountElementsOnPage) {
         String hqlRequest = "from Item order by name asc";
         Query query = entityManager.createQuery(hqlRequest)
                 .setFirstResult(firstElement)
-                .setMaxResults(amountElement);
+                .setMaxResults(amountElementsOnPage);
         return query.getResultList();
     }
 }

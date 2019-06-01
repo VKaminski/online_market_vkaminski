@@ -28,4 +28,10 @@ public class ProfileConverterImpl implements ProfileConverter {
         }
         return profileDTO;
     }
+
+    @Override
+    public Profile toProfile(ProfileDTO profileDTO) {
+
+        return null;
+    }
 }

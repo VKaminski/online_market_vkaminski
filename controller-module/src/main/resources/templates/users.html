@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
@@ -24,7 +26,7 @@
                 <td>Email</td>
                 <td>Role</td>
             </tr>
-            <tr th:each="user,stat : ${users}">
+            <tr th:each="user,stat : ${usersPage.elements}">
                 <td>
                     <input type="checkbox"
                            th:field="*{checkedUsersId}"
@@ -32,7 +34,7 @@
                            th:checked="${user.deleted}">
                 </td>
                 <td>
-                    <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElementOnPage + 1}"></span>
+                    <span th:text="${stat.index + (usersPage.page - 1) * usersPage.amountElementsOnPage + 1}"></span>
                 </td>
                 <td>
                     <span th:text="${user.surname}"></span>
@@ -64,7 +66,7 @@
             </tr>
         </table>
         <div th:with="url=@{/users}">
-            <div th:include="paginator :: paginator"></div>
+            <div th:include="paginator :: paginator (pageDTO=${usersPage})"></div>
         </div>
     </form>
 </div>

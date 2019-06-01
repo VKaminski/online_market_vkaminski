@@ -1,10 +1,12 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.model;
 
+import java.util.Date;
+
 public class NewArticleDTO {
     private String title;
     private String content;
-    private UserDTO author;
-    private String date;
+    private Long userId;
+    private Date date;
 
     public String getTitle() {
         return title;
@@ -22,19 +24,19 @@ public class NewArticleDTO {
         this.content = content;
     }
 
-    public UserDTO getAuthor() {
-        return author;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setAuthor(UserDTO author) {
-        this.author = author;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

@@ -4,9 +4,8 @@ import com.gmail.kaminski.viktar.onlinemarket.repository.ReviewRepository;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Review;
 import com.gmail.kaminski.viktar.onlinemarket.service.ReviewService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ReviewConverter;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,18 +24,27 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public List<ReviewDTO> get(Integer firstElement, Integer amountElement) {
-        List<Review> reviews = reviewRepository.findAll(firstElement, amountElement);
-        List<ReviewDTO> output = new ArrayList<>();
-        for (Review review : reviews) {
-            output.add(reviewConverter.toReviewDTO(review));
+    public PageDTO<ReviewDTO> getReviewsPage(PageDTO<ReviewDTO> pageDTO) {
+        int amountElements = reviewRepository.getAmountOfEntities();
+        pageDTO.setAmountElements(amountElements);
+        Integer amountElementsOnPage = pageDTO.getAmountElementsOnPage();
+        int amountPages = amountElements / amountElementsOnPage + 1;
+        if (pageDTO.getPage() > (amountPages)) {
+            pageDTO.setPage(amountPages);
         }
-        return output;
+        int firstElement = (pageDTO.getPage() - 1) * pageDTO.getAmountElementsOnPage();
+        List<Review> reviews = reviewRepository.findAll(firstElement, amountElementsOnPage);
+        List<ReviewDTO> reviewDTOs = new ArrayList<>();
+        for (Review review : reviews) {
+            reviewDTOs.add(reviewConverter.toReviewDTO(review));
+        }
+        pageDTO.setElements(reviewDTOs);
+        return pageDTO;
     }
 
     @Override
     @Transactional
-    public Long getTotalAmount() {
+    public Integer getTotalAmount() {
         return reviewRepository.getAmountOfEntities();
     }
 

@@ -7,6 +7,8 @@ import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.RandomService;
 import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.AuthorizedUserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +49,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO getByEmail(String email) {
+    public AuthorizedUserDTO getByEmail(String email) {
         User user = userRepository.getByEmail(email);
-        return userConverter.toUserDTO(user);
+        return userConverter.toAuthorizedUserDTO(user);
     }
 
     @Override
@@ -73,18 +75,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> getUsers(Integer firstElement, Integer amountElement) {
-        List<User> users = userRepository.findAll(firstElement, amountElement);
-        List<UserDTO> output = new ArrayList<>();
-        for (User user : users) {
-            output.add(userConverter.toUserDTO(user));
+    public PageDTO<UserDTO> getUsersPage(PageDTO<UserDTO> pageDTO) {
+        int totalAmountElements = userRepository.getAmountOfEntities();
+        Integer amountElements = pageDTO.getAmountElementsOnPage();
+        pageDTO.setAmountElements(amountElements);
+        int amountPages = totalAmountElements / amountElements + 1;
+        if (pageDTO.getPage() > (amountPages)) {
+            pageDTO.setPage(amountPages);
         }
-        return output;
+        int firstElement = (pageDTO.getPage() - 1) * pageDTO.getAmountElementsOnPage();
+        List<User> users = userRepository.getAllOrderByEmail(firstElement, amountElements);
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User user : users) {
+            userDTOs.add(userConverter.toUserDTO(user));
+        }
+        pageDTO.setElements(userDTOs);
+        return pageDTO;
     }
 
     @Override
     @Transactional
-    public Long getAmountUsers() {
+    public Integer getAmountUsers() {
         return userRepository.getAmountOfEntities();
     }
 
@@ -92,9 +103,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateRole(Long userId, Long roleId) {
         User user = userRepository.findById(userId);
-        Role role = roleRepository.findById(roleId);
-        user.setRole(role);
-        userRepository.update(user);
+        if (!user.isLocked()) {
+            Role role = roleRepository.findById(roleId);
+            user.setRole(role);
+            userRepository.update(user);
+        }
     }
 
     @Override

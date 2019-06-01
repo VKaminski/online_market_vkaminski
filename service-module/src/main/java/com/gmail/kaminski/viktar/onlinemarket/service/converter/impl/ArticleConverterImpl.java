@@ -2,6 +2,7 @@ package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Comment;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ArticleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.CommentConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
@@ -13,12 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -26,6 +25,8 @@ public class
 ArticleConverterImpl implements ArticleConverter {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final Marker custom = MarkerFactory.getMarker("custom");
+    @Value("${custom.date.format}")
+    private String dateFormat;
     private UserConverter userConverter;
     private CommentConverter commentConverter;
 
@@ -80,23 +81,15 @@ ArticleConverterImpl implements ArticleConverter {
     }
 
     @Override
-    public Article toArticle(NewArticleDTO newArticleDTO){
+    public Article toArticle(NewArticleDTO newArticleDTO) {
         Article article = new Article();
-        article.setAuthor(userConverter.toUser(newArticleDTO.getAuthor()));
+        User user = new User();
+        user.setId(newArticleDTO.getUserId());
+        article.setAuthor(user);
         article.setTitle(newArticleDTO.getTitle());
         article.setContent(newArticleDTO.getContent());
         if (newArticleDTO.getDate() != null) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = null;
-            try {
-                date = format.parse(newArticleDTO.getDate());
-            } catch (ParseException e) {
-                logger.debug(custom, e.getMessage() + " date: " + newArticleDTO.getDate());
-                Long currentTime = System.currentTimeMillis();
-                logger.debug(custom, e.getMessage() + " set current date: " + currentTime);
-                date = new Date(currentTime);
-            }
-            article.setDate(date);
+            article.setDate(newArticleDTO.getDate());
         }
         return article;
     }

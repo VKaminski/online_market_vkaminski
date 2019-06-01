@@ -1,9 +1,13 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
-import com.gmail.kaminski.viktar.onlinemarket.controller.model.Paginator;
-import com.gmail.kaminski.viktar.onlinemarket.controller.util.PaginatorService;
+import com.gmail.kaminski.viktar.onlinemarket.controller.util.RequestParamService;
 import com.gmail.kaminski.viktar.onlinemarket.service.ItemService;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ItemDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +15,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 @Controller
 public class ItemController {
-
-    private PaginatorService paginatorService;
+    private static final Logger logger = LoggerFactory.getLogger(ItemController.class);
+    private static final Marker custom = MarkerFactory.getMarker("custom");
     private ItemService itemService;
+    private RequestParamService requestParamService;
 
-    public ItemController(PaginatorService paginatorService, ItemService itemService) {
-        this.paginatorService = paginatorService;
+    public ItemController(ItemService itemService,
+                          RequestParamService requestParamService) {
         this.itemService = itemService;
+        this.requestParamService = requestParamService;
     }
 
     @GetMapping("/items")
@@ -29,12 +33,12 @@ public class ItemController {
             @RequestParam(value = "page", required = false, defaultValue = "1") String page,
             @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
             Model model) {
-        Long sizeList = itemService.getAmountItems();
-        Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Integer firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
-        List<ItemDTO> items = itemService.getItems(firstElement, paginator.getAmountElementOnPage());
-        model.addAttribute("items", items);
-        model.addAttribute("paginator", paginator);
+        logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
+        PageDTO<ItemDTO> itemsPage = new PageDTO<>();
+        itemsPage.setPage(requestParamService.getElements(page, Integer.MAX_VALUE, 1));
+        itemsPage.setAmountElementsOnPage(requestParamService.getElements(amountElement, 40, 10));
+        itemService.getItemsPage(itemsPage);
+        model.addAttribute("itemsPage", itemsPage);
         return "items";
     }
 

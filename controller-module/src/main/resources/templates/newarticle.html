@@ -9,7 +9,7 @@
 <a href="/articles">Articles</a>
 <a href="/logout">Logout</a>
 <div align="center">
-    <form action="#" th:action="@{/articles/new}" th:object="${article}" method="post">
+    <form th:action="@{/articles/new}" th:object="${article}" method="post">
         <table>
             <tr>
                 <td>Title</td>
@@ -17,11 +17,11 @@
             </tr>
             <tr>
                 <td>Content</td>
-                <td><input type="text" th:field="*{content}"></td>
+                <td><textarea rows="20" cols="50" th:field="*{content}"/></td>
             </tr>
             <tr>
                 <td>Date:</td>
-                <td><input type="date" th:field="*{date}"></td>
+                <td><input type="datetime-local" name="createdDate"></td>
             </tr>
             <tr>
                 <td></td>

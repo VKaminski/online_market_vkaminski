@@ -5,6 +5,7 @@ import com.gmail.kaminski.viktar.onlinemarket.repository.model.Item;
 import com.gmail.kaminski.viktar.onlinemarket.service.ItemService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ItemConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ItemDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,21 +24,32 @@ public class ItemServiceImpl implements ItemService {
         this.itemConverter = itemConverter;
     }
 
+
+
     @Override
     @Transactional
-    public Long getAmountItems() {
+    public Integer getAmountItems() {
         return itemRepository.getAmountOfEntities();
     }
 
     @Override
     @Transactional
-    public List<ItemDTO> getItems(Integer firstElement, Integer amountElement) {
-        List<Item> items = itemRepository.findAll(firstElement, amountElement);
-        List<ItemDTO> output = new ArrayList<>();
-        for (Item item : items) {
-            output.add(itemConverter.toItemDTO(item));
+    public PageDTO<ItemDTO> getItemsPage(PageDTO<ItemDTO> pageDTO) {
+        int amountElements = itemRepository.getAmountOfEntities();
+        pageDTO.setAmountElements(amountElements);
+        Integer amountElementsOnPage = pageDTO.getAmountElementsOnPage();
+        int amountPages = amountElements / amountElementsOnPage + 1;
+        if (pageDTO.getPage() > (amountPages)) {
+            pageDTO.setPage(amountPages);
         }
-        return output;
+        int firstElement = (pageDTO.getPage() - 1) * pageDTO.getAmountElementsOnPage();
+        List<Item> items = itemRepository.getAllOrderByName(firstElement, amountElementsOnPage);
+        List<ItemDTO> itemDTOs = new ArrayList<>();
+        for (Item item : items) {
+            itemDTOs.add(itemConverter.toItemDTO(item));
+        }
+        pageDTO.setElements(itemDTOs);
+        return pageDTO;
     }
 
     @Override
@@ -68,6 +80,5 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void add(ItemDTO itemDTO) {
         itemRepository.add(itemConverter.toItem(itemDTO));
-
     }
 }

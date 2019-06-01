@@ -2,7 +2,6 @@ package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Comment;
-import com.gmail.kaminski.viktar.onlinemarket.service.converter.ArticleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.CommentConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;

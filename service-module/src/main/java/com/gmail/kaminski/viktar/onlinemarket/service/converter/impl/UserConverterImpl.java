@@ -4,6 +4,7 @@ import com.gmail.kaminski.viktar.onlinemarket.repository.model.Role;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.RoleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.AuthorizedUserDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.NewUserDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 import org.springframework.stereotype.Component;
@@ -94,5 +95,17 @@ public class UserConverterImpl implements UserConverter {
         role.setName(newUserDTO.getRole());
         user.setRole(role);
         return user;
+    }
+
+    @Override
+    public AuthorizedUserDTO toAuthorizedUserDTO(User user) {
+        AuthorizedUserDTO authorizedUserDTO = new AuthorizedUserDTO();
+        authorizedUserDTO.setId(user.getId());
+        authorizedUserDTO.setEmail(user.getEmail());
+        authorizedUserDTO.setName(user.getName());
+        authorizedUserDTO.setSurname(user.getSurname());
+        authorizedUserDTO.setPassword(user.getPassword());
+        authorizedUserDTO.setRole(roleConverter.toRoleDTO(user.getRole()));
+        return authorizedUserDTO;
     }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Items</title>
@@ -24,9 +24,9 @@
                 <td>UniqNumber</td>
                 <td>Price</td>
             </tr>
-            <tr th:each="item,stat : ${items}">
+            <tr th:each="item,stat : ${itemsPage.elements}">
                 <td>
-                    <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElementOnPage + 1}"></span>
+                    <span th:text="${stat.index + (itemsPage.page - 1) * itemsPage.amountElementsOnPage + 1}"></span>
                 </td>
                 <td>
                     <span th:text="${item.name}"></span>
@@ -55,9 +55,8 @@
             </tr>
         </table>
         <div th:with="url=@{/items}">
-            <div th:include="paginator :: paginator"></div>
+            <div th:replace="paginator :: paginator (pageDTO=${itemsPage})"></div>
         </div>
 </div>
-
 </body>
 </html>

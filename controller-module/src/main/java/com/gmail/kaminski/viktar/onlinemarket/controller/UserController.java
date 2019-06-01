@@ -1,12 +1,16 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
 import com.gmail.kaminski.viktar.onlinemarket.controller.model.CheckedUsers;
-import com.gmail.kaminski.viktar.onlinemarket.controller.model.Paginator;
-import com.gmail.kaminski.viktar.onlinemarket.controller.util.PaginatorService;
+import com.gmail.kaminski.viktar.onlinemarket.controller.util.RequestParamService;
 import com.gmail.kaminski.viktar.onlinemarket.service.RoleService;
 import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.RoleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,16 +26,21 @@ import java.util.List;
 
 @Controller
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Marker custom = MarkerFactory.getMarker("custom");
     private UserService userService;
     private RoleService roleService;
-    private PaginatorService paginatorService;
+    private RequestParamService paginatorService;
+    private RequestParamService requestParamService;
 
     protected UserController(UserService userService,
                              RoleService roleService,
-                             PaginatorService paginatorService) {
+                             RequestParamService paginatorService,
+                             RequestParamService requestParamService) {
         this.userService = userService;
         this.roleService = roleService;
         this.paginatorService = paginatorService;
+        this.requestParamService = requestParamService;
     }
 
     @GetMapping("/users")
@@ -39,18 +48,18 @@ public class UserController {
             @RequestParam(value = "page", required = false, defaultValue = "1") String page,
             @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
             Model model) {
-        Long sizeList = userService.getAmountUsers();
-        Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Integer firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
-        List<UserDTO> users = userService.getUsers(firstElement, paginator.getAmountElementOnPage());
+        logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
         List<RoleDTO> roles = roleService.getAll();
+        PageDTO<UserDTO> usersPage = new PageDTO<>();
+        usersPage.setPage(requestParamService.getElements(page, Integer.MAX_VALUE, 1));
+        usersPage.setAmountElementsOnPage(requestParamService.getElements(amountElement, 100, 10));
+        userService.getUsersPage(usersPage);
         List<Long> checkedUsersId = new ArrayList<>();
         CheckedUsers checkedUsers = new CheckedUsers();
         checkedUsers.setCheckedUsersId(checkedUsersId);
-        model.addAttribute("users", users);
         model.addAttribute("roles", roles);
+        model.addAttribute("usersPage", usersPage);
         model.addAttribute("checkedUsers", checkedUsers);
-        model.addAttribute("paginator", paginator);
         return "users";
     }
 

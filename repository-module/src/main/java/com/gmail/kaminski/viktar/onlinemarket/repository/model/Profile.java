@@ -1,23 +1,33 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository.model;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
 @Table
 public class Profile {
+    @GenericGenerator(
+            name = "generator",
+            strategy = "foreign",
+            parameters = @Parameter(name = "property", value = "user")
+    )
     @Id
+    @GeneratedValue(generator = "generator")
     @Column(name = "id")
     private Long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @MapsId
+    @PrimaryKeyJoinColumn
     private User user;
     @Column
     private String address;

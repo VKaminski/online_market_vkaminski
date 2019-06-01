@@ -1,13 +1,19 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.ArticleRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.CommentRepository;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.util.ArticlesRequest;
 import com.gmail.kaminski.viktar.onlinemarket.service.ArticleService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ArticleConverter;
-import com.gmail.kaminski.viktar.onlinemarket.service.converter.CommentConverter;
+import com.gmail.kaminski.viktar.onlinemarket.service.converter.RequestConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.NewArticleDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.util.ArticlesRequestDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,19 +24,25 @@ import java.util.List;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
+    private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
+    private static final Marker custom = MarkerFactory.getMarker("custom");
     @Value("${custom.comment.forbidden.word}")
     private String forbiddenWords;
     private ArticleRepository articleRepository;
     private ArticleConverter articleConverter;
+    private RequestConverter requestConverter;
 
-    public ArticleServiceImpl(ArticleRepository articleRepository, ArticleConverter articleConverter) {
+    public ArticleServiceImpl(ArticleRepository articleRepository,
+                              ArticleConverter articleConverter,
+                              RequestConverter requestConverter) {
         this.articleRepository = articleRepository;
         this.articleConverter = articleConverter;
+        this.requestConverter = requestConverter;
     }
 
     @Override
     @Transactional
-    public Long getAmountArticles() {
+    public Integer getAmountArticles() {
         return articleRepository.getAmountOfEntities();
     }
 
@@ -43,37 +55,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public List<ArticleDTO> findByTitle(String searchRequest, Integer firstElement, Integer amountElement) {
-        List<Article> articles = articleRepository.findByTitle(searchRequest, firstElement, amountElement);
-        List<ArticleDTO> output = new ArrayList<>();
-        for (Article article : articles) {
-            output.add(articleConverter.toArticleDTO(article));
+    public PageDTO<ArticleDTO> getArticlesPage(ArticlesRequestDTO requestDTO, PageDTO<ArticleDTO> pageDTO) {
+        int amountElements = articleRepository.getAmountOfEntities();
+        pageDTO.setAmountElements(amountElements);
+        Integer amountElementsOnPage = pageDTO.getAmountElementsOnPage();
+        int amountPages = amountElements / amountElementsOnPage + 1;
+        if (pageDTO.getPage() > (amountPages)) {
+            pageDTO.setPage(amountPages);
         }
-        return output;
-
-    }
-
-
-    @Override
-    @Transactional
-    public List<ArticleDTO> findByDate(Date dateStart, Date dateStop, Integer firstElement, Integer amountElement) {
-        List<Article> articles = articleRepository.findByDate(dateStart, dateStop, firstElement, amountElement);
-        List<ArticleDTO> output = new ArrayList<>();
+        int firstElement = (pageDTO.getPage() - 1) * pageDTO.getAmountElementsOnPage();
+        ArticlesRequest request = requestConverter.toArticlesRequest(requestDTO);
+        List<Article> articles = articleRepository.findWithParameter(request, firstElement, amountElementsOnPage);
+        List<ArticleDTO> articleDTOs = new ArrayList<>();
         for (Article article : articles) {
-            output.add(articleConverter.toArticleDTO(article));
+            articleDTOs.add(articleConverter.toArticleDTO(article));
         }
-        return output;
-    }
-
-    @Override
-    @Transactional
-    public List<ArticleDTO> getArticles(Integer firstElement, Integer amountElement) {
-        List<Article> articles = articleRepository.findAll(firstElement, amountElement);
-        List<ArticleDTO> output = new ArrayList<>();
-        for (Article article : articles) {
-            output.add(articleConverter.toArticleDTO(article));
-        }
-        return output;
+        pageDTO.setElements(articleDTOs);
+        return pageDTO;
     }
 
     @Override

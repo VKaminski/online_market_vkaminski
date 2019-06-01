@@ -19,9 +19,9 @@
         <td>Date</td>
         <td>Visible</td>
     </tr>
-    <tr th:each="review,stat : ${reviews}">
+    <tr th:each="review,stat : ${reviewsPage.elements}">
         <td>
-            <span th:text="${stat.index + (paginator.page - 1) * paginator.amountElementOnPage + 1}"></span>
+            <span th:text="${stat.index + (reviewsPage.page - 1) * reviewsPage.amountElementsOnPage + 1}"></span>
         </td>
         <td>
             <span th:text="${review.userDTO.surname}"></span>
@@ -50,7 +50,7 @@
 </table>
 </div>
 <div th:with="url=@{/reviews}" align="center">
-    <div th:include="paginator :: paginator"></div>
+    <div th:include="paginator :: paginator (pageDTO=${reviewsPage})"></div>
 </div>
 </body>
 </html>

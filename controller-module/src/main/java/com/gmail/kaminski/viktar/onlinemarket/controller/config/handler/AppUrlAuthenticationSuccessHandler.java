@@ -82,7 +82,7 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
             return "/users";
         } else if (isSale) {
             return "/articles";
-        }else if (isCustomer) {
+        } else if (isCustomer) {
             return "/articles";
         } else {
             return "/login";

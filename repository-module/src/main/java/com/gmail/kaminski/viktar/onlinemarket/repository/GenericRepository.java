@@ -14,5 +14,5 @@ public interface GenericRepository<I, T> {
 
     List<T> findAll(int firstElement, int amountElement);
 
-    Long getAmountOfEntities();
+    Integer getAmountOfEntities();
 }

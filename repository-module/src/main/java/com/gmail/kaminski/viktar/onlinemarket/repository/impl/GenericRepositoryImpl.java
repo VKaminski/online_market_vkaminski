@@ -34,6 +34,7 @@ public abstract class GenericRepositoryImpl<I, T> implements GenericRepository<I
 
     @Override
     public void update(T entity) {
+
         entityManager.merge(entity);
     }
 
@@ -52,9 +53,9 @@ public abstract class GenericRepositoryImpl<I, T> implements GenericRepository<I
     }
 
     @Override
-    public Long getAmountOfEntities() {
+    public Integer getAmountOfEntities() {
         String query = "SELECT COUNT(*) FROM " + entityClass.getName();
         Query q = entityManager.createQuery(query);
-        return ((Number) q.getSingleResult()).longValue();
+        return ((Number) q.getSingleResult()).intValue();
     }
 }

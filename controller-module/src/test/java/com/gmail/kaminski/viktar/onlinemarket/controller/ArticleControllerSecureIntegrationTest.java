@@ -1,5 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
+import com.gmail.kaminski.viktar.onlinemarket.controller.app.OnlineMarketMain;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RoleControllerSecureIntegrationTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        classes = OnlineMarketMain.class)
+public class ArticleControllerSecureIntegrationTest {
 
     @Autowired
     private MockMvc mock;

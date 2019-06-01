@@ -31,8 +31,5 @@ public class ItemConverterImpl implements ItemConverter {
         item.setUniqNumber(itemDTO.getUniqNumber());
         item.setPrice(itemDTO.getPrice());
         return item;
-
-
-
     }
 }

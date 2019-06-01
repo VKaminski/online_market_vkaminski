@@ -1,8 +1,8 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
-import com.gmail.kaminski.viktar.onlinemarket.controller.model.Paginator;
-import com.gmail.kaminski.viktar.onlinemarket.controller.util.PaginatorService;
+import com.gmail.kaminski.viktar.onlinemarket.controller.util.RequestParamService;
 import com.gmail.kaminski.viktar.onlinemarket.service.ReviewService;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,33 +15,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 @Controller
 public class ReviewController {
     private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
     private static final Marker custom = MarkerFactory.getMarker("custom");
     private ReviewService reviewService;
-    private PaginatorService paginatorService;
+    private RequestParamService requestParamService;
 
-    protected ReviewController(PaginatorService paginatorService,
-                               ReviewService reviewService) {
-        this.paginatorService = paginatorService;
+    public ReviewController(ReviewService reviewService,
+                            RequestParamService requestParamService) {
         this.reviewService = reviewService;
+        this.requestParamService = requestParamService;
     }
 
     @GetMapping("/reviews")
     public String reviews(@RequestParam(value = "page", required = false, defaultValue = "1") String page,
                           @RequestParam(value = "amountElement", required = false, defaultValue = "10") String amountElement,
                           Model model) {
-        Long sizeList = reviewService.getTotalAmount();
-        Paginator paginator = paginatorService.get(page, amountElement, sizeList);
-        Integer firstElement = (paginator.getPage() - 1) * paginator.getAmountElementOnPage();
-        List<ReviewDTO> reviews = reviewService.get(firstElement, paginator.getAmountElementOnPage());
-        Long id = new Long(0);
-        model.addAttribute("reviewId", id);
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("paginator", paginator);
+        logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
+        PageDTO<ReviewDTO> reviewsPage = new PageDTO<>();
+        reviewsPage.setPage(requestParamService.getElements(page, Integer.MAX_VALUE, 1));
+        reviewsPage.setAmountElementsOnPage(requestParamService.getElements(amountElement, 100, 10));
+        reviewService.getReviewsPage(reviewsPage);
+        model.addAttribute("reviewsPage", reviewsPage);
         return "reviews";
     }
 

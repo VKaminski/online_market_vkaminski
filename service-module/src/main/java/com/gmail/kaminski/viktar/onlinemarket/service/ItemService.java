@@ -1,13 +1,14 @@
 package com.gmail.kaminski.viktar.onlinemarket.service;
 
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ItemDTO;
-
-import java.util.List;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface ItemService {
-    Long getAmountItems();
 
-    List<ItemDTO> getItems(Integer firstElement, Integer amountElement);
+    Integer getAmountItems();
+
+    PageDTO<ItemDTO> getItemsPage(PageDTO<ItemDTO> pageDTO);
 
     void delete(Long id);
 

@@ -1,13 +1,12 @@
 package com.gmail.kaminski.viktar.onlinemarket.service;
 
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewDTO;
 
-import java.util.List;
-
 public interface ReviewService {
-    List<ReviewDTO> get(Integer firstElement, Integer amountElement);
+    PageDTO<ReviewDTO> getReviewsPage(PageDTO<ReviewDTO> pageDTO);
 
-    Long getTotalAmount();
+    Integer getTotalAmount();
 
     void show(Long id);
 

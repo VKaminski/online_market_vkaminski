@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <title>Articles</title>
     <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
 </head>
+
 <body>
 <div align="center">
      <span sec:authorize="isAuthenticated()">
@@ -23,19 +23,17 @@
     <a href="/logout">Logout</a>
 </nav>
 <div id="main" align="center">
-    <form th:action="@{/articles/findtitle}" method='POST'>
-        Find by title:
-        <input type="text" name="searchRequest"/>
+    <form th:action="@{/articles/find}" method='GET'>
+        Title:
+        <input type="text" name="searchRequest" th:value="${searchRequest}"/>
+        Date:
+        <input type="datetime-local" name="dateRequestStart" th:value="${dateRequestStart}">
+        <input type="datetime-local" name="dateRequestStop" th:value ="${dateRequestStop}">
         <input type="submit" value="Find"/>
     </form>
-    <form th:action="@{/articles/finddate}" method='POST'>
-        Find dy date:
-        <input type="date" name="dateRequestStart">
-        <input type="date" name="dateRequestStop">
-        <input type="submit" value="Find"/>
-    </form>
+
     <table border="1" cellpadding="2">
-        <tr th:each="article,stat : ${articles}">
+        <tr th:each="article : ${articlesPage.elements}">
             <td>
                 <h3>
                     <div th:text="${article.title}"/>
@@ -62,9 +60,8 @@
         </tr>
     </table>
     <div th:with="url=@{/articles}">
-        <div th:include="paginator :: paginator"></div>
+        <div th:include="paginator :: paginator (pageDTO=${articlesPage})"></div>
     </div>
 </div>
-
 </body>
 </html>

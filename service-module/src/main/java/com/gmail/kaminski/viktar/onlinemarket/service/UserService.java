@@ -1,21 +1,21 @@
 package com.gmail.kaminski.viktar.onlinemarket.service;
 
+import com.gmail.kaminski.viktar.onlinemarket.service.model.AuthorizedUserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface UserService {
-    UserDTO getByEmail(String email);
+    AuthorizedUserDTO getByEmail(String email);
 
-    @Transactional
     UserDTO getById(Long id);
 
     void add(UserDTO UserDTO);
 
-    List<UserDTO> getUsers(Integer firstElement, Integer amountElement);
+    PageDTO<UserDTO> getUsersPage(PageDTO<UserDTO> pageDTO);
 
-    Long getAmountUsers();
+    Integer getAmountUsers();
 
     void updateRole(Long userId, Long roleId);
 

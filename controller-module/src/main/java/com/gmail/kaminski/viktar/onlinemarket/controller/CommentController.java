@@ -28,7 +28,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/articles/{id}/{commentId}/addcomment")
+    @PostMapping("/articles/{id}/comments/{commentId}/addcomment")
     public String addComment(
             @PathVariable("id") Long articleId,
             @PathVariable("commentId") Long commentId,
@@ -55,7 +55,7 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/articles/{articleId}/{commentId}/delete")
+    @PostMapping("/articles/{articleId}/comments/{commentId}/delete")
     public String deleteComment(
             @PathVariable("articleId") Long articleId,
             @PathVariable("commentId") Long commentId) {

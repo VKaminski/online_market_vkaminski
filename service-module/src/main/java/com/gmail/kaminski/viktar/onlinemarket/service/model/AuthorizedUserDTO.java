@@ -1,26 +1,12 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.model;
 
-public class UserDTO {
+public class AuthorizedUserDTO {
     private Long id;
     private String name;
     private String surname;
-    private String patronymic;
     private String email;
     private String password;
     private RoleDTO role;
-    private boolean deleted;
-
-    public UserDTO() {
-    }
-
-    public UserDTO(Long id, String name, String surname, String patronymic, String email, RoleDTO role) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.patronymic = patronymic;
-        this.email = email;
-        this.role = role;
-    }
 
     public Long getId() {
         return id;
@@ -46,14 +32,6 @@ public class UserDTO {
         this.surname = surname;
     }
 
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -76,18 +54,5 @@ public class UserDTO {
 
     public void setRole(RoleDTO role) {
         this.role = role;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }
