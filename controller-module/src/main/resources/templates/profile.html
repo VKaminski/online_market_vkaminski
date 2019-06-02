@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
@@ -16,7 +19,7 @@
         <tr>
             <td>
                 Name:
-                <div th:text="${profile.user.name}"/>
+                <span th:text="${profile.user.name}"/>
                 <br>Surname:
                 <span th:text="${profile.user.surname}"/>
                 <br>Address:
@@ -26,7 +29,7 @@
             </td>
         </tr>
     </table>
+    <a href="/profile/edit">Edit</a>
 </div>
-
 </body>
 </html>

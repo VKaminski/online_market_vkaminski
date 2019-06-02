@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Article</title>
@@ -15,18 +17,31 @@
     <table border="1" cellpadding="2">
         <tr>
             <td>
-                <h3>
-                    <div th:text="${article.title}"/>
-                </h3>
-                <div th:text="${article.content}"/>
-                <br>Author:
-                <span th:text="${article.author.name}"/>
+                <form action="#" th:action="@{/articles/{id}/update(id=${article.id})}" th:object="${article}" method="post">
+                    <h3>
+                        <div sec:authorize="hasRole('ROLE_SALE')">
+                            <input type="text" th:field="*{title}">
+                        </div>
+                        <div sec:authorize="hasRole('ROLE_CUSTOMER')">
+                            <div th:text="*{title}"/>
+                        </div>
+                    </h3>
+                    <div sec:authorize="hasRole('ROLE_SALE')">
+                        <textarea rows="20" cols="50" th:field="*{content}"/>
+                    </div>
+                    <div sec:authorize="hasRole('ROLE_CUSTOMER')">
+                        <div th:text="*{content}"/>
+                    </div>
+                    <br>Author:
+                    <span th:text="${article.author.name}"/>
 
-                <span th:text="${article.author.surname}"/>
-                <br>Comments:
-                <span th:text="${article.amountComments}"/>
-                <br>Date:
-                <span th:text="${article.date}"/>
+                    <span th:text="${article.author.surname}"/>
+                    <br>Date:
+                    <span th:text="${article.date}"/>
+                    <div sec:authorize="hasRole('ROLE_SALE')">
+                        <button type="submit">Update</button>
+                    </div>
+                </form>
             </td>
         </tr>
     </table>
@@ -39,9 +54,9 @@
 
                 <span th:text="${comment.author.surname}"/>
                 <br>
-                <span th:unless="${comment.head == 0}">
+                <span th:unless="${comment.headComment == null}">
                     <span th:each="commentHead,stat : ${article.comments}">
-                        <span th:if="${commentHead.id == comment.head}">
+                        <span th:if="${commentHead.id == comment.headComment.id}">
                             [
                             <span th:text="${commentHead.author.name}"/>
 
@@ -54,11 +69,21 @@
                 <br>Date:
                 <span th:text="${comment.date}"/>
                 <div>
-                    <form action="#" th:action="@{/articles/{articleId}/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}" th:object="${newComment}" method="post">
-                        <input type="text" th:field="*{content}">
-                        <button type="submit">Send</button>
-                    </form>
+                    <div>
+                        <form action="#"
+                              th:action="@{/articles/{articleId}/comments/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}"
+                              th:object="${newComment}" method="post">
+                            <input type="text" th:field="*{content}">
+                            <button type="submit">Send</button>
+                        </form>
+                    </div>
+                    <div sec:authorize="hasRole('ROLE_SALE')">
+                        <form action="#" th:action="@{/articles/{articleId}/comments/{commentId}/delete(articleId=${article.id}, commentId=${comment.id})}" method="post">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </div>
                 </div>
+
             </td>
         </tr>
     </table>

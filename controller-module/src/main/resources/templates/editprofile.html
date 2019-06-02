@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
+</head>
+<body>
+<h2 align="center">Profile</h2>
+<nav id="menu" align="center">
+    <a href="/articles">Articles</a>
+    <a href="/logout">Logout</a>
+</nav>
+<div id="main" align="center">
+    <form action="#" th:action="@{/profile/edit}" th:object="${profile}" method="post">
+        <table border="1" cellpadding="2">
+            <tr>
+                <td>
+                    Name:
+                    <div>
+                        <input th:type="text" th:field="*{user.name}">
+                    </div>
+                    <br>Surname:
+                    <div>
+                        <input th:type="text" th:field="*{user.surname}">
+                    </div>
+                    <br>Address:
+                    <div>
+                        <input th:type="text" th:field="*{address}">
+                    </div>
+                    <br>Phone:
+                    <div>
+                        <input th:type="text" th:field="*{phone}">
+                    </div>
+                    <br>New Password:
+                    <div>
+                        <input type="text" name="newPassword">
+                    </div>
+                    <br> Repeat New Password:
+                    <div>
+                        <input type="text" name="repeatNewPassword">
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Update</button>
+    </form>
+</div>
+</body>
+</html>

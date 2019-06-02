@@ -1,31 +1,61 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.GenericRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.exception.RepositoryException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
-@Repository
-public class GenericRepositoryImpl implements GenericRepository {
+public abstract class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
 
-    private static Logger logger = LoggerFactory.getLogger(GenericRepositoryImpl.class);
+    protected Class<T> entityClass;
 
-    @Autowired
-    private DataSource dataSource;
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    @SuppressWarnings("unchecked")
+    public GenericRepositoryImpl() {
+        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
+        this.entityClass = (Class<T>) genericSuperclass.getActualTypeArguments()[1];
+    }
+
 
     @Override
-    public Connection getConnection() {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new RepositoryException("Troubles with getting connection", e);
-        }
+    public T findById(I id) {
+        return entityManager.find(entityClass, id);
+    }
+
+    @Override
+    public void add(T entity) {
+        entityManager.persist(entity);
+    }
+
+    @Override
+    public void update(T entity) {
+
+        entityManager.merge(entity);
+    }
+
+    @Override
+    public void remove(T entity) {
+        entityManager.remove(entity);
+    }
+
+    @Override
+    public List<T> findAll(int firstElement, int amountElement) {
+        String query = "from " + entityClass.getName();
+        Query q = entityManager.createQuery(query)
+                .setFirstResult(firstElement)
+                .setMaxResults(amountElement);
+        return q.getResultList();
+    }
+
+    @Override
+    public Integer getAmountOfEntities() {
+        String query = "SELECT COUNT(*) FROM " + entityClass.getName();
+        Query q = entityManager.createQuery(query);
+        return ((Number) q.getSingleResult()).intValue();
     }
 }

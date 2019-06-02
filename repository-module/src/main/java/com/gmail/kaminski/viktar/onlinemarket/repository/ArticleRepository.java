@@ -1,22 +1,13 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.util.ArticlesRequest;
 
-import java.sql.Connection;
 import java.util.List;
 
-public interface ArticleRepository extends GenericRepository {
-    Long getAmountArticles(Connection connection);
+public interface ArticleRepository extends GenericRepository<Long, Article> {
 
-    Article getById(Connection connection, Long id);
+    List<Article> findAll(int firstElement, int amountElement);
 
-    List<Article> getArticles(Connection connection, Long firstElement, Integer amountElement);
-
-    List<Article> findByTitle(Connection connection, String searchRequest, Long firstElement, Integer amountElement);
-
-    List<Article> findByDate(Connection connection, String dateStart, String dateStop, Long firstElement, Integer amountElement);
-
-    void add(Connection connection, Article article);
-
-    void delete(Connection connection, Long id);
+    List<Article> findWithParameter(ArticlesRequest request, Integer firstElement, Integer amountElement);
 }

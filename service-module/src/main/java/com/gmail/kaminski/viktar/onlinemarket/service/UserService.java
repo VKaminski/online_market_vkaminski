@@ -1,20 +1,23 @@
 package com.gmail.kaminski.viktar.onlinemarket.service;
 
-import com.gmail.kaminski.viktar.onlinemarket.service.model.NewUserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.AuthorizedUserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
-    UserDTO getByEmail(String email);
+    AuthorizedUserDTO getByEmail(String email);
 
-    void add(NewUserDTO newUserDTO);
+    UserDTO getById(Long id);
 
-    List<UserDTO> getUsers(Long firstElement, Integer amountElement);
+    void add(UserDTO UserDTO);
 
-    Long getAmountUsers();
+    PageDTO<UserDTO> getUsersPage(PageDTO<UserDTO> pageDTO);
 
-    void updateRole(Long id, String roleName);
+    Integer getAmountUsers();
+
+    void updateRole(Long userId, Long roleId);
 
     void delete(List<Long> checkedUsersId);
 

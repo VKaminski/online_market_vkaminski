@@ -1,7 +1,5 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +9,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AppUserPrincipal implements UserDetails {
-    private static final Logger logger = LoggerFactory.getLogger(AppUserPrincipal.class);
 
-    private UserDTO userDTO;
+    private AuthorizedUserDTO authorizedUserDTO;
     private Set<GrantedAuthority> grantedAuthorities;
 
-    public AppUserPrincipal(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public AppUserPrincipal(AuthorizedUserDTO authorizedUserDTO) {
+        this.authorizedUserDTO = authorizedUserDTO;
         this.grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRole().getName()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(authorizedUserDTO.getRole().getName()));
     }
 
     @Override
@@ -29,12 +26,12 @@ public class AppUserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userDTO.getPassword();
+        return authorizedUserDTO.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userDTO.getEmail();
+        return authorizedUserDTO.getEmail();
     }
 
     @Override
@@ -57,7 +54,7 @@ public class AppUserPrincipal implements UserDetails {
         return true;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public AuthorizedUserDTO getAuthorizedUserDTO() {
+        return authorizedUserDTO;
     }
 }

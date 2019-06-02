@@ -4,6 +4,7 @@ import com.gmail.kaminski.viktar.onlinemarket.controller.config.handler.AppUrlAu
 import com.gmail.kaminski.viktar.onlinemarket.controller.config.handler.LoginAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 @Configuration
 @EnableWebSecurity
+@Order(2)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final GlobalValue globalValue;
@@ -34,8 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/articles", "/articles/**", "/article", "/article/**", "/profile")
-                .hasRole(globalValue.getCustomerRoleName())
-                .antMatchers("/users", "/users/**", "/reviews", "/reviews/**", "/profile")
+                .hasAnyRole(globalValue.getCustomerRoleName(), globalValue.getSaleRoleName())
+                .antMatchers("/items", "/items/**")
+                .hasRole(globalValue.getSaleRoleName())
+                .antMatchers("/users", "/users/**", "/reviews", "/reviews/**")
                 .hasRole(globalValue.getAdministratorRoleName())
                 .antMatchers("/", "/403", "/login")
                 .permitAll()

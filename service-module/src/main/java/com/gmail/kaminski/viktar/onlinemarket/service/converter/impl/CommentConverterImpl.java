@@ -1,38 +1,40 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.Comment;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.CommentConverter;
+import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.CommentDTO;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CommentConverterImpl implements CommentConverter {
-    private UserConverterImpl userConverter;
+    private UserConverter userConverter;
 
-    public CommentConverterImpl(UserConverterImpl userConverter) {
+    public CommentConverterImpl(UserConverter userConverter) {
         this.userConverter = userConverter;
     }
 
     @Override
     public CommentDTO toCommentDTO(Comment comment) {
         CommentDTO commentDTO = new CommentDTO();
-        if (comment.getArticleId() != null) {
-            commentDTO.setArticleId(comment.getArticleId());
-        }
         if (comment.getId() != null) {
             commentDTO.setId(comment.getId());
         }
-        if (comment.getAuthor() != null) {
-            commentDTO.setAuthor(userConverter.toUserDTO(comment.getAuthor()));
-        }
-        if (comment.getContent() != null) {
-            commentDTO.setContent(comment.getContent());
-        }
+        ArticleDTO articleDTO = new ArticleDTO();
+        articleDTO.setId(comment.getArticle().getId());
+        commentDTO.setArticle(articleDTO);
+        commentDTO.setAuthor(userConverter.toUserDTO(comment.getAuthor()));
+        commentDTO.setContent(comment.getContent());
         if (comment.getDate() != null) {
             commentDTO.setDate(comment.getDate());
         }
-        if (comment.getHead() != null) {
-            commentDTO.setHead(comment.getHead());
+        if (comment.getHeadComment() != null) {
+            CommentDTO headCommentDTO = new CommentDTO();
+            headCommentDTO.setId(comment.getHeadComment().getId());
+            commentDTO.setHeadComment(headCommentDTO);
+            commentDTO.setHeadComment(headCommentDTO);
         }
         return commentDTO;
     }
@@ -40,23 +42,21 @@ public class CommentConverterImpl implements CommentConverter {
     @Override
     public Comment toComment(CommentDTO commentDTO) {
         Comment comment = new Comment();
-        if (commentDTO.getArticleId() != null) {
-            comment.setArticleId(commentDTO.getArticleId());
-        }
         if (commentDTO.getId() != null) {
             comment.setId(commentDTO.getId());
         }
-        if (commentDTO.getAuthor() != null) {
-            comment.setAuthor(userConverter.toUser(commentDTO.getAuthor()));
-        }
-        if (commentDTO.getContent() != null) {
-            comment.setContent(commentDTO.getContent());
-        }
+        Article article = new Article();
+        article.setId(commentDTO.getArticle().getId());
+        comment.setArticle(article);
+        comment.setAuthor(userConverter.toUser(commentDTO.getAuthor()));
+        comment.setContent(commentDTO.getContent());
         if (commentDTO.getDate() != null) {
             comment.setDate(commentDTO.getDate());
         }
-        if (commentDTO.getHead() != null) {
-            comment.setHead(commentDTO.getHead());
+        if (commentDTO.getHeadComment() != null) {
+            Comment headComment = new Comment();
+            headComment.setId(commentDTO.getHeadComment().getId());
+            comment.setHeadComment(headComment);
         }
         return comment;
     }
