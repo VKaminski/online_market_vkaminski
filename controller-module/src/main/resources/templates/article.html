@@ -5,46 +5,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Article</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
-<body>
+<body align="center">
 <h2 align="center">Article</h2>
-<nav id="menu" align="center">
-    <a href="/articles">Articles</a>
-    <a href="/logout">Logout</a>
-</nav>
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: article"></div>
 <div id="main" align="center">
     <table border="1" cellpadding="2">
         <tr>
             <td>
-                <form action="#" th:action="@{/articles/{id}/update(id=${article.id})}" th:object="${article}" method="post">
-                    <h3>
-                        <div sec:authorize="hasRole('ROLE_SALE')">
-                            <input type="text" th:field="*{title}">
-                        </div>
-                        <div sec:authorize="hasRole('ROLE_CUSTOMER')">
-                            <div th:text="*{title}"/>
-                        </div>
-                    </h3>
-                    <div sec:authorize="hasRole('ROLE_SALE')">
-                        <textarea rows="20" cols="50" th:field="*{content}"/>
-                    </div>
-                    <div sec:authorize="hasRole('ROLE_CUSTOMER')">
-                        <div th:text="*{content}"/>
-                    </div>
-                    <br>Author:
-                    <span th:text="${article.author.name}"/>
+                <h3>
+                    <div th:text="*{article.title}"/>
+                </h3>
+                <div th:text="*{article.content}"/>
+                <br>Author:
+                <span th:text="${article.author.name}"/>
 
-                    <span th:text="${article.author.surname}"/>
-                    <br>Date:
-                    <span th:text="${article.date}"/>
-                    <div sec:authorize="hasRole('ROLE_SALE')">
-                        <button type="submit">Update</button>
-                    </div>
+                <span th:text="${article.author.surname}"/>
+                <br>Date:
+                <span th:text="${article.date}"/>
+            </td>
+            <td sec:authorize="hasRole('ROLE_SALE')">
+                <form action="#" th:action="@{/articles/{id}/edit(id=${article.id})}" method="get">
+                    <input type="submit" value="Edit article">
                 </form>
             </td>
         </tr>
     </table>
+    <div sec:authorize="hasRole('ROLE_CUSTOMER')" align="center">
+        <form action="#"
+              th:action="@{/articles/{articleId}/comments/add(articleId=${article.id})}"
+              th:object="${newComment}" method="post">
+            <textarea type="text" th:field="*{content}"/>
+            <br>
+            <input type="submit" value="Send comment">
+        </form>
+    </div>
     <h2><span th:text="${errorMessage}"/></h2>
     <table border="1" cellpadding="2">
         <tr th:each="comment,stat : ${article.comments}">
@@ -54,9 +51,9 @@
 
                 <span th:text="${comment.author.surname}"/>
                 <br>
-                <span th:unless="${comment.headComment == null}">
+                <span th:unless="${comment.headCommentId == null}">
                     <span th:each="commentHead,stat : ${article.comments}">
-                        <span th:if="${commentHead.id == comment.headComment.id}">
+                        <span th:if="${commentHead.id == comment.headCommentId}">
                             [
                             <span th:text="${commentHead.author.name}"/>
 
@@ -71,19 +68,21 @@
                 <div>
                     <div>
                         <form action="#"
-                              th:action="@{/articles/{articleId}/comments/{commentId}/addcomment(articleId=${article.id}, commentId=${comment.id})}"
+                              th:action="@{/articles/{articleId}/comments/add(articleId=${article.id})}"
                               th:object="${newComment}" method="post">
                             <input type="text" th:field="*{content}">
-                            <button type="submit">Send</button>
+                            <input type="hidden" name="headCommentId" th:value="${comment.id}">
+                            <input type="submit" value="Answer">
                         </form>
                     </div>
-                    <div sec:authorize="hasRole('ROLE_SALE')">
-                        <form action="#" th:action="@{/articles/{articleId}/comments/{commentId}/delete(articleId=${article.id}, commentId=${comment.id})}" method="post">
-                            <input type="submit" value="Delete">
-                        </form>
-                    </div>
+                    <span sec:authorize="hasRole('ROLE_SALE')">
+                <form action="#"
+                      th:action="@{/articles/{articleId}/comments/{commentId}/delete(articleId=${article.id}, commentId=${comment.id})}"
+                      method="post">
+                    <input type="submit" value="Delete">
+                </form>
+            </span>
                 </div>
-
             </td>
         </tr>
     </table>

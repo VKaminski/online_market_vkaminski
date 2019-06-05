@@ -1,12 +1,12 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.ProfileRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Profile;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Profile;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.ProfileService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ProfileConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ProfileDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ProfileEditDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -34,17 +34,30 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public void update(ProfileDTO profileDTO) {
-        UserDTO updated = profileDTO.getUser();
-        Profile profile = profileRepository.findById(updated.getId());
-        String hashPassword = BCrypt.hashpw(updated.getPassword(), BCrypt.gensalt(cryptoRound));
+    public ProfileEditDTO getForEditById(Long id) {
+        Profile profile = profileRepository.findById(id);
+        ProfileEditDTO editProfileDTO = new ProfileEditDTO();
+        editProfileDTO.setName(profile.getUser().getName());
+        editProfileDTO.setSurname(profile.getUser().getSurname());
+        editProfileDTO.setAddress(profile.getAddress());
+        editProfileDTO.setPhone(profile.getPhone());
+        return editProfileDTO;
+    }
+
+    @Override
+    @Transactional
+    public void update(ProfileEditDTO editProfileDTO, String password) {
+        Profile profile = profileRepository.findById(editProfileDTO.getId());
         User user = profile.getUser();
-        user.setName(updated.getName());
-        user.setSurname(updated.getSurname());
-        user.setPassword(hashPassword);
+        if (password != null) {
+            String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(cryptoRound));
+            user.setPassword(hashPassword);
+        }
+        user.setName(editProfileDTO.getName());
+        user.setSurname(editProfileDTO.getSurname());
         profile.setUser(user);
-        profile.setAddress(profileDTO.getAddress());
-        profile.setPhone(profileDTO.getPhone());
+        profile.setAddress(editProfileDTO.getAddress());
+        profile.setPhone(editProfileDTO.getPhone());
         profileRepository.update(profile);
     }
 }

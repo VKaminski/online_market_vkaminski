@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Article</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body align="center">
+<h2 align="center">Article</h2>
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: article"></div>
+<div id="main" align="center">
+    <table border="1" cellpadding="2">
+        <tr>
+            <td>
+                <form action="#" th:action="@{/articles/{id}/edit(id=${article.id})}" th:object="${article}" method="post">
+                    <h3>
+                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</span>
+                        <br><input type="text" th:field="*{title}">
+                    </h3>
+                    <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content Error</span>
+                    <br><textarea rows="20" cols="50" th:field="*{content}"/>
+                    <br>Date:
+                    <span th:text="${article.date}"/>
+                    <br><input type="submit" value="Save">
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

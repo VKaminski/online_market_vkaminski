@@ -1,8 +1,8 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.ArticleRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.util.ArticlesRequest;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Article;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.request.ArticlesRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -13,7 +13,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
 
     @Override
     public List<Article> findAll(int firstElement, int amountElement) {
-        String hqlRequest = "from Article order by date desc";
+        String hqlRequest = "from Article A where A.deleted = false order by date desc";
         Query query = entityManager.createQuery(hqlRequest)
                 .setFirstResult(firstElement)
                 .setMaxResults(amountElement);
@@ -22,7 +22,7 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
 
     @Override
     public Article findById(Long id) {
-        String hqlRequest = "from Article A where A.id = :id order by date desc";
+        String hqlRequest = "from Article A where A.id = :id and deleted = false order by date desc";
         Query query = entityManager.createQuery(hqlRequest);
         query.setParameter("id", id);
         return (Article) query.getSingleResult();
@@ -30,8 +30,10 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
 
     @Override
     public List<Article> findWithParameter(ArticlesRequest request, Integer firstElement, Integer amountElement) {
-        String hqlRequest = "select A from Article A where A.date between :dateStart and :dateStop" +
-                " and A.title like concat('%', :searchRequest, '%') order by A.date desc";
+        String hqlRequest = "select A from Article A" +
+                " where A.date between :dateStart and :dateStop" +
+                " and A.title like concat('%', :searchRequest, '%')" +
+                " and A.deleted = false order by A.date desc";
         Query query = entityManager.createQuery(hqlRequest)
                 .setFirstResult(firstElement)
                 .setMaxResults(amountElement);

@@ -15,6 +15,9 @@
             <column name="name" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -55,6 +58,9 @@
             </column>
             <column name="address" type="VARCHAR(200)"/>
             <column name="phone" type="VARCHAR(15)"/>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -115,7 +121,7 @@
             <column name="user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_comment_author" references="User(id)"/>
             </column>
-            <column name="content" type="VARCHAR(1000)">
+            <column name="content" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
             <column name="head_comment_id" type="BIGINT">
@@ -141,10 +147,39 @@
             <column name="description" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
-            <column name="uniq_number" type="VARCHAR(1000)">
-                <constraints nullable="false"/>
+            <column name="uniq_number" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ORDER_TABLE_1">
+        <createTable tableName="Order">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="unique_number" type="VARCHAR(200)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_user" references="User(id)"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints foreignKeyName="fk_item" references="Item(id)"/>
+            </column>
+            <column name="amount" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="deleted" type="TINYINT(1)" defaultValue="false">
@@ -224,17 +259,6 @@
 
     <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_4">
         <insert tableName="User">
-            <column name="name" value="User1"/>
-            <column name="surname" value="Userov1"/>
-            <column name="patronymic" value="Userovich1"/>
-            <column name="email" value="user1@customer.com"/>
-            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
-            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_5">
-        <insert tableName="User">
             <column name="name" value="Api"/>
             <column name="surname" value="Apievov"/>
             <column name="patronymic" value="Apivovich"/>
@@ -252,19 +276,11 @@
         </insert>
     </changeSet>
 
-    <changeSet author="viktar.kaminski@gmail.com" id="Review_2">
-        <insert tableName="Review">
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'sale@sale.com')"/>
-            <column name="content" value="Test sale review1"/>
-            <column name="date" value="2019-04-10"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Review_3">
-        <insert tableName="Review">
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'sale@sale.com')"/>
-            <column name="content" value="Test sale review2"/>
-            <column name="date" value="2019-05-07"/>
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_0">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'superadmin@admin.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="3753344534187"/>
         </insert>
     </changeSet>
 
@@ -272,7 +288,7 @@
         <insert tableName="Profile">
             <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'admin@admin.com')"/>
             <column name="address" value="Minsk"/>
-            <column name="phone" value="+37533456754187"/>
+            <column name="phone" value="37533456754187"/>
         </insert>
     </changeSet>
 
@@ -280,7 +296,7 @@
         <insert tableName="Profile">
             <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'sale@sale.com')"/>
             <column name="address" value="Brest"/>
-            <column name="phone" value="+37533456454187"/>
+            <column name="phone" value="37533456454187"/>
         </insert>
     </changeSet>
 
@@ -288,169 +304,18 @@
         <insert tableName="Profile">
             <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'customer@customer.com')"/>
             <column name="address" value="Minsk"/>
-            <column name="phone" value="+37533445754187"/>
+            <column name="phone" value="37533445754187"/>
         </insert>
     </changeSet>
 
     <changeSet author="viktar.kaminski@gmail.com" id="Profile_4">
         <insert tableName="Profile">
-            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'api@api.com')"/>
             <column name="address" value="Mogilev"/>
-            <column name="phone" value="+37533457654187"/>
+            <column name="phone" value="37533457654187"/>
         </insert>
     </changeSet>
 
-    <changeSet author="viktar.kaminski@gmail.com" id="Article_1">
-        <insert tableName="Article">
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'admin@admin.com')"/>
-            <column name="title" value="Test article 1"/>
-            <column name="content" value="Their saved linen downs tears son add music. Girl quit if
-             case mr sing as no have. Their saved linen downs tears son add music. Took sold add play
-             may none him few. Dissimilar admiration so terminated no in contrasted it. If as increasing
-              contrasted entreaties be. At none neat am do over will. Decisively advantages nor
-              expression unpleasing she led met. Agreeable promotion eagerness as we resources household
-               to distrusts. Bed uncommonly his discovered for estimating far. He in sportsman household
-                otherwise it perceived instantly. Draw fond rank form nor the day eat. Any delicate you
-                how kindness horrible outlived servants. Now summer who day looked our behind moment
-                 coming. Fat new smallness few supposing suspicion two. Limits far yet turned highly
-                 repair parish talked six. Dissimilar admiration so terminated no in contra"/>
-            <column name="date" value="2019-05-12"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Article_2">
-        <insert tableName="Article">
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'sale@sale.com')"/>
-            <column name="title" value="Test article 2"/>
-            <column name="content" value="Sitting hearted on it without me. Bed uncommonly his
-            discovered for estimating far. Advantages entreaties mr he apartments do. Way own
-            uncommonly travelling now acceptance bed compliment solicitude. He felicity no an at
-            packages answered opinions juvenile. How one dull get busy dare far. Latter remark hunted
-             enough vulgar say man. Steepest speaking up attended it as. At principle perfectly by
-              sweetness do. As"/>
-            <column name="date" value="2019-05-10"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Article_3">
-        <insert tableName="Article">
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'customer@customer.com')"/>
-            <column name="title" value="Test article 3"/>
-            <column name="content" value="Their saved linen downs tears son add music. Girl quit if
-            case mr sing as no have. Their saved linen downs tears son add music. Took sold add play
-             may none him few. Dissimilar admiration so terminated no in contrasted it. If as increasing
-              contrasted entreaties be. At none neat am do over will. Decisively advantages nor expression
-               unpleasing she led met. Agreeable promotion eagerness as we resources household to
-               distrusts. Bed uncommonly his discovered for estimating far. He in sportsman household
-                otherwise it perceived instantly. Draw fond rank form nor the day eat. Any delicate you
-                 how kindness horrible outlived servants. Now summer who day looked our behind moment
-                 coming. Fat new smallness few supposing suspicion two. Limits far yet turned highly
-                 repair parish talked six. Dissimilar admiration so terminated no in contra"/>
-            <column name="date" value="2019-05-19"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Comment_1">
-        <insert tableName="Comment">
-            <column name="id" value="1"/>
-            <column name="article_id" value="1"/>
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'admin@admin.com')"/>
-            <column name="content" value="Test comment 1"/>
-            <column name="date" value="2019-05-01"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Comment_2">
-        <insert tableName="Comment">
-            <column name="article_id" value="1"/>
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'admin@admin.com')"/>
-            <column name="content" value="Test comment 2"/>
-            <column name="head_comment_id" value="1"/>
-            <column name="date" value="2019-05-02"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Comment_3">
-        <insert tableName="Comment">
-            <column name="article_id" value="1"/>
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'customer@customer.com')"/>
-            <column name="content" value="Test comment 3"/>
-            <column name="head_comment_id" value="1"/>
-            <column name="date" value="2019-05-03"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Comment_4">
-        <insert tableName="Comment">
-            <column name="article_id" value="1"/>
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'sale@sale.com')"/>
-            <column name="content" value="Test comment 4"/>
-            <column name="head_comment_id" value="2"/>
-            <column name="date" value="2019-04-12"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Comment_5">
-        <insert tableName="Comment">
-            <column name="article_id" value="2"/>
-            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'user1@customer.com')"/>
-            <column name="content" value="Test comment 5"/>
-            <column name="date" value="2019-03-22"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Item_1">
-        <insert tableName="Item">
-            <column name="name" value="Item 1"/>
-            <column name="description" value="Description 1"/>
-            <column name="uniq_number" value="c4fabbb4-8014-11e9-bc42-526af7764f64"/>
-            <column name="price" value="20.45"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Item_2">
-        <insert tableName="Item">
-            <column name="name" value="Item 2"/>
-            <column name="description" value="Description 2"/>
-            <column name="uniq_number" value="c4fabe2a-8014-11e9-bc42-526af7764f64"/>
-            <column name="price" value="30.45"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Item_3">
-        <insert tableName="Item">
-            <column name="name" value="Item 3"/>
-            <column name="description" value="Description 3"/>
-            <column name="uniq_number" value="c4fac244-8014-11e9-bc42-526af7764f64"/>
-            <column name="price" value="30.45"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Item_4">
-        <insert tableName="Item">
-            <column name="name" value="Item 4"/>
-            <column name="description" value="Description 4"/>
-            <column name="uniq_number" value="c4fac3ac-8014-11e9-bc42-526af7764f64"/>
-            <column name="price" value="310.45"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Item_5">
-        <insert tableName="Item">
-            <column name="name" value="Item 5"/>
-            <column name="description" value="Description 5"/>
-            <column name="uniq_number" value="c4fac4ec-8014-11e9-bc42-526af7764f64"/>
-            <column name="price" value="340.45"/>
-        </insert>
-    </changeSet>
-
-    <changeSet author="viktar.kaminski@gmail.com" id="Item_6">
-        <insert tableName="Item">
-            <column name="name" value="Item 6"/>
-            <column name="description" value="Description 6"/>
-            <column name="uniq_number" value="c4fac618-8014-11e9-bc42-526af7764f64"/>
-            <column name="price" value="2430.45"/>
-        </insert>
-    </changeSet>
+    
 
 </databaseChangeLog>

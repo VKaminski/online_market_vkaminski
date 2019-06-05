@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+
+<body align="center">
+<h2 align="center">Orders</h2>
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: orders"></div>
+<div id="main" align="center">
+    <table border="1" cellpadding="2">
+        <tr th:each="article,stat : ${ordersPage.elements}">
+        <tr>
+            <td>№</td>
+            <td>Unique Number</td>
+            <td>Item</td>
+            <td>Amount</td>
+            <td>Total price</td>
+            <td>Status</td>
+        </tr>
+        <tr th:each="order,stat : ${ordersPage.elements}">
+            <td>
+                <span th:text="${stat.index + (ordersPage.page - 1) * ordersPage.amountElementsOnPage + 1}"></span>
+            </td>
+            <td>
+                <span th:text="${order.item.uniqueNumber}"></span>
+            </td>
+            <td>
+                <span th:text="${order.item.name}"></span>
+            </td>
+            <td>
+                <span th:text="${order.amount}"></span>
+            </td>
+            <td>
+                <span th:text="${order.totalPrice}"></span>
+            </td>
+            <td>
+                <span th:text="${order.status.name()}"></span>
+            </td>
+            <td sec:authorize="hasRole('ROLE_SALE')">
+                <form action="#" th:action="@{/orders/{id}(id=${order.id})}" method="get">
+                    <input type="submit" value="More">
+                </form>
+            </td>
+        </tr>
+        </tr>
+    </table>
+    <div th:with="url=@{/orders}">
+        <div th:replace="paginator :: paginator (pageDTO=${ordersPage})"></div>
+    </div>
+</div>
+</body>
+</html>

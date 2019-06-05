@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Item</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body align="center">
+<h2 align="center">Upload file</h2>
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: item"></div>
+<div id="main" align="center">
+    <div th:if="${message}">
+        <div th:text="${message}"/>
+    </div>
+    <form action="/items/upload" enctype="multipart/form-data" method="post" >
+        <input type="file" name="file" /><br/><br/>
+        <input type="submit" value="Upload" />
+    </form>
+</div>
+
+</body>
+</html>

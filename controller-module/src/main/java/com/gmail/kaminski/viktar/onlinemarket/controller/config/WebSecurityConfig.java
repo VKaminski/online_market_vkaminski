@@ -35,14 +35,46 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/articles", "/articles/**", "/article", "/article/**", "/profile")
+                .antMatchers(
+                        "/profile",
+                        "/profile/edit")
+                .hasAnyRole(globalValue.getCustomerRoleName(), globalValue.getSaleRoleName(), globalValue.getAdministratorRoleName())
+                .antMatchers(
+                        "/articles",
+                        "/articles/*",
+                        "/items",
+                        "/orders")
                 .hasAnyRole(globalValue.getCustomerRoleName(), globalValue.getSaleRoleName())
-                .antMatchers("/items", "/items/**")
+                .antMatchers(
+                        "/reviews/new",
+                        "/items/*/buy",
+                        "/articles/*/comments/add")
+                .hasRole(globalValue.getCustomerRoleName())
+                .antMatchers(
+                        "/articles/{articleId}/comments/{commentId}/delete",
+                        "/articles/*/delete",
+                        "/articles/*/edit",
+                        "/articles/new",
+                        "/items/*",
+                        "/items/upload",
+                        "/items/*/copy",
+                        "/items/*/delete",
+                        "/orders/*",
+                        "/orders/*/switchstatus")
                 .hasRole(globalValue.getSaleRoleName())
-                .antMatchers("/users", "/users/**", "/reviews", "/reviews/**")
+                .antMatchers(
+                        "/users",
+                        "/users/new",
+                        "/users/*/changepassword",
+                        "/users/*/changerole",
+                        "/reviews",
+                        "/reviews/*/delete",
+                        "/reviews/*/hide")
                 .hasRole(globalValue.getAdministratorRoleName())
-                .antMatchers("/", "/403", "/login")
+                .antMatchers("/error", "/403", "/login", "/css/**")
                 .permitAll()
+                .antMatchers("/**")
+                .denyAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")

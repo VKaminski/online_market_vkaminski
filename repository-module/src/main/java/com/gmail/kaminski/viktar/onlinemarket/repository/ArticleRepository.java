@@ -1,7 +1,7 @@
 package com.gmail.kaminski.viktar.onlinemarket.repository;
 
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.util.ArticlesRequest;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Article;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.request.ArticlesRequest;
 
 import java.util.List;
 

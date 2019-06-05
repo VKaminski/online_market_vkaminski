@@ -1,5 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.service;
 
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewNewDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewDTO;
 
@@ -11,4 +12,6 @@ public interface ReviewService {
     void show(Long id);
 
     void delete(Long id);
+
+    void add(ReviewNewDTO reviewDTO);
 }

@@ -6,7 +6,7 @@ public class ItemDTO {
     private Long id;
     private String name;
     private String description;
-    private String uniqNumber;
+    private String uniqueNumber;
     private BigDecimal price;
 
     public void setId(Long id) {
@@ -33,12 +33,12 @@ public class ItemDTO {
         return description;
     }
 
-    public void setUniqNumber(String uniqNumber) {
-        this.uniqNumber = uniqNumber;
+    public void setUniqueNumber(String uniqueNumber) {
+        this.uniqueNumber = uniqueNumber;
     }
 
-    public String getUniqNumber() {
-        return uniqNumber;
+    public String getUniqueNumber() {
+        return uniqueNumber;
     }
 
     public void setPrice(BigDecimal price) {
