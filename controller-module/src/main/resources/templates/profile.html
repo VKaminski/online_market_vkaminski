@@ -1,20 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
-<body>
+<body align="center">
 <h2 align="center">Profile</h2>
-<nav id="menu" align="center">
-    <a href="/articles">Articles</a>
-    <a href="/logout">Logout</a>
-</nav>
-<div id="main" align="center">
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: profile"></div>
+<div align="center" id="main">
     <table border="1" cellpadding="2">
         <tr>
             <td>
@@ -29,7 +24,11 @@
             </td>
         </tr>
     </table>
-    <a href="/profile/edit">Edit</a>
+    <div>
+        <form action="#" th:action="@{/profile/edit}" method="get">
+            <input type="submit" value="Edit">
+        </form>
+    </div>
 </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.RoleRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Role;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Role;
 import com.gmail.kaminski.viktar.onlinemarket.service.RoleService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.RoleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.RoleDTO;

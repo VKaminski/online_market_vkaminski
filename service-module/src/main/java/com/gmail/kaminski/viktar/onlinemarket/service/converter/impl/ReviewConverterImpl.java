@@ -1,9 +1,11 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Review;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Review;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ReviewConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ReviewNewDTO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +24,7 @@ public class ReviewConverterImpl implements ReviewConverter {
             review.setId(reviewDTO.getId());
         }
         if (reviewDTO.getUserDTO() != null) {
-            review.setUser(userConverter.toUser(reviewDTO.getUserDTO()));
+            review.setAuthor(userConverter.toUser(reviewDTO.getUserDTO()));
         }
         if (reviewDTO.getContent() != null) {
             review.setContent(reviewDTO.getContent());
@@ -36,13 +38,27 @@ public class ReviewConverterImpl implements ReviewConverter {
 
     @SuppressWarnings("Duplicates")
     @Override
+    public Review toReview(ReviewNewDTO reviewDTO) {
+        Review review = new Review();
+        User user = new User();
+        user.setId(reviewDTO.getAuthorId());
+        review.setAuthor(user);
+        review.setContent(reviewDTO.getContent());
+        if (reviewDTO.getDate() != null) {
+            review.setDate(reviewDTO.getDate());
+        }
+        return review;
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
     public ReviewDTO toReviewDTO(Review review) {
         ReviewDTO reviewDTO = new ReviewDTO();
         if (review.getId() != null) {
             reviewDTO.setId(review.getId());
         }
-        if (review.getUser() != null) {
-            reviewDTO.setUserDTO(userConverter.toUserDTO(review.getUser()));
+        if (review.getAuthor() != null) {
+            reviewDTO.setUserDTO(userConverter.toUserDTO(review.getAuthor()));
         }
         if (review.getContent() != null) {
             reviewDTO.setContent(review.getContent());

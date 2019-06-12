@@ -2,14 +2,17 @@ package com.gmail.kaminski.viktar.onlinemarket.service.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.RoleRepository;
 import com.gmail.kaminski.viktar.onlinemarket.repository.UserRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Role;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Profile;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Role;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.RandomService;
 import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.AuthorizedUserDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.UserAuthorizedDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.UserNewDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.validator.PageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -36,20 +39,23 @@ public class UserServiceImpl implements UserService {
     private UserConverter userConverter;
     private RandomService randomService;
     private RoleRepository roleRepository;
+    private PageValidator pageValidator;
 
     public UserServiceImpl(UserRepository userRepository,
                            UserConverter userConverter,
                            RandomService randomService,
-                           RoleRepository roleRepository) {
+                           RoleRepository roleRepository,
+                           PageValidator pageValidator) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.randomService = randomService;
         this.roleRepository = roleRepository;
+        this.pageValidator = pageValidator;
     }
 
     @Override
     @Transactional
-    public AuthorizedUserDTO getByEmail(String email) {
+    public UserAuthorizedDTO getByEmail(String email) {
         User user = userRepository.getByEmail(email);
         return userConverter.toAuthorizedUserDTO(user);
     }
@@ -63,28 +69,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void add(UserDTO UserDTO) {
-        User user = userConverter.toUser(UserDTO);
-        String newPassword = generatePassword(minPasswordLength, maxPasswordLength);
-        String hashPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(cryptoRound));
-        user.setPassword(hashPassword);
-        userRepository.add(user);
-        sendMessage(newPassword, user);
+    public boolean add(UserNewDTO newUserDTO) {
+        if (userRepository.getByEmail(newUserDTO.getEmail()) == null) {
+            User user = userConverter.toUser(newUserDTO);
+            Profile profile = new Profile();
+            profile.setUser(user);
+            user.setProfile(profile);
+            String newPassword = generatePassword(minPasswordLength, maxPasswordLength);
+            String hashPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(cryptoRound));
+            user.setPassword(hashPassword);
+            userRepository.add(user);
+            sendMessage(newPassword, user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
     @Override
     @Transactional
     public PageDTO<UserDTO> getUsersPage(PageDTO<UserDTO> pageDTO) {
-        int totalAmountElements = userRepository.getAmountOfEntities();
-        Integer amountElements = pageDTO.getAmountElementsOnPage();
-        pageDTO.setAmountElements(amountElements);
-        int amountPages = totalAmountElements / amountElements + 1;
-        if (pageDTO.getPage() > (amountPages)) {
-            pageDTO.setPage(amountPages);
-        }
+        pageDTO.setAmountElements(userRepository.getAmountOfEntities());
+        pageValidator.valid(pageDTO);
+        int amountElementsOnPage = pageDTO.getAmountElementsOnPage();
         int firstElement = (pageDTO.getPage() - 1) * pageDTO.getAmountElementsOnPage();
-        List<User> users = userRepository.getAllOrderByEmail(firstElement, amountElements);
+        List<User> users = userRepository.getAllUsersOrderByEmail(firstElement, amountElementsOnPage);
         List<UserDTO> userDTOs = new ArrayList<>();
         for (User user : users) {
             userDTOs.add(userConverter.toUserDTO(user));
@@ -131,10 +141,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private void sendMessage(String newPassword, User user) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("Hello ").append(user.getName()).append(" ").append(user.getSurname())
-                .append(", your new password ").append(newPassword);
-        logger.debug(custom, stringBuffer.toString());
+        String stringBuffer = "Hello " + user.getName() + " " + user.getSurname() +
+                ", your new password " + newPassword;
+        logger.debug(custom, stringBuffer);
     }
 
     private String generatePassword(int minLength, int maxLength) {

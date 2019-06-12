@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorry page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body id="main">
+<h2 align="center">Sorry page</h2>
+<span sec:authorize="hasRole('ROLE_SALE')">
+        <form action="#" th:action="@{/articles}" method="get">
+            <input type="submit" value="Articles">
+        </form>
+    </span>
+<span sec:authorize="hasRole('ROLE_CUSTOMER')">
+        <form action="#" th:action="@{/articles}" method="get">
+            <input type="submit" value="Articles">
+        </form>
+    </span>
+<span sec:authorize="hasRole('ROLE_ADMINISTRATOR')">
+        <form action="#" th:action="@{/users}" method="get">
+            <input type="submit" value="Users">
+        </form>
+    </span>
+<div align="center">
+    <h1>Uups... we have problem! Please, choose another page!</h1>
+    <br>
+    <div th:text="${#request.getAttribute('message')}"/>
+</div>
+</body>
+</html>

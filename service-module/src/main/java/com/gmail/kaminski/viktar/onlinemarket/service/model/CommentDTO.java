@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class CommentDTO {
     private Long id;
-    private ArticleDTO article;
+    private Long articleId;
     private UserDTO author;
     private String content;
     private Date date;
-    private CommentDTO headComment;
+    private Long headCommentId;
 
     public Long getId() {
         return id;
@@ -18,12 +18,12 @@ public class CommentDTO {
         this.id = id;
     }
 
-    public ArticleDTO getArticle() {
-        return article;
+    public Long getArticleId() {
+        return articleId;
     }
 
-    public void setArticle(ArticleDTO article) {
-        this.article = article;
+    public void setArticleId(Long articleId) {
+        this.articleId = articleId;
     }
 
     public UserDTO getAuthor() {
@@ -50,11 +50,11 @@ public class CommentDTO {
         this.date = date;
     }
 
-    public CommentDTO getHeadComment() {
-        return headComment;
+    public Long getHeadCommentId() {
+        return headCommentId;
     }
 
-    public void setHeadComment(CommentDTO headComment) {
-        this.headComment = headComment;
+    public void setHeadCommentId(Long headCommentId) {
+        this.headCommentId = headCommentId;
     }
 }

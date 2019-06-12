@@ -1,51 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
-
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/style}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
-<body>
+<body align="center">
 <h2 align="center">Profile</h2>
-<nav id="menu" align="center">
-    <a href="/articles">Articles</a>
-    <a href="/logout">Logout</a>
-</nav>
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: profile"></div>
 <div id="main" align="center">
     <form action="#" th:action="@{/profile/edit}" th:object="${profile}" method="post">
-        <table border="1" cellpadding="2">
+        <table>
             <tr>
-                <td>
-                    Name:
-                    <div>
-                        <input th:type="text" th:field="*{user.name}">
-                    </div>
-                    <br>Surname:
-                    <div>
-                        <input th:type="text" th:field="*{user.surname}">
-                    </div>
-                    <br>Address:
-                    <div>
-                        <input th:type="text" th:field="*{address}">
-                    </div>
-                    <br>Phone:
-                    <div>
-                        <input th:type="text" th:field="*{phone}">
-                    </div>
-                    <br>New Password:
-                    <div>
-                        <input type="text" name="newPassword">
-                    </div>
-                    <br> Repeat New Password:
-                    <div>
-                        <input type="text" name="repeatNewPassword">
-                    </div>
-                </td>
+                <td>Name:</td>
+                <td><input type="text" th:field="*{name}"></td>
+                <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
+            </tr>
+            <tr>
+                <td>Surname:</td>
+                <td><input type="text" th:field="*{surname}"></td>
+                <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+                <td><input type="text" th:field="*{address}"></td>
+                <td th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</td>
+            <tr>
+                <td>Phone:</td>
+                <td><input type="text" th:field="*{phone}"></td>
+            <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
+            <tr>
+                <td>New Password:</td>
+                <td><input type="text" name="newPassword"></td>
+            </tr>
+            <tr>
+                <td>Repeat New Password:</td>
+                <td><input type="text" name="repeatNewPassword"></td>
             </tr>
         </table>
-        <button type="submit">Update</button>
+        <input type="submit" value="Update">
     </form>
 </div>
 </body>

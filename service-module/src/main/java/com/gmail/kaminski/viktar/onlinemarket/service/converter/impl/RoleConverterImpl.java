@@ -1,6 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Role;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Role;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.RoleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.RoleDTO;
 import org.springframework.stereotype.Component;

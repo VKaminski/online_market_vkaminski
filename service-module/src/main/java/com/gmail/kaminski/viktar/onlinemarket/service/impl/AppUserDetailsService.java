@@ -2,7 +2,7 @@ package com.gmail.kaminski.viktar.onlinemarket.service.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.AppUserPrincipal;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.AuthorizedUserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.UserAuthorizedDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +18,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AuthorizedUserDTO authorizedUserDTO = userService.getByEmail(username);
+        UserAuthorizedDTO authorizedUserDTO = userService.getByEmail(username);
         if (authorizedUserDTO == null) {
             throw new UsernameNotFoundException("User is not found!");
         }

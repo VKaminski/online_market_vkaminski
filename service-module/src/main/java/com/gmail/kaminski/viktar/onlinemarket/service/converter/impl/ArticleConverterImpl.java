@@ -1,15 +1,17 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Comment;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.User;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Article;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Comment;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.User;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ArticleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.CommentConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.impl.UserServiceImpl;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleEditDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleNewDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticlePreviewDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.CommentDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.NewArticleDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -21,12 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class
-ArticleConverterImpl implements ArticleConverter {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private static final Marker custom = MarkerFactory.getMarker("custom");
-    @Value("${custom.date.format}")
-    private String dateFormat;
+public class ArticleConverterImpl implements ArticleConverter {
+    @Value("${custom.article.preview.length}")
+    private int previewLength;
     private UserConverter userConverter;
     private CommentConverter commentConverter;
 
@@ -81,7 +80,7 @@ ArticleConverterImpl implements ArticleConverter {
     }
 
     @Override
-    public Article toArticle(NewArticleDTO newArticleDTO) {
+    public Article toArticle(ArticleNewDTO newArticleDTO) {
         Article article = new Article();
         User user = new User();
         user.setId(newArticleDTO.getUserId());
@@ -92,5 +91,34 @@ ArticleConverterImpl implements ArticleConverter {
             article.setDate(newArticleDTO.getDate());
         }
         return article;
+    }
+
+    @Override
+    public ArticlePreviewDTO toArticlePreviewDTO(Article article) {
+        ArticlePreviewDTO articlePreviewDTO = new ArticlePreviewDTO();
+        articlePreviewDTO.setId(article.getId());
+        articlePreviewDTO.setAuthor(userConverter.toUserDTO(article.getAuthor()));
+        articlePreviewDTO.setTitle(article.getTitle());
+        articlePreviewDTO.setContent(article.getContent().substring(previewLength));
+        articlePreviewDTO.setDate(article.getDate());
+        articlePreviewDTO.setAmountComments(article.getComments().size());
+        return articlePreviewDTO;
+    }
+
+    @Override
+    public ArticleEditDTO toArticleEditDTO(Article article) {
+        ArticleEditDTO articleEditDTO = new ArticleEditDTO();
+        articleEditDTO.setId(article.getId());
+        articleEditDTO.setTitle(article.getTitle());
+        articleEditDTO.setContent(article.getContent());
+        articleEditDTO.setDate(article.getDate());
+        return articleEditDTO;
+    }
+
+    @Override
+    public void update(Article recipient, ArticleEditDTO donor) {
+        recipient.setTitle(donor.getTitle());
+        recipient.setContent(donor.getContent());
+        recipient.setDate(donor.getDate());
     }
 }

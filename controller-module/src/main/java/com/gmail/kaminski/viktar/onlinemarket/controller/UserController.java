@@ -1,5 +1,7 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
+import com.gmail.kaminski.viktar.onlinemarket.controller.config.GlobalValue;
+import com.gmail.kaminski.viktar.onlinemarket.controller.exception.WebControllerException;
 import com.gmail.kaminski.viktar.onlinemarket.controller.model.CheckedUsers;
 import com.gmail.kaminski.viktar.onlinemarket.controller.util.RequestParamService;
 import com.gmail.kaminski.viktar.onlinemarket.service.RoleService;
@@ -7,6 +9,7 @@ import com.gmail.kaminski.viktar.onlinemarket.service.UserService;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.RoleDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.UserNewDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -28,15 +31,18 @@ import java.util.List;
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final Marker custom = MarkerFactory.getMarker("custom");
+    private GlobalValue globalValue;
     private UserService userService;
     private RoleService roleService;
     private RequestParamService paginatorService;
     private RequestParamService requestParamService;
 
-    protected UserController(UserService userService,
+    protected UserController(GlobalValue globalValue,
+                             UserService userService,
                              RoleService roleService,
                              RequestParamService paginatorService,
                              RequestParamService requestParamService) {
+        this.globalValue = globalValue;
         this.userService = userService;
         this.roleService = roleService;
         this.paginatorService = paginatorService;
@@ -51,50 +57,70 @@ public class UserController {
         logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
         List<RoleDTO> roles = roleService.getAll();
         PageDTO<UserDTO> usersPage = new PageDTO<>();
-        usersPage.setPage(requestParamService.getElements(page, Integer.MAX_VALUE, 1));
-        usersPage.setAmountElementsOnPage(requestParamService.getElements(amountElement, 100, 10));
-        userService.getUsersPage(usersPage);
-        List<Long> checkedUsersId = new ArrayList<>();
-        CheckedUsers checkedUsers = new CheckedUsers();
-        checkedUsers.setCheckedUsersId(checkedUsersId);
-        model.addAttribute("roles", roles);
-        model.addAttribute("usersPage", usersPage);
-        model.addAttribute("checkedUsers", checkedUsers);
-        return "users";
+        usersPage.setPage(requestParamService.getInteger(page, Integer.MAX_VALUE, globalValue.getDefaultPage()));
+        usersPage.setAmountElementsOnPage(
+                requestParamService.getInteger(
+                        amountElement,
+                        globalValue.getDefaultMaxAmountElements(),
+                        globalValue.getDefaultAmountElements()));
+        try {
+            userService.getUsersPage(usersPage);
+            List<Long> checkedUsersId = new ArrayList<>();
+            CheckedUsers checkedUsers = new CheckedUsers();
+            checkedUsers.setCheckedUsersId(checkedUsersId);
+            model.addAttribute("roles", roles);
+            model.addAttribute("usersPage", usersPage);
+            model.addAttribute("checkedUsers", checkedUsers);
+            return "users";
+        } catch (Exception e) {
+            throw new WebControllerException("Please, correct your request! Users were not found!", e);
+        }
     }
 
     @PostMapping("/users/{id}/changerole")
     public String changeRole(@PathVariable("id") Long id,
                              @RequestParam Long roleId) {
-        userService.updateRole(id, roleId);
-        return "redirect:/users";
+        try {
+            userService.updateRole(id, roleId);
+            return "redirect:/users";
+        } catch (Exception e) {
+            throw new WebControllerException("Please, correct your request! Role for user was not change!", e);
+        }
     }
 
     @PostMapping("/users/{id}/changepassword")
     public String changePassword(@PathVariable("id") Long id) {
-        userService.changePassword(id, 5, 20);
-        return "redirect:/users";
+        try {
+            userService.changePassword(id, globalValue.getMinLengthPassword(),globalValue.getMaxLengthPassword());
+            return "redirect:/users";
+        } catch (Exception e) {
+            throw new WebControllerException("Please, correct your request! Password for user was not change!", e);
+        }
     }
 
     @PostMapping("/users/delete")
     public String deleteUsers(@ModelAttribute(value = "checkedUsers") CheckedUsers checkedUsers) {
         List<Long> checkedUsersId = checkedUsers.getCheckedUsersId();
-        userService.delete(checkedUsersId);
-        return "redirect:/users";
+        try {
+            userService.delete(checkedUsersId);
+            return "redirect:/users";
+        } catch (Exception e) {
+            throw new WebControllerException("Please, correct your request! Users were not deleted!", e);
+        }
     }
 
     @GetMapping("/users/new")
     public String newUser(Model model) {
         List<RoleDTO> roles = roleService.getAll();
-        UserDTO user = new UserDTO();
+        UserNewDTO user = new UserNewDTO();
         model.addAttribute("roles", roles);
         model.addAttribute("user", user);
         return "newuser";
     }
 
-    @PostMapping("/users/new/create")
+    @PostMapping("/users/new")
     public String createUser(
-            @Valid @ModelAttribute("user") UserDTO user,
+            @Valid @ModelAttribute("user") UserNewDTO userDTO,
             BindingResult bindingResult,
             Model model) {
         List<RoleDTO> roles = roleService.getAll();
@@ -102,7 +128,15 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "newuser";
         }
-        userService.add(user);
-        return "redirect:/users/new";
+        try {
+            if (userService.add(userDTO)) {
+                return "redirect:/users/new";
+            } else {
+                model.addAttribute("checkEmail", "Email is not free! Choose another!");
+                return "newuser";
+            }
+        } catch (Exception e) {
+            throw new WebControllerException("Please, correct your request! User was not created!", e);
+        }
     }
 }

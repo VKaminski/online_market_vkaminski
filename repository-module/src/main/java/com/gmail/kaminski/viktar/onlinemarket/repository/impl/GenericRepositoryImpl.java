@@ -45,7 +45,7 @@ public abstract class GenericRepositoryImpl<I, T> implements GenericRepository<I
 
     @Override
     public List<T> findAll(int firstElement, int amountElement) {
-        String query = "from " + entityClass.getName();
+        String query = "from " + entityClass.getName() + " E where E.deleted = false";
         Query q = entityManager.createQuery(query)
                 .setFirstResult(firstElement)
                 .setMaxResults(amountElement);
@@ -54,7 +54,7 @@ public abstract class GenericRepositoryImpl<I, T> implements GenericRepository<I
 
     @Override
     public Integer getAmountOfEntities() {
-        String query = "SELECT COUNT(*) FROM " + entityClass.getName();
+        String query = "SELECT COUNT(*) FROM " + entityClass.getName() + " E where E.deleted = false";
         Query q = entityManager.createQuery(query);
         return ((Number) q.getSingleResult()).intValue();
     }
