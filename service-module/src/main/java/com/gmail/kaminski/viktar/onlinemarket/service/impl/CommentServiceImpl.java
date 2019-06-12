@@ -20,16 +20,13 @@ public class CommentServiceImpl implements CommentService {
     @Value("${custom.comment.forbidden.word}")
     private String forbiddenWords;
     private CommentRepository commentRepository;
-    private CommentConverter commentConverter;
     private UserRepository userRepository;
     private ArticleRepository articleRepository;
 
     public CommentServiceImpl(CommentRepository commentRepository,
-                              CommentConverter commentConverter,
                               UserRepository userRepository,
                               ArticleRepository articleRepository) {
         this.commentRepository = commentRepository;
-        this.commentConverter = commentConverter;
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
     }

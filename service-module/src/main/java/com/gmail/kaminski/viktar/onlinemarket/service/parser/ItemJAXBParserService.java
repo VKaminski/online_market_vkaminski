@@ -1,6 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.parser;
 
-import com.gmail.kaminski.viktar.onlinemarket.service.model.XMLItemsDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.XML.XMLItemsDTO;
 
 import java.io.InputStream;
 

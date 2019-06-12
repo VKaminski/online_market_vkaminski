@@ -1,4 +1,4 @@
-package com.gmail.kaminski.viktar.onlinemarket.service.model;
+package com.gmail.kaminski.viktar.onlinemarket.service.model.XML;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -186,7 +187,7 @@ public class APIController {
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity getOrder(
+    public ResponseEntity<OrderDTO> getOrder(
             @PathVariable Long id
     ) {
         try {

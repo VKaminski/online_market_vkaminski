@@ -107,9 +107,8 @@ public class RequestParamServiceImpl implements RequestParamService {
             Schema schema = schemaFactory.newSchema(xsdSource);
             Validator validator = schema.newValidator();
             validator.validate(xmlSource);
-        } catch (SAXException e) {
-            logger.debug(custom, "XML not valid!");
-        } catch (IOException e) {
+        } catch (SAXException | IOException e) {
+            logger.error(e.getMessage(), e);
             logger.debug(custom, "XML not valid!");
         }
     }

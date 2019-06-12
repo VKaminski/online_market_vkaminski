@@ -16,7 +16,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implem
         Query query = entityManager.createQuery(hqlRequest);
         query.setParameter("email", email);
         List<User> users = query.getResultList();
-        if (users.size() > 0) {
+        if (!users.isEmpty()) {
             return users.get(0);
         } else {
             return null;

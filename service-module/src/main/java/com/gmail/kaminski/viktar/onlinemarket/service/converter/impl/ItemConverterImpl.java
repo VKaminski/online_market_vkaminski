@@ -3,7 +3,7 @@ package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Item;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ItemConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ItemDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.XMLItemDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.XML.XMLItemDTO;
 import org.springframework.stereotype.Component;
 
 @Component

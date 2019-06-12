@@ -59,20 +59,16 @@ public class ArticleController {
         logger.debug(custom, "page: " + page + " amountElement: " + amountElement);
         ArticlesRequestDTO articlesRequestDTO = new ArticlesRequestDTO();
         articlesRequestDTO.setTitle(searchRequest);
-        articlesRequestDTO.setDateStart(requestParamService.getDate(dateRequestStart, globalValue.getDefaultDateRequestStart()));
-        articlesRequestDTO.setDateStop(requestParamService.getDate(dateRequestStop, globalValue.getDefaultDateRequestStop()));
+        articlesRequestDTO.setDateStart(requestParamService.getDate(dateRequestStart, 0l));
+        articlesRequestDTO.setDateStop(requestParamService.getDate(dateRequestStop, System.currentTimeMillis()));
         PageDTO<ArticlePreviewDTO> articlesPage = new PageDTO<>();
-        articlesPage.setPage(requestParamService.getInteger(page, Integer.MAX_VALUE, globalValue.getDefaultPage()));
+        articlesPage.setPage(requestParamService.getInteger(page, Integer.MAX_VALUE, 1));
         articlesPage.setAmountElementsOnPage(
                 requestParamService.getInteger(
                         amountElement,
-                        globalValue.getDefaultMaxAmountElements(),
-                        globalValue.getDefaultAmountElements()));
-        try {
+                        100,
+                        10));
             articleService.getArticlesPage(articlesRequestDTO, articlesPage);
-        } catch (Exception e) {
-            throw new WebControllerException("Please, correct your request! Articles were not found", e);
-        }
         model.addAttribute("articlesPage", articlesPage);
         model.addAttribute("searchRequest", searchRequest);
         model.addAttribute("dateRequestStart", dateRequestStart);

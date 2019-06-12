@@ -1,6 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.parser.impl;
 
-import com.gmail.kaminski.viktar.onlinemarket.service.model.XMLItemsDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.XML.XMLItemsDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.parser.ItemJAXBParserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +23,8 @@ public class ItemJAXBParserServiceImpl implements ItemJAXBParserService {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(XMLItemsDTO.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            XMLItemsDTO xmlItemsDTO = (XMLItemsDTO) unmarshaller.unmarshal(fileContent);
-            return xmlItemsDTO;
-        }catch (Exception e){
+            return (XMLItemsDTO) unmarshaller.unmarshal(fileContent);
+        } catch (Exception e) {
             logger.debug(custom, "JAXB exception: " + e.getMessage());
             return null;
         }

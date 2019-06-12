@@ -141,10 +141,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private void sendMessage(String newPassword, User user) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("Hello ").append(user.getName()).append(" ").append(user.getSurname())
-                .append(", your new password ").append(newPassword);
-        logger.debug(custom, stringBuffer.toString());
+        String stringBuffer = "Hello " + user.getName() + " " + user.getSurname() +
+                ", your new password " + newPassword;
+        logger.debug(custom, stringBuffer);
     }
 
     private String generatePassword(int minLength, int maxLength) {

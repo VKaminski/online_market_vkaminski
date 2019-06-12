@@ -99,7 +99,11 @@ public class ArticleConverterImpl implements ArticleConverter {
         articlePreviewDTO.setId(article.getId());
         articlePreviewDTO.setAuthor(userConverter.toUserDTO(article.getAuthor()));
         articlePreviewDTO.setTitle(article.getTitle());
-        articlePreviewDTO.setContent(article.getContent().substring(previewLength));
+        if(article.getContent().length() <= previewLength){
+            articlePreviewDTO.setContent(article.getContent());
+        }else {
+            articlePreviewDTO.setContent(article.getContent().substring(previewLength));
+        }
         articlePreviewDTO.setDate(article.getDate());
         articlePreviewDTO.setAmountComments(article.getComments().size());
         return articlePreviewDTO;
