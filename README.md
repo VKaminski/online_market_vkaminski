@@ -58,13 +58,13 @@
 
 ---
 
-######Sale user
+######Sale author
 
     - Articles: create, update, delete(soft delete), delete(soft delete) comments.
     - Items: create, copy, delete(soft delete), upload with help of xml
     - Orders: show orders, change status(NEW, REVIEWING, IN_PROGRESS, DELIVERED)
 
-######Customer user
+######Customer author
 
     - Articles: show, create comment for articles.
     - Orders: create order with one item and some quantity, show orders
