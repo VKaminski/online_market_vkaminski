@@ -1,23 +1,24 @@
 package com.gmail.kaminski.viktar.onlinemarket.service;
 
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleEditDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticlePreviewDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.util.ArticlesRequestDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.NewArticleDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleNewDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 
-import java.util.Date;
-import java.util.List;
-
 public interface ArticleService {
-    PageDTO<ArticleDTO> getArticlesPage(ArticlesRequestDTO request, PageDTO<ArticleDTO> pageDTO);
+    PageDTO<ArticlePreviewDTO> getArticlesPage(ArticlesRequestDTO request, PageDTO<ArticlePreviewDTO> pageDTO);
 
     Integer getAmountArticles();
 
     ArticleDTO getById(Long id);
 
-    void add(NewArticleDTO newArticleDTO);
+    void add(ArticleNewDTO newArticleDTO);
 
     void delete(Long id);
 
-    void update(ArticleDTO articleDTO);
+    void update(ArticleEditDTO articleDTO);
+
+    ArticleEditDTO getForEditById(Long id);
 }

@@ -3,21 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>New article</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body align="center">
 <h2 align="center">New article</h2>
-<a href="/articles">Articles</a>
-<a href="/logout">Logout</a>
-<div align="center">
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: newarticle"></div>
+<div id="main">
     <form th:action="@{/articles/new}" th:object="${article}" method="post">
         <table>
             <tr>
                 <td>Title</td>
-                <td><input type="text" th:field="*{title}"></td>
+                <td>
+                    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</span>
+                    <br><input type="text" th:field="*{title}">
+                </td>
             </tr>
             <tr>
                 <td>Content</td>
-                <td><textarea rows="20" cols="50" th:field="*{content}"/></td>
+                <td>
+                    <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content Error</span>
+                    <br><textarea rows="20" cols="50" th:field="*{content}"/>
+                </td>
             </tr>
             <tr>
                 <td>Date:</td>
@@ -26,7 +33,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <button type="submit">Create</button>
+                    <input type="submit" value="Create">
                 </td>
             </tr>
         </table>

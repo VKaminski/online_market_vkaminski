@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body align="center">
+<h2 align="center">Order</h2>
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: order"></div>
+<div id="main" align="center">
+    <table border="1" cellpadding="2">
+        <tr>
+            <td>№</td>
+            <td><span th:text="${order.uniqueNumber}"/></td>
+        </tr>
+        <tr>
+            <td>User</td>
+            <td><span th:text="${order.customer.name}"/> <span th:text="${order.customer.surname}"/></td>
+        </tr>
+        <tr>
+            <td>Phone</td>
+            <td><span th:text="${profile.phone}"/></td>
+        </tr>
+        <tr>
+            <td>Item</td>
+            <td><span th:text="${order.item.name}"/></td>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td><span th:text="${order.amount}"/></td>
+        </tr>
+        <tr>
+            <td>Total price</td>
+            <td><span th:text="${order.totalPrice}"/></td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>
+                <form action="#" th:action="@{/orders/{id}/switchstatus(id=${order.id})}" method="post">
+                    <select name="newstatus" onchange='this.form.submit()'>
+                        <option th:each="status : ${statusList}"
+                                th:value="${status.name()}" th:text="${status.name()}"
+                                th:selected="${status.name() == order.status.name()}">
+                        </option>
+                    </select>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

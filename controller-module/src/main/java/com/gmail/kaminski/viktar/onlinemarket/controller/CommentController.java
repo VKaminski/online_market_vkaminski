@@ -1,10 +1,10 @@
 package com.gmail.kaminski.viktar.onlinemarket.controller;
 
-import com.gmail.kaminski.viktar.onlinemarket.service.ArticleService;
+import com.gmail.kaminski.viktar.onlinemarket.controller.exception.WebControllerException;
 import com.gmail.kaminski.viktar.onlinemarket.service.CommentService;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.CommentDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.UserDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.AppUserPrincipal;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.CommentNewDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.UserAuthorizedDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,42 +16,36 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CommentController {
 
-    private ArticleService articleService;
     private ArticleController articleController;
     private CommentService commentService;
 
-    public CommentController(ArticleService articleService,
-                             ArticleController articleController,
+    public CommentController(ArticleController articleController,
                              CommentService commentService) {
-        this.articleService = articleService;
         this.articleController = articleController;
         this.commentService = commentService;
     }
 
-    @PostMapping("/articles/{id}/comments/{commentId}/addcomment")
+    @PostMapping("/articles/{id}/comments/add")
     public String addComment(
             @PathVariable("id") Long articleId,
-            @PathVariable("commentId") Long commentId,
-            @ModelAttribute("newComment") CommentDTO newComment,
+            @ModelAttribute("newComment") CommentNewDTO newComment,
             Model model) {
-        ArticleDTO articleDTO = new ArticleDTO();
-        articleDTO.setId(articleId);
-        newComment.setArticle(articleDTO);
-        CommentDTO headComment = new CommentDTO();
-        headComment.setId(commentId);
-        newComment.setHeadComment(headComment);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserEmail = auth.getName();
-        UserDTO currentUser = new UserDTO();
-        currentUser.setEmail(currentUserEmail);
-        newComment.setAuthor(currentUser);
-        if (commentService.addComment(newComment)) {
-            return "redirect:/articles/" + articleId;
-        } else {
-            String errorMessage = "Message contain forbidden word";
-            model.addAttribute("errorMessage", errorMessage);
-            articleController.showArticle(articleId, model);
-            return "article";
+        AppUserPrincipal userPrincipal = (AppUserPrincipal) auth.getPrincipal();
+        UserAuthorizedDTO authorizedUser = userPrincipal.getAuthorizedUserDTO();
+        newComment.setAuthorId(authorizedUser.getId());
+        newComment.setArticleId(articleId);
+        try {
+            if (commentService.addComment(newComment)) {
+                return "redirect:/articles/" + articleId;
+            } else {
+                String errorMessage = "Message contain forbidden word";
+                model.addAttribute("errorMessage", errorMessage);
+                articleController.showArticle(articleId, model);
+                return "redirect:/articles/" + articleId;
+            }
+        } catch (Exception e) {
+            throw new WebControllerException("Please, correct your request! Comment was not create", e);
         }
     }
 
@@ -59,7 +53,11 @@ public class CommentController {
     public String deleteComment(
             @PathVariable("articleId") Long articleId,
             @PathVariable("commentId") Long commentId) {
-        commentService.deleteComment(commentId);
-        return "redirect:/articles/" + articleId;
+        try {
+            commentService.deleteComment(commentId);
+            return "redirect:/articles/" + articleId;
+        } catch (Exception e) {
+            throw new WebControllerException("Please, correct your request! Comment was not deleted", e);
+        }
     }
 }

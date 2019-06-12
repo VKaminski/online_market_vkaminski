@@ -10,10 +10,10 @@ import java.util.Set;
 
 public class AppUserPrincipal implements UserDetails {
 
-    private AuthorizedUserDTO authorizedUserDTO;
+    private UserAuthorizedDTO authorizedUserDTO;
     private Set<GrantedAuthority> grantedAuthorities;
 
-    public AppUserPrincipal(AuthorizedUserDTO authorizedUserDTO) {
+    public AppUserPrincipal(UserAuthorizedDTO authorizedUserDTO) {
         this.authorizedUserDTO = authorizedUserDTO;
         this.grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(authorizedUserDTO.getRole().getName()));
@@ -54,7 +54,7 @@ public class AppUserPrincipal implements UserDetails {
         return true;
     }
 
-    public AuthorizedUserDTO getAuthorizedUserDTO() {
+    public UserAuthorizedDTO getAuthorizedUserDTO() {
         return authorizedUserDTO;
     }
 }

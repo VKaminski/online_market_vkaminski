@@ -1,6 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.util.ArticlesRequest;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.request.ArticlesRequest;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.RequestConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.util.ArticlesRequestDTO;
 import org.springframework.stereotype.Component;

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New review</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body align="center">
+<h2 align="center">New review</h2>
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: articles"></div>
+<div id="main" align="center">
+    <form action="#" th:action="@{/reviews/new}" method="post">
+        <textarea rows="20" cols="50" name="review"></textarea>
+        <br><input type="submit" value="Send review">
+    </form>
+</div>
+</body>
+</html>

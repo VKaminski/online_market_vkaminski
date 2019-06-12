@@ -1,15 +1,18 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.impl;
 
 import com.gmail.kaminski.viktar.onlinemarket.repository.ArticleRepository;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Article;
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.util.ArticlesRequest;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Article;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.request.ArticlesRequest;
 import com.gmail.kaminski.viktar.onlinemarket.service.ArticleService;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ArticleConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.RequestConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleDTO;
-import com.gmail.kaminski.viktar.onlinemarket.service.model.NewArticleDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleEditDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticleNewDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.model.ArticlePreviewDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.util.ArticlesRequestDTO;
+import com.gmail.kaminski.viktar.onlinemarket.service.validator.PageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -31,13 +34,16 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleRepository articleRepository;
     private ArticleConverter articleConverter;
     private RequestConverter requestConverter;
+    private PageValidator pageValidator;
 
     public ArticleServiceImpl(ArticleRepository articleRepository,
                               ArticleConverter articleConverter,
-                              RequestConverter requestConverter) {
+                              RequestConverter requestConverter,
+                              PageValidator pageValidator) {
         this.articleRepository = articleRepository;
         this.articleConverter = articleConverter;
         this.requestConverter = requestConverter;
+        this.pageValidator = pageValidator;
     }
 
     @Override
@@ -55,20 +61,16 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public PageDTO<ArticleDTO> getArticlesPage(ArticlesRequestDTO requestDTO, PageDTO<ArticleDTO> pageDTO) {
-        int amountElements = articleRepository.getAmountOfEntities();
-        pageDTO.setAmountElements(amountElements);
-        Integer amountElementsOnPage = pageDTO.getAmountElementsOnPage();
-        int amountPages = amountElements / amountElementsOnPage + 1;
-        if (pageDTO.getPage() > (amountPages)) {
-            pageDTO.setPage(amountPages);
-        }
+    public PageDTO<ArticlePreviewDTO> getArticlesPage(ArticlesRequestDTO requestDTO, PageDTO<ArticlePreviewDTO> pageDTO) {
+        pageDTO.setAmountElements(articleRepository.getAmountOfEntities());
+        pageValidator.valid(pageDTO);
+        int amountElementsOnPage = pageDTO.getAmountElementsOnPage();
         int firstElement = (pageDTO.getPage() - 1) * pageDTO.getAmountElementsOnPage();
         ArticlesRequest request = requestConverter.toArticlesRequest(requestDTO);
         List<Article> articles = articleRepository.findWithParameter(request, firstElement, amountElementsOnPage);
-        List<ArticleDTO> articleDTOs = new ArrayList<>();
+        List<ArticlePreviewDTO> articleDTOs = new ArrayList<>();
         for (Article article : articles) {
-            articleDTOs.add(articleConverter.toArticleDTO(article));
+            articleDTOs.add(articleConverter.toArticlePreviewDTO(article));
         }
         pageDTO.setElements(articleDTOs);
         return pageDTO;
@@ -76,7 +78,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public void add(NewArticleDTO newArticleDTO) {
+    public void add(ArticleNewDTO newArticleDTO) {
         articleRepository.add(articleConverter.toArticle(newArticleDTO));
     }
 
@@ -84,18 +86,23 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     public void delete(Long id) {
         Article article = articleRepository.findById(id);
-        article.setAuthor(null);
         articleRepository.remove(article);
     }
 
     @Override
     @Transactional
-    public void update(ArticleDTO articleDTO) {
+    public void update(ArticleEditDTO articleDTO) {
         Article databaseArticle = articleRepository.findById(articleDTO.getId());
-        databaseArticle.setTitle(articleDTO.getTitle());
-        databaseArticle.setContent(articleDTO.getContent());
-        databaseArticle.setDate(new Date(System.currentTimeMillis()));
+        articleDTO.setDate(new Date(System.currentTimeMillis()));
+        articleConverter.update(databaseArticle, articleDTO);
         articleRepository.update(databaseArticle);
+    }
+
+    @Override
+    @Transactional
+    public ArticleEditDTO getForEditById(Long id) {
+        Article article = articleRepository.findById(id);
+        return articleConverter.toArticleEditDTO(article);
     }
 
 }

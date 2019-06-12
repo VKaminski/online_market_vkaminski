@@ -2,7 +2,9 @@ package com.gmail.kaminski.viktar.onlinemarket.service;
 
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ItemDTO;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.PageDTO;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 public interface ItemService {
 
@@ -17,4 +19,6 @@ public interface ItemService {
     ItemDTO getById(Long id);
 
     void add(ItemDTO itemDTO);
+
+    Map<String, Integer> addFromXML(MultipartFile file);
 }

@@ -1,6 +1,6 @@
 package com.gmail.kaminski.viktar.onlinemarket.service.converter.impl;
 
-import com.gmail.kaminski.viktar.onlinemarket.repository.model.Profile;
+import com.gmail.kaminski.viktar.onlinemarket.repository.model.entity.Profile;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.ProfileConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.converter.UserConverter;
 import com.gmail.kaminski.viktar.onlinemarket.service.model.ProfileDTO;

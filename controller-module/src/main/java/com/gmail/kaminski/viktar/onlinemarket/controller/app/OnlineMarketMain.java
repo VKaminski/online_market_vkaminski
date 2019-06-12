@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
 @ComponentScan(basePackages = {"com.gmail.kaminski.viktar.onlinemarket"})
-@EntityScan("com.gmail.kaminski.viktar.onlinemarket.repository.model")
+@EntityScan("com.gmail.kaminski.viktar.onlinemarket.repository.model.entity")
 public class OnlineMarketMain {
     public static void main(String[] args) {
         SpringApplication.run(OnlineMarketMain.class, args);

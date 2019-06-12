@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/style}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
-<body>
+<body align="center">
 <h2 align="center">Users</h2>
-<nav id="menu" align="center">
-    <a href="/users/new">New user</a>
-    <a href="/reviews">Reviews</a>
-    <a href="/logout">Logout</a>
-</nav>
-<div id="main" align="center">
+<div th:replace="header :: header"></div>
+<div th:replace="navigation :: users"></div>
+<div id="main">
     <form action="#" th:action="@{/users/delete}" th:object="${checkedUsers}" method="post">
         <table border="1" cellpadding="2">
             <tr>
@@ -22,7 +18,6 @@
                 <td>№</td>
                 <td>Surname</td>
                 <td>Name</td>
-                <td>Patronymic</td>
                 <td>Email</td>
                 <td>Role</td>
             </tr>
@@ -43,9 +38,6 @@
                     <span th:text="${user.name}"></span>
                 </td>
                 <td>
-                    <span th:text="${user.patronymic}"></span>
-                </td>
-                <td>
                     <span th:text="${user.email}"></span>
                 </td>
                 <td>
@@ -60,15 +52,15 @@
                 </td>
                 <td>
                     <form action="#" th:action="@{/users/{id}/changepassword(id=${user.id})}" method="post">
-                        <input type="submit" value="Change password">
+                        <input id="longButton" type="submit" value="Change password">
                     </form>
                 </td>
             </tr>
         </table>
-        <div th:with="url=@{/users}">
-            <div th:include="paginator :: paginator (pageDTO=${usersPage})"></div>
-        </div>
     </form>
+    <div th:with="url=@{/users}">
+        <div th:replace="paginator :: paginator (pageDTO=${usersPage})"></div>
+    </div>
 </div>
 
 </body>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<body>
+<div id="menu" align="center">
+    <div th:fragment="reviews">
+        <nav>
+            <a th:href="@{/users/new}">New user</a>
+            <a th:href="@{/users}">Users</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="users">
+        <nav>
+            <a th:href="@{/users/new}">New user</a>
+            <a th:href="@{/reviews}">Reviews</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="newuser">
+        <nav>
+            <a th:href="@{/users}">Users</a>
+            <a th:href="@{/reviews}">Reviews</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="profile">
+        <nav>
+            <a sec:authorize="hasRole('ROLE_ADMINISTRATOR')" th:href="@{/users}">Users</a>
+            <a sec:authorize="hasRole('ROLE_SALE')" th:href="@{/articles}">Articles</a>
+            <a sec:authorize="hasRole('ROLE_CUSTOMER')" th:href="@{/articles}">Articles</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="articles">
+        <nav>
+            <a sec:authorize="hasRole('ROLE_SALE')" th:href="@{/articles/new}">New article</a>
+            <a th:href="@{/items}">Items</a>
+            <a th:href="@{/orders}">Orders</a>
+            <a sec:authorize="hasRole('ROLE_CUSTOMER')" href="/reviews/new">Review</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="article">
+        <nav>
+            <a th:href="@{/articles}">Articles</a>
+            <a th:href="@{/items}">Items</a>
+            <a th:href="@{/orders}">Orders</a>
+            <a sec:authorize="hasRole('ROLE_CUSTOMER')" href="/reviews/new">Review</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="newarticle">
+        <nav>
+            <a th:href="@{/articles}">Articles</a>
+            <a th:href="@{/items}">Items</a>
+            <a th:href="@{/orders}">Orders</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="items">
+        <nav>
+            <a th:href="@{/articles}">Articles</a>
+            <a th:href="@{/items}">Items</a>
+            <a th:href="@{/orders}">Orders</a>
+            <a sec:authorize="hasRole('ROLE_CUSTOMER')" href="/reviews/new">Review</a>
+            <a sec:authorize="hasRole('ROLE_SALE')" href="/items/upload">Upload XML</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="item">
+        <nav>
+            <a th:href="@{/articles}">Articles</a>
+            <a th:href="@{/items}">Items</a>
+            <a th:href="@{/orders}">Orders</a>
+            <a sec:authorize="hasRole('ROLE_CUSTOMER')" href="/reviews/new">Review</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="orders">
+        <nav>
+            <a th:href="@{/articles}">Articles</a>
+            <a th:href="@{/items}">Items</a>
+            <a sec:authorize="hasRole('ROLE_CUSTOMER')" href="reviews/new">Review</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+    <div th:fragment="order">
+        <nav>
+            <a th:href="@{/articles}">Articles</a>
+            <a th:href="@{/items}">Items</a>
+            <a th:href="@{/orders}">Orders</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
