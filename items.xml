@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<items xmlns="http://www.it-academy.by"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.it-academy.by controller-module/src/main/resources/items.xsd">
+
+    <item>
+        <id>1</id>
+        <name>LG</name>
+        <description>Washing machine</description>
+        <unique_number>temp1</unique_number>
+        <price>150</price>
+    </item>
+    <item>
+        <id>2</id>
+        <name>Samsung</name>
+        <description>Frize</description>
+        <unique_number>temp2</unique_number>
+        <price>500</price>
+    </item>
+    <item>
+        <id>3</id>
+        <name>Nokia</name>
+        <description>Mobile phone</description>
+        <unique_number>temp5</unique_number>
+        <price>350</price>
+    </item>
+    <item>
+        <id>4</id>
+        <name>Nokia</name>
+        <description>Mobile phone</description>
+        <unique_number>temp4</unique_number>
+        <price>370</price>
+    </item>
+    <item>
+        <id>5</id>
+        <name>Nokia</name>
+        <description>Mobile phone</description>
+        <unique_number>temp6</unique_number>
+        <price>370</price>
+    </item>
+</items>
