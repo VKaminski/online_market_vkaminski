@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -62,13 +61,13 @@ public class ArticleController {
         articlesRequestDTO.setDateStart(requestParamService.getDate(dateRequestStart, 0l));
         articlesRequestDTO.setDateStop(requestParamService.getDate(dateRequestStop, System.currentTimeMillis()));
         PageDTO<ArticlePreviewDTO> articlesPage = new PageDTO<>();
-        articlesPage.setPage(requestParamService.getInteger(page, Integer.MAX_VALUE, 1));
+        articlesPage.setPage(requestParamService.getInteger(page, Integer.MAX_VALUE, globalValue.getDefaultPage()));
         articlesPage.setAmountElementsOnPage(
                 requestParamService.getInteger(
                         amountElement,
-                        100,
-                        10));
-            articleService.getArticlesPage(articlesRequestDTO, articlesPage);
+                        globalValue.getDefaultMaxAmountElements(),
+                        globalValue.getDefaultAmountElements()));
+        articleService.getArticlesPage(articlesRequestDTO, articlesPage);
         model.addAttribute("articlesPage", articlesPage);
         model.addAttribute("searchRequest", searchRequest);
         model.addAttribute("dateRequestStart", dateRequestStart);
@@ -133,8 +132,8 @@ public class ArticleController {
 
     @GetMapping("/articles/new")
     public String newArticle(Model model) {
-            model.addAttribute("article", new ArticleDTO());
-            return "newarticle";
+        model.addAttribute("article", new ArticleDTO());
+        return "newarticle";
     }
 
     @PostMapping("/articles/new")
