@@ -1,0 +1,328 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_TABLE_1">
+        <createTable tableName="Role">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="USER_TABLE_1">
+        <createTable tableName="User">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patronymic" type="VARCHAR(40)"/>
+            <column name="email" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints foreignKeyName="fk_user_role" references="Role(id)"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locked" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="PROFILE_TABLE_1">
+        <createTable tableName="Profile">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" foreignKeyName="fk_user_id" references="User(id)"/>
+            </column>
+            <column name="address" type="VARCHAR(200)"/>
+            <column name="phone" type="VARCHAR(15)"/>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="REVIEW_TABLE_1">
+        <createTable tableName="Review">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_feedback_user" references="User(id)"/>
+            </column>
+            <column name="content" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visible" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ARTICLE_TABLE_1">
+        <createTable tableName="Article">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_article_author" references="User(id)"/>
+            </column>
+            <column name="title" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="COMMENT_TABLE_1">
+        <createTable tableName="Comment">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="article_id" type="BIGINT">
+                <constraints foreignKeyName="fk_article" references="Article(id)"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_comment_author" references="User(id)"/>
+            </column>
+            <column name="content" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="head_comment_id" type="BIGINT">
+                <constraints foreignKeyName="fk_comment_id" references="Comment(id)"/>
+            </column>
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ITEM_TABLE_1">
+        <createTable tableName="Item">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uniq_number" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ORDER_TABLE_1">
+        <createTable tableName="Order">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="unique_number" type="VARCHAR(200)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_user" references="User(id)"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints foreignKeyName="fk_item" references="Item(id)"/>
+            </column>
+            <column name="amount" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="TINYINT(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_1">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_ADMINISTRATOR"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_2">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_SALE"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_3">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_CUSTOMER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="ROLE_4">
+        <insert tableName="Role">
+            <column name="name" value="ROLE_SECURE_API"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_0">
+        <insert tableName="User">
+            <column name="name" value="Superadmin"/>
+            <column name="surname" value="Superadminov"/>
+            <column name="patronymic" value="Superadminovich"/>
+            <column name="email" value="superadmin@admin.com"/>
+            <column name="password" value="$2a$12$0007AfuifZi2yi1C0D3p9uT07xRGUHjrMT0xJMJxsZPT05PUVSFuK"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_ADMINISTRATOR')"/>
+            <column name="locked" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_1">
+        <insert tableName="User">
+            <column name="name" value="Admin"/>
+            <column name="surname" value="Adminov"/>
+            <column name="patronymic" value="Adminovich"/>
+            <column name="email" value="admin@admin.com"/>
+            <column name="password" value="$2a$12$UzpfzWgw47R.qBBP23s1E.OdK0/VKVKpB5ssk4UnCgs3z5zuU6aYi"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_ADMINISTRATOR')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_2">
+        <insert tableName="User">
+            <column name="name" value="Sale"/>
+            <column name="surname" value="Saleov"/>
+            <column name="patronymic" value="Saleovich"/>
+            <column name="email" value="sale@sale.com"/>
+            <column name="password" value="$2a$12$kNHA2bu3vUh7FNm2lEPcV.JBZVXT/6gcGWTh01N57D2oX6kccG92G"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_SALE')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_3">
+        <insert tableName="User">
+            <column name="name" value="Customer"/>
+            <column name="surname" value="Customerov"/>
+            <column name="patronymic" value="Customerovich"/>
+            <column name="email" value="customer@customer.com"/>
+            <column name="password" value="$2a$12$9QiIpXMBDYWIRKYp6.Cq3.9xlACnKO7QI9KKKagqtd1xtkUHd7y8i"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_CUSTOMER')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="TEST_USER_4">
+        <insert tableName="User">
+            <column name="name" value="Api"/>
+            <column name="surname" value="Apievov"/>
+            <column name="patronymic" value="Apivovich"/>
+            <column name="email" value="api@api.com"/>
+            <column name="password" value="$2a$12$9BGs3kEBbKdepWk2VefY1uNf62byxykwjac5UkdI8ZK7a03nRDDEu"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'ROLE_SECURE_API')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Review_1">
+        <insert tableName="Review">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'admin@admin.com')"/>
+            <column name="content" value="Test admin review"/>
+            <column name="date" value="2019-05-10"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_0">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'superadmin@admin.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="3753344534187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_1">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'admin@admin.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="37533456754187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_2">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'sale@sale.com')"/>
+            <column name="address" value="Brest"/>
+            <column name="phone" value="37533456454187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_3">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'customer@customer.com')"/>
+            <column name="address" value="Minsk"/>
+            <column name="phone" value="37533445754187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Profile_4">
+        <insert tableName="Profile">
+            <column name="id" valueComputed="(SELECT id FROM User WHERE email = 'api@api.com')"/>
+            <column name="address" value="Mogilev"/>
+            <column name="phone" value="37533457654187"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="viktar.kaminski@gmail.com" id="Article_1">
+        <insert tableName="Profile">
+            <column name="user_id" valueComputed="(SELECT id FROM User WHERE email = 'api@api.com')"/>
+            <column name="title" value="test_title"/>
+            <column name="content" value="test_content"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>
